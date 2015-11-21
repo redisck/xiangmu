@@ -1,0 +1,26 @@
+$(function(){
+	var price=false;
+	$("#rebate_price").blur(function(){
+		if($(this).val()>$("#sail_price").val()){
+			$("#error_price").html("价格填写错误").css("color","red");
+		}else{
+			price=true;
+		}
+	})
+	$("#rebate_price").focus(function(){
+		$("#error_price").html("价格不能比原价高").css("color","#137cd8");
+	});
+	/*
+	$("#start_time").blur(function(){
+		$.ajax({
+			url:'__APP__/Goods/ajax_sail_time',
+			type:"post",
+			data:"start_time="+$("#start_time").val(),
+			dataType:"json",
+			success:function(data){
+				alert($("#start_time").val());
+			}
+		})
+	})
+	*/
+})

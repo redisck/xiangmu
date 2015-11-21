@@ -1,0 +1,10 @@
+#EXTM3U
+#EXT-X-TARGETDURATION:20
+#EXT-X-MEDIA-SEQUENCE:0
+#EXTINF:10,
+http://114.80.182.82/477/89/93/965136a0b7bb4447c1458519d88fea4a-f4v-h264-aac-250-32-26703.0-965292-1362360226782-0d0eb47fbae7dee019a31be457a4f1ca-1-00-00-00.f4v?vid=57384401&lp=8081&lroot=/0&kfd=1&cmd=0&tm=1394864385&key=51748417f94b455db8975f21d119554e&diskid=101&lr=0&nlh=0&check=0&id=ku6_vod&usrip=115.183.25.8&uloc=1.0.11&ipsm=1&ext=.f4v&start=0&end=10&ts=10&ios=1
+#EXTINF:8,
+http://114.80.182.82/477/89/93/965136a0b7bb4447c1458519d88fea4a-f4v-h264-aac-250-32-26703.0-965292-1362360226782-0d0eb47fbae7dee019a31be457a4f1ca-1-00-00-00.f4v?vid=57384401&lp=8081&lroot=/0&kfd=1&cmd=0&tm=1394864385&key=51748417f94b455db8975f21d119554e&diskid=101&lr=0&nlh=0&check=0&id=ku6_vod&usrip=115.183.25.8&uloc=1.0.11&ipsm=1&ext=.f4v&start=10&end=18&ts=8&ios=1
+#EXTINF:8,
+http://114.80.182.82/477/89/93/965136a0b7bb4447c1458519d88fea4a-f4v-h264-aac-250-32-26703.0-965292-1362360226782-0d0eb47fbae7dee019a31be457a4f1ca-1-00-00-00.f4v?vid=57384401&lp=8081&lroot=/0&kfd=1&cmd=0&tm=1394864385&key=51748417f94b455db8975f21d119554e&diskid=101&lr=0&nlh=0&check=0&id=ku6_vod&usrip=115.183.25.8&uloc=1.0.11&ipsm=1&ext=.f4v&start=18&end=26&ts=8&ios=1
+#EXT-X-ENDLIST

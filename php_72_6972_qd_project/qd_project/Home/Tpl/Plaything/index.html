@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>
+		起点商城——商品列表
+	</title>
+	<link href="__PUBLIC__/css/reset.css" rel="Stylesheet" type="text/css">
+	<link href="__PUBLIC__/css/style_main.css" rel="Stylesheet" type="text/css">
+	<link href="__PUBLIC__/css/impromptu.css" rel="Stylesheet" type="text/css">
+    <link href="__PUBLIC__/css/daoju.css" rel="stylesheet" type="text/css">
+    <link href="__PUBLIC__/css/book_channel.css" rel="stylesheet" type="text/css">
+	<link href="__PUBLIC__/css/login.css" rel="stylesheet" type="text/css" >
+	<script src="__PUBLIC__/js/jquery-1.7.2.js"></script>
+	
+	<script>
+		$(function(){
+			var pageW=$(document).width();
+			var pageH=$(document).height();
+			var width=$(".login_content").width();
+			var height=$(".login_content").height();
+			//用户登录
+			$("#login_button").click(function(){
+				$("#zhezhao").css("width","100%").css("height","1650px").css("background","#000").css("opacity","0.5").fadeIn(1000).css("z-index","2014").next(".login_content").css("left",(pageW-width)/2).css("top","200px").fadeIn(1000).css("z-index","2015");
+			});
+			$("#button_user_login").click(function(){
+				if($('#username').val()=="" || $("#password").val()==""){
+					alert("用户名密码不能为空");
+				}else{
+					$("form:first").submit();
+				}
+			
+			})
+			$("#username").focus(function(){
+				$(".name_hidden").hide().prev().children("#username").css('color','#000').css('font-size','15px').css("font-weight","bold");
+			});
+			$(".name_hidden").click(function(){
+				$(this).hide().prev().children("#username").focus().css("color","#000").css("font-size","15px").css("font-weight","bold");
+			});
+			$("#username").blur(function(){
+				if($(this).val()==""){
+					$(".name_hidden").show();
+				}
+			});
+			$("#password").focus(function(){
+				$(".p_hidden").hide().prev().children("#password").css('color','#000').css('font-size','15px').css('font-weight','bold');
+			});
+			$(".p_hidden").click(function(){
+				$(this).hide().prev().children("#password").focus().css('color','#000').css("font-size","15px").css("font-weight","bold");
+			});
+			$("#password").blur(function(){
+				if($(this).val()==""){
+					$(".p_hidden").show();
+				}
+			});
+			$(".pop_content_opt").click(function(){
+				$("#zhezhao").css("display","none").next(".login_content").css("display","none");
+			
+			})
+			
+					/*热卖榜*/
+			var len=$(".book_list").length;
+			var index=1;
+			var zd;
+			function moveDiv(num){
+				$("#tab_holder>li").eq(num).addClass('current').siblings().removeClass();
+				$(".book_list").hide().eq(num).show();
+			}
+			
+			function zidong(){
+				if(index==len){
+					index=0;
+				}
+				moveDiv(index);
+				index=index+1;
+				
+			}
+			zd=window.setInterval(zidong,5000);
+			$("#tab_holder>li").mouseover(function(){
+					var index_num=$(".tab_holder>li").index(this);
+					moveDiv(index_num);
+					index=index_num+1;
+					clearInterval(zd);
+				})
+				$("#tab_holder>li").mouseout(function(){
+					zd=window.setInterval(zidong,5000);
+				})
+			
+			/*热卖榜结束*/
+				
+			
+		})
+	</script>
+	<style>
+		.item item_box{
+			float:left;
+		}
+	</style>
+</head>
+<body>
+<!--登陆开始-->
+<div id="zhezhao" style="position:absolute;top:0px;left:0px;display:none">
+</div>
+<div id="login" class="login_content" style="display:none">
+	<div class="pop_main">
+		<div class="pop_header">
+			<div id="pop_head_1">
+				<h3 class="pop_content_II">登陆起点</h3>
+			</div>
+			<div class="pop_content_opt">
+				<a href='javascript:void(0)' class="pop_content_close" id="pop_close_1">关闭</a>
+			</div>
+		</div>
+		<div style="height:340px;overflow:hidden" class="pop_main">
+			<div class="sd_banner">
+				<div id="pop_head_1" style="height:45px">
+					<h3 id="pop_title_1"></h3>
+				</div>
+				<div class="pop_content_opt" id="pop_content_1">
+				</div>
+			</div> 
+			<div class="login_main">
+			<form name='myform' action="__APP__/Login/dologin" method="post">
+				<div class="login_name">
+					<input type="text" name="username" id="username" >
+				</div>
+				<div class="name_hidden">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;手机号/邮箱/个性账号</div>
+				<div class="login_name" style="margin-top:10px">
+					
+					<input type="password" name="password" id="password" >
+				</div>
+				<div class="p_hidden">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;请输入密码</div>
+			
+				<div class="login_button">
+					<a class="button_user_login" id="button_user_login" style="cursor:pointer" href="javascript:void(0)" >
+						<span class="button_user_login_index" >登陆</span>
+					</a>
+			
+				</div>
+			</form>
+			</div>
+		</div>
+	</div>
+</div>
+<!--登陆结束-->
+<div id="page">
+	<!--header-->
+	<include file="Plaything:header" />
+	<!--header end-->
+	<div id="content">
+        
+ 
+<div class="search_box main_search">
+
+
+	<div class="search_card">
+	
+	    	
+	    <div class="search-select">
+			<input id="txtSearchType" value="图书" name="">
+		</div>
+		
+		<input type="hidden" id="hdnSearchType" value="1">
+		<input id="txtSearchKey" class="ipt_txt" value="请输入您要搜索的关键字"><input type="button" class="btn_search" id="btnSearch" value="搜 索">
+	
+	</div>
+	<p class="hotsearch"><span>热搜：</span><a target="_blank" href="">新书上架</a>&nbsp;<a target="_blank" href="">吞噬星空系列</a>&nbsp;<a target="_blank" href="">莽荒纪</a></p>
+</div>
+
+
+        <div class="col_main clearfix">
+            <div class="location">
+                <b>您现在的位置：</b><a href=""> 周边</a>
+                
+                <span id="t_nvaigation"></span>
+                
+                </div>
+            <div class="col_left">
+                <div class=" grid_left_207_2 outside_nav mb11">
+                    
+<div class="title">
+    <a href="" style="color: White;">周边分类</a></div>
+<div class="con">
+    <div class="left_dir">
+		<ul>
+			<volist name="play_classes" id="play" offset="0" length="1">
+			<li class="">
+				<a class="" style="cursor:pointer" href="__APP__/Plaything/index/classify_id/<{$play.id}>"><{$play.name}></a>
+				<ul></ul>
+			</li>
+			</volist>
+			<li class="">
+				<a class="" style="cursor:pointer">毛绒公仔</a>
+				<ul>
+				<volist name="play_classes" id="play" offset="1" length="5">
+					<li  class="">
+						<a class="" style="cursor:pointer" href="__APP__/Plaything/index/classify_id/<{$play.id}>"><{$play.name}></a>
+					</li>
+					
+				</volist>
+				</ul>
+			</li>
+		</ul>
+	</div>
+</div>
+
+                   
+                   
+                </div>
+  <!--热卖榜-->              
+<div class="grid_left_207 hot_sale mb11 col_left">
+    <div class="title" style="background:url(&#39;__PUBLIC__/images/stuff_mall.gif&#39;) no-repeat scroll 0 -42px transparent;color:white;">
+        热卖榜</div>
+    <div class="con">
+        <ul class="tab_holder" id="tab_holder">
+            <li class="current" >
+                <a href="javascript:void(0);" style="color: White;">图书</a></li>
+            
+            <li  class=""><a href="javascript:void(0);" style="color: White;">周边</a></li>
+        </ul>
+        <div style="clear: both">
+        </div>
+        <div id="divTopSaleBook" class="book_list">
+			<volist name="hot_sail_book" id="hotbook">
+		   <div class="book_box" style="margin-bottom:0px;">
+				<div class="cover">
+					<a href="__APP__/Content/index/id/<{$hotbook.id}>/classify_id/<{$hotbook.classify_id}>" target="_blank" title="<{$hotbook.name}>">
+					<img style="width:65px;height:85px;" src="__PUBLIC__/uploads/Goods_images/<{$hotbook.image_first}>/big/b_<{$hotbook.image_last}>" alt="<{$hotbook.name}>">
+					</a>
+				</div>
+				<div class="intro" style="padding-left:0px;margin-left:94px;">
+					<p class="tit"><b><{$hotbook.order}></b><a href="__APP__/Content/index/id/<{$hotbook.id}>/classify_id/<{$hotbook.classify_id}>" title="<{$hotbook.name}>"><{$hotbook.truncate}></a></p>
+					<p>原价：<del><{$hotbook.price}></del><br><i>起点价：<{$hotbook.qd_price}></i><a class="btn_buy" href="javascript:void(0);">立即购买</a></p>
+				</div>
+			</div>
+			</volist>
+			<!--一个结束-->
+        </div>
+		
+		<div id="divTopSalePlaything" class="book_list" style="display:none" >
+			<volist name="hot_sail_plaything" id="hotplaything">
+		    <div class="book_box" style="margin-bottom:0px;">
+				<div class="cover">
+					<a href="__APP__/Content/index/id/<{$hotplaything.id}>/classify_id/<{$hotplaything.classify_id}>" target="_blank" title="<{$hotplaything.name}>">
+					<img style="width:65px;height:85px;" src="__PUBLIC__/uploads/Goods_images/<{$hotplaything.image_first}>/big/b_<{$hotplaything.image_last}>" alt="<{$hotplaything.name}>">
+					</a>
+				</div>
+				<div class="intro" style="padding-left:0px;margin-left:94px;">
+					<p class="tit"><b><{$hotplaything.order}></b><a href="__APP__/Content/index/id/<{$hotplaything.id}>/classify_id/<{$hotplaything.classify_id}>" title="<{$hotplaything.name}>"><{$hotplaything.truncate}></a></p>
+					<p>原价：<del><{$hotplaything.price}></del><br><i>起点价：<{$hotplaything.qd_price}></i><a class="btn_buy" href="javascript:void(0);">立即购买</a></p>
+				</div>
+			</div>
+			</volist>
+		
+		</div>
+       
+    </div>
+</div>
+
+			</div>
+			<div class="col_right">
+				<div class="grid_right_762_2 outside_showList mb11">
+					<div class="title filter_tools clearfix">
+						<div class="pagination"><s class="pre"> </s>&nbsp;1 <s class="next current"> </s></div>
+						<ul class="clearfix">
+							<li>排序：</li>
+							<li><a href="javascript:void(0)" class="by_math current" title="销量由高到低">销 量</a></li>
+							<li><a href="javascript:void(0)" class="by_price by_price_up"  title="价格由低到高">价 格</a></li>
+						</ul>
+					</div>
+					<div class="con">
+						<div class="total">显示： <em><{$firstRow}>-<{$listRows}>  条</em>， 共<em><{$count_list}></em>条</div>
+						<div class="list_box">
+						    
+											<volist name="plaything" id="pl">
+											<div class="item item_box" style="margin-bottom:30px;">
+												<p class="pic" style="margin:0px;">
+													<a href="__APP__/Content/index/id/<{$pl.id}>/classify_id/<{$pl.classify_id}>" target="_blank" title="<{$pl.name}>">
+														<img src="__PUBLIC__/uploads/Goods_images/<{$pl.image_first}>/common/<{$pl.image_last}>" width="208px" height="208px" alt="<{$pl.name}>" title="<{$pl.name}>">
+													</a>
+												</p>
+												<p class="intro" style="overflow:hidden;height:44px;">
+													<a href="__APP__/Content/index/id/<{$pl.id}>/classify_id/<{$pl.classify_id}>" target="_blank" title="<{$pl.name}>"><{$pl.truncate}></a>
+												</p>
+												<p class="price" style="height:22px;"><b>起点价：<em><{$pl.qd_price}></em></b>&nbsp;&nbsp;&nbsp;&nbsp;</p>
+											</div>
+											</volist>
+										
+							
+						</div>
+				
+						
+                        <div class="pagetor" align="right">
+                            
+                            <{$show}>
+                            </div>
+					</div>
+				</div>
+				</div>
+				</div>
+		</div>
+	
+
+	</div>
+	
+<!--footer-->
+<include file="Index:footer" />
+<!--end-->
+
+
+</body></html>

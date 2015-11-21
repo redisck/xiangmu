@@ -1,0 +1,247 @@
+<link href="__PUBLIC__/css/back.css" type="text/css" rel="stylesheet">
+<script src="__PUBLIC__/js/jquery-1.7.2.js" type="text/javascript"></script>
+<script src="__PUBLIC__/js/time_sail.js" type="text/javascript"></script>
+<style>
+td{user-select:none;}
+*{margin:0;padding:0;list-style-type:none;}
+.showbox{width:0px;height:0px;display:none;position:absolute;right:0;top:0;z-index:100;border:1px #8FA4F5 solid;padding:1px;background:#fff;}
+.showbox h2{height:25px;font-size:14px;background-color:#3366cc;position:relative;padding-left:10px;line-height:25px;color:#fff;}
+.showbox h2 a{position:absolute;right:5px;top:0;font-size:12px;color:#fff;}
+.showbox .mainlist{padding:10px;}
+.showbox .mainlist li{height:24px;line-height:24px;}
+.showbox .mainlist li span{margin:0 5px 0 0;font-family:"宋体";font-size:12px;font-weight:400;color:#ddd;}
+.showbox .mainlist li a{font-size:12px;}
+.mask{background:#666;position:absolute;z-index:99;left:0;top:0;display:none;width:100%;height:100%;opacity:0.5;filter:alpha(opacity=50);-moz-opacity:0.5;}
+.all_cont tr{line-height:30px}
+</style>
+
+<script language="javascript">
+
+  $(function ($) { 
+	//行颜色效果
+	$('.all_cont tr').hover(
+	function () {
+        $(this).children().css('background-color', '#f9f9f9');
+	},
+	function () {
+        $(this).children().css('background-color', '#fff');
+	});
+	/*弹出层*/
+	$(".btn-small").click(function(){
+		
+		var box =300;
+		
+		var th= $(window).scrollTop()+$(window).height()/1.6-box+100;
+		
+		var h =document.body.clientHeight;
+		
+		var rw =$(window).width()/2-box;
+		
+		$("#ad_add").animate({top:th,opacity:'show',width:600,height:350,right:rw},500);
+		
+		$("body").prepend("<div class='mask'></div>");
+		
+		$(".mask").css({opacity:"0.5"}).css("height",h);
+		
+		return false;
+		
+	});
+	
+	$("#ad_add .close").click(function(){
+	
+		$(this).parents("#ad_add").animate({top:0,opacity: 'hide',width:0,height:0,right:0},500);
+		
+		$(".mask").fadeOut("fast");
+		
+	});
+	/*结束*/
+	/*弹出层*/
+
+	
+	$("#edit_close").click(function(){
+	
+		$(this).parents("#ad_edit").animate({top:0,opacity: 'hide',width:0,height:0,right:0},500);
+		
+		$(".mask").fadeOut("fast");
+		
+	});
+	/*结束*/
+
+  });
+
+  function del(obj){
+		var result=confirm('你确定要把该物品放入回收站吗');
+		if(result==true){
+			window.location.href="__APP__/Goods/deleteBook?id="+obj.id;
+			}
+		}
+/*修改弹出层*/
+  function edit(obj){
+		$("#ad_id").val(obj.id);
+		$.ajax({
+			url:"__APP__/Ad/ajax_href",
+			type:"post",
+			data:"id="+obj.id,
+			dataType:'json',
+			success:function(msg){
+				//console.log(msg);
+				$("#ad_href1").val(msg.href);
+				
+			}
+		})
+		
+		var box =300;
+		
+		var th= $(window).scrollTop()+$(window).height()/1.6-box+100;
+		
+		var h =document.body.clientHeight;
+		
+		var rw =$(window).width()/2-box;
+		
+		$("#ad_edit").animate({top:th,opacity:'show',width:600,height:250,right:rw},500);
+		
+		$("body").prepend("<div class='mask'></div>");
+		
+		$(".mask").css({opacity:"0.5"}).css("height",h);
+		return false;
+		
+
+  }
+		
+</script>
+<div class="contener">
+   <div class="list_head_m">
+		  <div class="list_head_ml">当前位置：【广告列表】</div>
+		  <div class="list_head_mr"><a href="javascript:void(0)"  rel="添加广告" title="添加广告"><input class="btn btn-small" value="添加广告" ></a></div>
+	</div>
+		
+		<table width="100%" class="list all_cont" >
+			<tr>
+				<th>ID</th>
+				<th width="15%">广告位置</th>
+				<th width="20%">广告标题</th>
+				<th width="30%">图片</th>
+				<th>状态</th>
+				<th>操作</th>
+			</tr>
+			<volist name="ad_list" id="ad">
+				<tr style="text-align:center">
+					<td><{$ad.id}></td>
+					<td><{$ad.type}></td>
+					<td><{$ad.title}></td>
+					<td><img src="http://192.168.170.102/qd_project/<{$ad.root}>/<{$ad.image_first}>/common/<{$ad.image_last}>" width="200px" height="100px"></td>
+					<td>显示</td>
+					<td><a href="javascript:void(0)" class="edit" id="<{$ad.id}>" onclick="edit(this)">修改</a></td>
+				</tr>
+			</volist>
+			<tr><td colspan="6"><{$show}></td></tr>
+		</table>
+	
+	
+</div>
+<!--
+<div class="zhezhao" style="width:100%;height:100%;background:#000;opacity:0.5;position:absolute;top:0px;left:0px;"></div>
+-->
+
+	<div class="showbox" id="ad_add">
+		<h2>添加广告<a class="close" href="#">关闭</a></h2>
+		<div class="mainlist">
+			<table width="360px" border="0" cellpadding="0" cellspacing="1"    class="all_cont" >
+				  <form action="__APP__/Ad/add"  method="post" enctype="multipart/form-data">
+					
+				  <tr>
+					<td align="right">广告位置：</td>
+					<td align="left" class="first_td">
+					  <select name="type">
+						<option value="首页幻灯片">首页幻灯片</option>
+						<option value="首页底部广告">首页底部广告</option>
+						<option value="图书页幻灯片">图书页幻灯片</option>
+						<option value="图书页中部广告">图书页中部广告</option>
+					  </select>
+					</td>
+				  </tr> 
+				   <tr>
+					<td align="right">广告标题：</td>
+					<td align="left">
+					  <input type="text" name="title" id="title" style="height:25px" maxlength="150">
+					</td>
+					
+				  </tr> 
+				  <tr>
+					<td align="right">广告链接：</td>
+					<td align="left">
+					  <input type="text" name="href" id="ad_href" value="javascript:void(0)" style="height:25px" >
+					</td>
+					
+				  </tr> 
+				  
+				  <tr>
+					<td align="right">广告图片：</td>
+					<td align="left">
+						<input type="file" name="image" id="ad_file">
+					</td>
+					
+				  </tr> 
+				  
+				  
+				  <tr>
+					<td align="right">状态：</td>
+					<td align="left">
+						<input type="radio" name="status" value="1">置顶
+						<input type="radio" name="status" value="0">普通
+					</td>
+				  </tr> 
+				 
+				
+				  <tr>
+					<td width="200">&nbsp;</td>
+					<td align="left" colspan="2">
+					  <input type="submit" value="添加" class="btn btn-primary">
+					</td>
+				  </tr> 
+				  </form>         
+			</table>
+		</div>
+	</div>
+	
+	<!--修改-->
+		<div class="showbox" id="ad_edit">
+		<h2>广告修改<a class="close" href="#" id="edit_close">关闭</a></h2>
+		<div class="mainlist">
+			<table width="360px" border="0" cellpadding="0" cellspacing="1"    class="all_cont" >
+				  <form action="__APP__/Ad/edit"  method="post" enctype="multipart/form-data">
+					<input type="hidden" name="id" id="ad_id" value="">
+				   <tr>
+					<td align="right">广告标题：</td>
+					<td align="left">
+					  <input type="text" name="title" id="title" style="height:25px" maxlength="150">
+					</td>
+					
+				  </tr> 
+				  <tr>
+					<td align="right">广告链接：</td>
+					<td align="left">
+					  <input type="text" name="href" id="ad_href1" value="" style="height:25px" >
+					</td>
+					
+				  </tr> 
+				   <tr>
+					<td align="right">广告图片：</td>
+					<td align="left">
+						<input type="file" name="image" id="ad_file">
+					</td>
+					
+				  </tr> 
+				  
+				  
+				  <tr>
+					<td width="200">&nbsp;</td>
+					<td align="left" colspan="2">
+					  <input type="submit" value="修改" class="btn btn-primary">
+					</td>
+				  </tr> 
+				  </form>         
+			</table>
+		</div>
+	</div>
+	<!--end-->

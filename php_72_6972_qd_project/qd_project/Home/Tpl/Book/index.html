@@ -1,0 +1,1292 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>
+		起点商城——图书
+	</title>
+	<link href="__PUBLIC__/css/reset.css" rel="Stylesheet" type="text/css">
+	<link href="__PUBLIC__/css/style_main.css" rel="Stylesheet" type="text/css">
+	<link href="__PUBLIC__/css/impromptu.css" rel="Stylesheet" type="text/css">
+    <link href="__PUBLIC__/css/alertBox.css" rel="Stylesheet" type="text/css">
+    <link href="__PUBLIC__/css/daoju.css" rel="stylesheet" type="text/css">
+    <link href="__PUBLIC__/css/book_channel.css" rel="stylesheet" type="text/css">
+    <link href="__PUBLIC__/css/smallslider.css" rel="stylesheet" type="text/css">
+    <link href="__PUBLIC__/css/al_book_130508.css" rel="stylesheet" type="text/css">
+	<link href="__PUBLIC__/css/ad.css" rel="stylesheet" type="text/css" >
+	<link href="__PUBLIC__/css/login.css" rel="stylesheet" type="text/css" >
+	<script src="__PUBLIC__/js/jquery-1.7.2.js"></script>
+	<script>
+		$(function(){
+			var pageW=$(document).width();
+			var pageH=$(document).height();
+			var width=$(".login_content").width();
+			var height=$(".login_content").height();
+			//用户登录
+			$("#login_button").click(function(){
+				$("#zhezhao").css("width","100%").css("height","4000px").css("background","#000").css("opacity","0.5").fadeIn(1000).css("z-index","2014").next(".login_content").css("left",(pageW-width)/2).css("top","200px").fadeIn(1000).css("z-index","2015");
+			});
+			$("#button_user_login").click(function(){
+				if($('#username').val()=="" || $("#password").val()==""){
+					alert("用户名密码不能为空");
+				}else{
+					$("form:first").submit();
+				}
+			
+			})
+			$("#username").focus(function(){
+				$(".name_hidden").hide().prev().children("#username").css('color','#000').css('font-size','15px').css("font-weight","bold");
+			});
+			$(".name_hidden").click(function(){
+				$(this).hide().prev().children("#username").focus().css("color","#000").css("font-size","15px").css("font-weight","bold");
+			});
+			$("#username").blur(function(){
+				if($(this).val()==""){
+					$(".name_hidden").show();
+				}
+			});
+			$("#password").focus(function(){
+				$(".p_hidden").hide().prev().children("#password").css('color','#000').css('font-size','15px').css('font-weight','bold');
+			});
+			$(".p_hidden").click(function(){
+				$(this).hide().prev().children("#password").focus().css('color','#000').css("font-size","15px").css("font-weight","bold");
+			});
+			$("#password").blur(function(){
+				if($(this).val()==""){
+					$(".p_hidden").show();
+				}
+			});
+			$(".pop_content_opt").click(function(){
+				$("#zhezhao").css("display","none").next(".login_content").css("display","none");
+			
+			})
+				
+	/*限时促销*/
+		sail_time=setInterval(function(){
+			
+				$.ajax({
+				url:"__APP__/Index/ajax_sail_time",
+				dataType:"json",
+				success:function(data){
+					
+					if(data[0]>0){	
+						$("#sail_time").html((Math.floor(data[0]/3600))+"小时"+Math.floor((data[0]%3600)/60)+"分钟"+Math.floor((data[0]%3600)%60)+"秒");
+					}else if(data[0]<0){
+						$("#sail_time").html('<span style="color:red;font-weight:bold;font-size:15px">正在热销</span>');
+						clearInterval(sail_time);
+						setTimeout(function(){
+						$("#sail_time").html("<span style='color:red;font-weight:bold'>已经结束了哦</span>");
+					},data[1]*1000);
+					}
+					
+				}
+			})	
+			},1000);
+			
+			
+			$(".look").click(function(){
+				if($("#sail_time").children().html()=="正在热销"){
+					window.location.href="__APP__/Content/index/id/<{$sail_info[0]['goods_id']}>/classify_id/<{$sail_info[0]['classify_id']}>/sail_price/<{$sail_info[0]['rebate_price']}>/time_sail/<{$sail_info[0]['md5']}>";
+				}else if($("#sail_time").children().html()=="已经结束了哦"){
+					$(".time_sail_end").css('display','block');
+					$("#zhezhao").css("width","100%").css("height","2200px").css("background","#aaaaaa").css("opacity","0.5").css("display","block").css("z-index","2014");
+				}else{
+					$(".time_sail_nostart").css('display','block');
+					$("#zhezhao").css("width","100%").css("height","2200px").css("background","#aaaaaa").css("opacity","0.5").css("display","block").css("z-index","2014");
+				}
+			});
+			
+			$(".time_sail_image").click(function(){
+				if($("#sail_time").children().html()=="正在热销"){
+					window.location.href="__APP__/Content/index/id/<{$sail_info[0]['goods_id']}>/classify_id/<{$sail_info[0]['classify_id']}>/sail_price/<{$sail_info[0]['rebate_price']}>/time_sail/<{$sail_info[0]['md5']}>";
+				}else if($("#sail_time").children().html()=="已经结束了哦"){
+					$(".time_sail_end").css('display','block');
+					$("#zhezhao").css("width","100%").css("height","2200px").css("background","#aaaaaa").css("opacity","0.5").css("display","block").css("z-index","2014");
+				}else{
+					$(".time_sail_nostart").css('display','block');
+					$("#zhezhao").css("width","100%").css("height","2200px").css("background","#aaaaaa").css("opacity","0.5").css("display","block").css("z-index","2014");
+				}
+			});
+			
+			//提示未开始弹出框关闭
+			$("#time_btnClose").click(function(){
+				$(".time_sail_nostart").css('display','none');
+				$("#zhezhao").css("display",'none');
+			})
+			$("#time_btnContinue").click(function(){
+				$(".time_sail_nostart").css('display','none');
+				$("#zhezhao").css("display",'none');
+			})
+			//提示结束
+			//提示已结束弹出框关闭
+			$("#end_btnClose").click(function(){
+				$(".time_sail_end").css('display','none');
+				$("#zhezhao").css("display",'none');
+			})
+			$("#end_btnContinue").click(function(){
+				$(".time_sail_end").css('display','none');
+				$("#zhezhao").css("display",'none');
+			})
+			/*限时促销结束*/
+			/*起点馆*/
+	
+			$("#qidianShop>li").click(function(){						
+				var book_index=$("#qidianShop>li").index(this);
+				
+				$("#qidianShop>li").eq(book_index).addClass('on').siblings().removeClass();
+				$("#qd_book>span").hide().eq(book_index).show();
+									
+			})
+							
+		})
+	</script>
+</head>
+<body>
+<!--登陆框-->
+<div id="zhezhao" style="position:absolute;top:0px;left:0px;display:none">
+</div>
+<div id="login" class="login_content" style="display:none">
+	<div class="pop_main">
+		<div class="pop_header">
+			<div id="pop_head_1">
+				<h3 class="pop_content_II">登陆起点</h3>
+			</div>
+			<div class="pop_content_opt">
+				<a href='javascript:void(0)' class="pop_content_close" id="pop_close_1">关闭</a>
+			</div>
+		</div>
+		<div style="height:340px;overflow:hidden" class="pop_main">
+			<div class="sd_banner">
+				<div id="pop_head_1" style="height:45px">
+					<h3 id="pop_title_1"></h3>
+				</div>
+				<div class="pop_content_opt" id="pop_content_1">
+				</div>
+			</div> 
+			<div class="login_main">
+			<form name='myform' action="__APP__/Login/dologin" method="post">
+				<div class="login_name">
+					<input type="text" name="username" id="username" >
+				</div>
+				<div class="name_hidden">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;手机号/邮箱/个性账号</div>
+				<div class="login_name" style="margin-top:10px">
+					
+					<input type="password" name="password" id="password" >
+				</div>
+				<div class="p_hidden">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;请输入密码</div>
+			
+				<div class="login_button">
+					<a class="button_user_login" id="button_user_login" style="cursor:pointer" href="javascript:void(0)" >
+						<span class="button_user_login_index" >登陆</span>
+					</a>
+			
+				</div>
+			</form>
+			</div>
+		</div>
+	</div>
+</div>
+<!--登陆框结束-->
+<!--提示限时购物还没开始-->
+<div class="time_sail_nostart" style="position:fixed;left:300px;top:250px; z-index:99999;display:none">
+	<table border="0" cellspacing="0" cellpadding="0" class="ajax_box">
+<colgroup valign="middle">
+<col width="5">
+<col width="430">
+<col width="5">
+</colgroup>
+	<tbody><tr>
+		<td class="bd"></td>
+		<td class="bd"></td>
+		<td class="bd"></td>
+	</tr>
+	<tr>
+		<td class="bd"></td>
+		<td class="con">
+                <!-- 标题层 start-->
+                <div class="title_box">
+                    <h3>提示信息</h3>
+                    <a id="time_btnClose" href="javascript:void(0);" title="关闭">关闭</a>
+				</div>
+                <!-- 标题层 end-->
+
+                <!-- 内容层 start-->
+                <div class="content_box success_alert">
+					<p class="confirm"><i class="error"> </i>本次限时购物还没有开始，敬请关注</p>
+                </div>
+                <!-- 内容层 end-->
+
+                <!-- 操作层 start-->
+                <div class="opt_box"><a href="javascript:void(0);" id="time_btnContinue" class="btn btn_gray">继续购物</a></div>
+                <!-- 操作层 end-->
+				 
+		</td>
+		<td class="bd"></td>
+	</tr>
+	<tr>
+		<td class="bd"></td>
+		<td class="bd"></td>
+		<td class="bd"></td>
+	</tr>
+</tbody></table>	
+</div>
+<!--提示限时未购物开始 end-->
+<!--提示限时购物已经结束-->
+<div class="time_sail_end" style="position:fixed;left:300px;top:250px; z-index:99999;display:none">
+	<table border="0" cellspacing="0" cellpadding="0" class="ajax_box">
+<colgroup valign="middle">
+<col width="5">
+<col width="430">
+<col width="5">
+</colgroup>
+	<tbody><tr>
+		<td class="bd"></td>
+		<td class="bd"></td>
+		<td class="bd"></td>
+	</tr>
+	<tr>
+		<td class="bd"></td>
+		<td class="con">
+                <!-- 标题层 start-->
+                <div class="title_box">
+                    <h3>提示信息</h3>
+                    <a id="end_btnClose" href="javascript:void(0);" title="关闭">关闭</a>
+				</div>
+                <!-- 标题层 end-->
+
+                <!-- 内容层 start-->
+                <div class="content_box success_alert">
+					<p class="confirm"><i class="error"> </i>本次限时购物已经结束，谢谢关注</p>
+                </div>
+                <!-- 内容层 end-->
+
+                <!-- 操作层 start-->
+                <div class="opt_box"><a href="javascript:void(0);" id="end_btnContinue" class="btn btn_gray">继续购物</a></div>
+                <!-- 操作层 end-->
+				 
+		</td>
+		<td class="bd"></td>
+	</tr>
+	<tr>
+		<td class="bd"></td>
+		<td class="bd"></td>
+		<td class="bd"></td>
+	</tr>
+</tbody></table>	
+</div>
+<!--提示限时购物结束-->
+
+<div id="page">
+	<!--header头开始-->
+	<include file="Book:header" />
+	
+	<!--结束-->
+	<div id="content">
+        
+    
+
+<div class="search_box book_search">
+
+
+	<div class="search_card">
+	
+	    <form action="__APP__/Search/index" method="get">
+			<label><input name="condition" type="radio" value="1" checked=""> 书名</label>&nbsp;
+			<label><input name="condition" type="radio" value="2"> 作者</label>&nbsp;
+			<label><input name="condition" type="radio" value="3"> 出版社</label>&nbsp;&nbsp;
+			<input id="txtSearchKey" class="ipt_txt" value="" name="search_name">
+			<input type="submit" class="btn_search" id="btnSearch" value="搜 索">
+		</form>
+	</div>
+<p class="hotsearch"><span>热搜:</span><a target="_blank" href="">新书上架</a>&nbsp;<a target="_blank" href="">吞噬星空系列</a>&nbsp;<a target="_blank" href="">莽荒纪</a></p>
+</div>
+
+
+    <div class="book_main clearfix">
+        <!-- 图书分类 轮播 书讯 开始 -->
+        <div class="bm_linebox clearfix">
+            <div class="col_left">
+                
+<div class="books_nav">
+    <div class="title">
+        <a href="" style="color: white;">图书分类</a>
+    </div>
+    <div class="books_fl clearfix">
+        <div class="itembox item1">
+            <div class="tit">
+               <center> <a style="cursor: pointer" ><span style="color:red;font-size:16px; font-family: '微软雅黑', 'Arial Black'; font-weight: bold; ">起点馆</span></a> <span style="font-size:16px; font-family: '微软雅黑', 'Arial Black';"> & </span>  <a style="cursor: pointer"  ><span style="color:red;font-size:16px; font-family: '微软雅黑', 'Arial Black'; font-weight: bold; ">传统馆</span></a> </center>
+                
+            </div>
+           
+        </div>
+ 
+        <div class="itembox item2" style="margin-top:10px; border-top:1px solid #dcc9ab">
+           
+            <ul id="menu" style="margin-top:10px">
+				<!--重复-->
+				<volist name="classify" id="class">
+                <li class="sub_item">
+					<a style="cursor:pointer" href="__APP__/List/index/classify_id/<{$class.id}>"><{$class.name}></a><span class="product-num"></span>
+				</li>
+				</volist>
+				<!--重复结束-->
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+
+            </div>
+            <div class="col_right">
+				<!--中部-->
+                <div class="col_center">
+                    <div class="bm_slide_box">
+                        <div class="notice">
+                            公告：买起点作品实体书 送粉丝值和钻石</div>
+                        <div class="billboard">
+						<!--广告-->
+                            	<!--幻灯片-->
+					   <div class="slide box_hd" style="position:relative;margin:20px auto;top:-10px">
+                            <ul class="slidepic">
+							<volist name="ad_list" id="ad">
+								<li><a href="<{$ad.href}>"><img width="502" height="216" alt="<{$ad.title}>" src="__PUBLIC__/uploads/Ad_images/<{$ad.image_first}>/common/<{$ad.image_last}>" /></a></li>
+								
+							</volist>
+							</ul>
+							<div class="slidebtn">
+								<ul>
+									<li class="current">1</li>
+									<li>2</li>
+									<li>3</li>		
+									<li>4</li>				
+								</ul>
+							</div>
+                            
+                        </div>
+						<script>
+							$(function(){
+	
+								// 图片上下翻滚
+								var len = $('.slidebtn>ul>li').length;
+								var index = 0;
+								var autoplay;
+								$('.slidebtn li').mouseover(function(){
+									index = $('.slidebtn li').index(this);
+									showImg(index);
+								}).eq(0).mouseover();
+								
+								$('.slide').hover(function(){
+									clearInterval(autoplay);
+								},function(){
+									autoplay = setInterval(function(){
+										showImg(index)
+										index++;
+										if(index==len){
+											index=0;
+										}
+									},3000);
+								}).trigger('mouseleave');
+
+								function showImg(index){
+									var picheight = $('.slide').height();
+									$('.slidepic').stop(true,false).animate({top:-picheight*index},600)
+									$('.slidebtn li').removeClass('current').eq(index).addClass('current');
+								};
+							})
+						</script>
+						<!--幻灯片-->
+						<!--广告结束-->
+                        </div>
+                    </div>
+					<!--套书-->
+                    <div class="today-buy jpts">
+                        <div class="clearfix">
+                            <a id="ABoutique" onmouseover="ShowBoutique();" class="title on">精品套书</a>
+                        </div>
+                        <div class="bd clearfix" id="Boutique" style="display: block;">
+							<volist name="whole_book" id="whole" offset="0" length="1">
+                            <div class="b-info">
+                                <h3><a href="__APP__/Content/index/id/<{$whole.id}>/classify_id/<{$whole.classify_id}>" target="_blank"><{$whole.name}></a></h3> 
+								<a target="_blank" href="__APP__/Content/index/id/<{$whole.id}>/classify_id/<{$whole.classify_id}>"><img height="132" src="__PUBLIC__/uploads/Goods_images/<{$whole.image_first}>/big/b_<{$whole.image_last}>" title="<{$ad.name}>" alt="<{$whole.name}>"></a>
+									<p style="height:90px;">    <{$whole.truncate_des}></p>
+									<div class="price"><ins><{$whole.qd_price}></ins>&nbsp; &nbsp; &nbsp; <del><{$whole.price}></del> </div>
+							</div>
+							</volist>
+<ul class="b-list">
+	<!--套书重复-->
+	<volist name="whole_book" id="whole" offset="1" length="7">
+	<li><p><a target="_blank" href="__APP__/Content/index/id/<{$whole.id}>/classify_id/<{$whole.classify_id}>"><{$whole.truncate}></a></p><span><{$whole.qd_price}></span></li>
+	<!--结束-->
+	</volist>
+</ul>
+
+                            </div>
+							
+                        </div>
+						<!--end-->
+						<!--中部广告-->
+                        <div class="bmt_linebox books-gg clearfix">
+							<volist name="ad_middle" id="middle" offset="0" length="1">
+                            <a class="mr6"  href="<{$middle.href}>"><img src="__PUBLIC__/uploads/Ad_images/<{$middle.image_first}>/common/<{$middle.image_last}>" width="250"></a>
+							</volist>
+							
+							<volist name="ad_middle" id="middle" offset="1" length="1">
+								<a href="<{$middle.href}>"><img src="__PUBLIC__/uploads/Ad_images/<{$middle.image_first}>/common/<{$middle.image_last}>" width="250"></a>
+							</volist>
+							
+						</div>
+						<!--end-->
+                    </div>
+					<!--中部结束-->
+                    <div class="col_side">
+                        
+                        <div class="bm_linebox">
+                            <a target="_blank" href="http://shop.qidian.com/Note.aspx?id=41">
+                                <img src="__PUBLIC__/images/button.png" width="241" height="30"></a>
+						</div>
+                        <!--书讯-->
+                        <div class="news_box">
+                            <div class="title">
+                                书讯快递
+							</div>
+                            <div class="con" id="divNotice" style="height: auto; overflow: hidden;">
+                                <ul class="news_list">
+                                    <li><a href="" target="_blank"><font color="#ff0000">[关注]商城购起点图书赠粉丝值钻石</font></a></li>
+									<li><a href="" target="_blank"><font color="#ff0000">唐七公子《三生三世枕上书》赠明信片</font></a> </li>
+									<li><font color="#003366"><a href="" target="_blank">天蚕土豆 斗破苍穹(大主宰1-2)热卖</a> </font></li>
+									<li><font color="#003366"><a href="" target="_blank">圣堂 最新（1-9）册上架</a> </font></li>
+									<li><a href="" target="_blank"><font color="#003366">地师 最新5678册上架</font></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <!--书讯end-->
+
+<!--限时特卖-->    
+<div class="limit_sale mb11" style="width:100%; height:400px; margin-bottom:10px; ">
+    <div class="title" style=" width:auto;">
+        限时特卖</div>
+    <div class="con" style=" width:207px;height:360px">
+        <div class="box">
+			<volist name="sail_info" id="info">
+            <div class="ItemsBox ui-carousel" id="carousel" style="width: 190px; overflow: hidden; height: 335px;">
+            <div class="wrapper" style="width:200px">
+				<div class="Item" style="width: 190px; height: 335px; margin-right: 0px;">   
+					<div class="photo" style="text-align: center; height:190px;">  
+						<a target="_blank" title="<{$info.name}>" href="javascript:void(0)" style="border:none;" class="time_sail_image">
+						<img src="__PUBLIC__/uploads/Goods_images/<{$info.image_first}>/big/b_<{$info.image_last}>" width="185" height="185" ></a>
+					</div>                
+					<div class="name" style=" overflow:hidden;line-height:18px; height:18px; text-align:center;  word-wrap:normal ; text-overflow:ellipsis; ">
+					<a title="<{$info.name}>" href="" target="_blank" style="color:white"><{$info.name}></a>
+					</div>
+					<div class="yes_sale"> 
+						<span class="price" style="font-size:22px;"><{$info.rebate_price}></span>
+						<a class="look" href="javascript:void(0s)" target="_blank"></a>
+						<div class="clearfix">                    </div>      
+					</div>               
+					<div class="info">                   
+						<table width="100%" border="0" cellspacing="0" cellpadding="0">                      
+						<tbody>
+							<tr><th>原价</th> <th>折扣 </th> <th> 节省 </th> </tr>                       
+							<tr><td> ￥<del><{$info.price}></del> </td>                            <td> <{$rebate}>折</td><td><{$diff_price}></td></tr>
+						</tbody>
+						</table>              					
+					</div>             
+					<div class="time"><span class="aaa">距离本次促销时间</span></div>         
+				</div>
+			</div>
+			</div>
+			</volist>
+			
+            <div class="control" align="center" style="text-align:center;">
+                <div style="margin: 0 auto; text-align:center; overflow:hidden; width:130px; margin-left: 5px;" id="pages" >
+                <span id="sail_time"></span><span id="hidden_time" style="display:none"></span>
+			</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- end -->
+
+
+
+
+                    </div>
+                </div>
+                <!-- 图书分类 轮播 书讯 结束 -->
+                <!--
+    *****************************************
+    活动图书专栏
+    *****************************************
+    -->
+               <!--
+                    <iframe id="ctl00_cphContent_PictureSwith" src="__PUBLIC__/images/PictureSwith.htm" style="width: 980px; height: 0px; border: none; overflow: hidden;" scrolling="no">
+                </iframe>
+				-->
+                <!-- 起点新书上架&起点畅销榜 开始 -->
+                <div class="bm_linebox clearfix">
+                    <!-- 起点新书上架 -->
+                    <div class="new-bookshelf books">
+                        <div class="hd">
+                            <h3>
+                                起点馆</h3>
+                            <div class="bookshelf-link xinpindh">
+                                <ul class="clearfix">
+                                    <li class="on">新书上架</li>
+                                </ul>
+                            </div>
+                            
+                        </div>
+                        <div class="bd">
+                            <div class="c-bd">
+                                <ul class="clearfix">
+                                    <span id="ctl00_cphContent_lblBookShelves">
+										<!--重复开始-->
+										<volist name="new_book" id="new">
+										<li>
+											<div class="pic">
+												<a target="_blank" href="__APP__/Content/index/id/<{$new.id}>/classify_id/<{$new.classify_id}>">
+													<img alt="<{$new.name}>" title="<{$new.name}>" src="__PUBLIC__/uploads/Goods_images/<{$new.image_first}>/big/b_<{$new.image_last}>">
+												</a>
+											</div>
+											<h3><a title="<{$new.name}>" target="_blank" href="__APP__/Content/index/id/<{$new.id}>/classify_id/<{$new.classify_id}>"><{$new.truncate}></a></h3>
+											<div class="price"><ins><{$new.qd_price}></ins><del><{$new.price}></del></div>
+										</li>
+										</volist>
+										<!--重复结束-->
+									</span>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 起点畅销榜 -->
+                    <div id="" class="lc-box qdcxb">
+                        <div class="lc-hd">
+                            <h4 class="r1">
+                                <a target="_blank" href="javascript:void(0);">图书畅销榜</a></h4>
+              
+                        </div>
+                        <div id="weekdiv" class="lc-bd " style="display: ;">
+                            <ul style="display: block;" class="bestsale-pannel weekranklist" id="qd_hot">
+							<!--重复开始-->
+							  <volist name="qd_hot_book" id="qdhot" offset="0" length="1">
+							  <li> 
+									<dl style="display: none;" class="show-text">
+										<dt class="n<{$qdhot.num}>">1</dt>
+										<dd class="book-name">
+											<a target="_blank" class="book-pic" title="<{$qdhot.name}>" href="__APP__/Content/index/id/<{$qdhot.id}>/classify_id/<{$qdhot.classify_id}>"><{$qdhot.name}></a>
+										</dd>
+									</dl> 
+									<!--js效果-->
+									<dl style="" class="show-pic">
+										<dt class="n<{$qdhot.num}>">1</dt>
+										<dd class="item">
+											<h3><a target="_blank" title="<{$qdhot.name}>" href="__APP__/Content/index/id/<{$qdhot.id}>/classify_id/<{$qdhot.classify_id}>"><{$qdhot.name}></a></h3>
+											<div class="price"><ins>¥<{$qdhot.qd_price}></ins></div>
+											<a target="_blank" class="book-pic" title="<{$qdhot.name}>" href="__APP__/Content/index/id/<{$qdhot.id}>/classify_id/<{$qdhot.classify_id}>">
+												<img width="42" height="55" src="__PUBLIC__/uploads/Goods_images/<{$qdhot.image_first}>/small/s_<{$qdhot.image_last}>" alt="<{$qdhot.name}>"></a>
+										</dd>
+									</dl>
+									<!--JS结束-->
+								</li>
+								</volist>
+								
+								<volist name="qd_hot_book" id="qdhot" offset="1" length="9">
+							  <li> 
+									<dl style="" class="show-text">
+										<dt class="n<{$qdhot.num}>">1</dt>
+										<dd class="book-name">
+											<a target="_blank" class="book-pic" title="<{$qdhot.name}>" href="__APP__/Content/index/id/<{$qdhot.id}>/classify_id/<{$qdhot.classify_id}>"><{$qdhot.name}></a>
+										</dd>
+									</dl> 
+									<!--js效果-->
+									<dl style="display:none" class="show-pic">
+										<dt class="n<{$qdhot.num}>">1</dt>
+										<dd class="item">
+											<h3><a target="_blank" title="<{$qdhot.name}>" href="__APP__/Content/index/id/<{$qdhot.id}>/classify_id/<{$qdhot.classify_id}>"><{$qdhot.name}></a></h3>
+											<div class="price"><ins>¥<{$qdhot.qd_price}></ins></div>
+											<a target="_blank" class="book-pic" title="<{$qdhot.name}>" href="__APP__/Content/index/id/<{$qdhot.id}>/classify_id/<{$qdhot.classify_id}>">
+												<img width="42" height="55" src="__PUBLIC__/uploads/Goods_images/<{$qdhot.image_first}>/small/s_<{$qdhot.image_last}>" alt="<{$qdhot.name}>"></a>
+										</dd>
+									</dl>
+									<!--JS结束-->
+								</li>
+								</volist>
+							<!--结束-->
+                            </ul>
+							<script>
+								$(function(){
+									$("#qd_hot>li").mouseover(function(){
+										$(this).children(".show-pic").css("display","block").siblings().css("display","none");
+										$(this).siblings().children('.show-pic').css("display","none").siblings().css("display","block");
+										//$(this).siblings().children('.show-pic').hide();
+									})
+								})
+
+							</script>
+                        </div>
+                        
+                    </div>
+                </div>
+                <!-- 起点新书上架&起点畅销榜 结束 -->
+                <!-- 起点完本&作家系列图书 开始 -->
+                <div class="bm_linebox clearfix">
+                    <!-- 起点完本 -->
+                    <div class="new-bookshelf books">
+                        <div class="hd">
+                            <h3>
+                                起点馆</h3>
+                            <div class="bookshelf-link xinpindh">
+                                <ul class="clearfix" id="qidianShop">
+                                    <li class="on"><a href="javascript:void(0);">
+                                        连载全套</a></li>
+                                    <li class=""><a href="javascript:void(0);">
+                                        完本推荐</a></li>
+                                </ul>
+                            </div>
+							
+                        </div>
+                        <div class="bd">
+                            <div class="c-bd">
+                                <ul class="clearfix" id="qd_book">
+                                    <span id="ctl00_cphContent_lblQidianShop1" style="display: block">
+									<volist name="serialize_book" id="serialize">
+									<!--连载全套-->
+									<li>
+										<div class="pic">
+											<a target="_blank" href="__APP__/Content/index/id/<{$serialize.id}>/classify_id/<{$serialize.classify_id}>">
+												<img alt="<{$serialize.name}>" title="<{$serialize.name}>" src="__PUBLIC__/uploads/Goods_images/<{$serialize.image_first}>/big/b_<{$serialize.image_last}>"></a>
+										</div>
+										<h3><a title="<{$serialize.name}>" target="_blank" href="__APP__/Content/index/id/<{$serialize.id}>/classify_id/<{$serialize.classify_id}>"><{$serialize.truncate}></a></h3>
+										<div class="price"><ins>¥<{$serialize.qd_price}>起</ins><del>¥<{$serialize.price}></del></div>
+									</li>
+									</volist>
+									<!--连载全套end-->
+									</span>
+                                    <span id="ctl00_cphContent_lblQidianShop0" style="display: none">
+									<!--完本推荐-->
+									<volist name="end_book" id="end">
+									<li>
+										<div class="pic">
+											<a target="_blank" href="__APP__/Content/index/id/<{$end.id}>/classify_id/<{$end.classify_id}>">
+												<img alt="<{$end.name}>" title="<{$end.name}>" src="__PUBLIC__/uploads/Goods_images/<{$end.image_first}>/big/b_<{$end.image_last}>">
+											</a>
+										</div>
+										<h3><a title="<{$end.name}>" target="_blank" href="__APP__/Content/index/id/<{$end.id}>/classify_id/<{$end.classify_id}>"><{$end.truncate}></a></h3>
+										<div class="price"><ins>¥<{$end.qd_price}> 起</ins><del>¥<{$end.price}></del></div>
+									</li>
+									</volist>
+									<!--完本推荐结束-->
+									</span>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 作家系列图书 -->
+                    <div class="special-selling qdcxb qdred">
+                        <div class="lc-hd">
+                            <h4 class="r2" style="width:160px">
+                                <a target="_blank">起点作家系列图书</a></h4>
+                        </div>
+						<script>
+							$(function(){
+								$(".qd_author>li").mouseover(function(){
+									var index=$(".qd_author>li").index(this);
+									$(this).addClass('on').css('color','#c30d23').css('cursor','pointer').siblings().removeClass().css('color','#000').css('cursor','pointer');
+									$(".qd_author_book>.qd_book_list").hide().eq(index).show();
+								
+								});
+								
+								$(".qd_num>span").mouseover(function(){
+									var book_index=$(".qd_num>span").index(this);
+									$(this).addClass("on").siblings().removeClass();
+									$(".qd_book_list>.item_box").eq(book_index).show().siblings('.item_box').hide();
+									
+								})
+								
+								
+							})
+						</script>
+                        <div class="title">
+                            <ul class="three clearfix qd_author">
+                                <li class="on" id="author1">
+									唐家三少</li>
+                                <li class="" id="author2">
+                                    我吃西红柿</li>
+                                <li class="" id="author3">
+                                    林家成</li>
+                            </ul>
+                        </div>
+                        <div class="bd qd_author_book">
+						   <volist name="author_book" id="qdauthor" offset="0" length="1">
+						   <div class="AuthorWorks_1 qd_book_list" style="display: block;">
+								<volist name="qdauthor" id="qd" offset="0" length="1">
+								
+                                <div class="item_box" style="display:block;">
+									<div class="pic">
+										<a target="_blank" href="__APP__/Content/index/id/<{$qd.id}>/classify_id/<{$qd.classify_id}>"><img src="__PUBLIC__/uploads/Goods_images/<{$qd.image_first}>/big/b_<{$qd.image_last}>" title="<{$qd.name}>" alt="<{$qd.name}>"></a>
+									</div>
+									<div class="info">
+										<span class="name"><a target="_blank" href="__APP__/Content/index/id/<{$qd.id}>/classify_id/<{$qd.classify_id}>"><{$qd.name}></a></span><br>
+										<span class="price"><ins>¥<{$qd.qd_price}></ins></span>
+									</div>
+									<br><div class="text">
+										<p><{$qd.truncate_des}></p>
+										</div>
+								</div>
+								
+								</volist>
+								
+								<volist name="qdauthor" id="qd" offset="1" length="2">
+								
+                                <div class="item_box" style="display:none;">
+									<div class="pic">
+										<a target="_blank" href="__APP__/Content/index/id/<{$qd.id}>/classify_id/<{$qd.classify_id}>"><img src="__PUBLIC__/uploads/Goods_images/<{$qd.image_first}>/big/b_<{$qd.image_last}>" title="<{$qd.name}>" alt="<{$qd.name}>"></a>
+									</div>
+									<div class="info">
+										<span class="name"><a target="_blank" href="__APP__/Content/index/id/<{$qd.id}>/classify_id/<{$qd.classify_id}>"><{$qd.name}></a></span><br>
+										<span class="price"><ins>¥<{$qd.qd_price}></ins></span>
+									</div>
+									<br><div class="text">
+										<p><{$qd.truncate_des}></p>
+										</div>
+								</div>
+								
+								</volist>
+								
+                                <div class="sub-hd qd_num">
+                                    <span class="on">1 </span><span>2 </span><span>3 </span>
+                                </div>
+                            </div>
+							</volist>
+							
+							<volist name="author_book" id="qdauthor" offset="1" length="2">
+						   <div class="AuthorWorks_1 qd_book_list" style="display:none">
+							
+                                <volist name="qdauthor" id="qd" offset="0" length="1">
+								
+                                <div class="item_box" style="display:block;">
+									<div class="pic">
+										<a target="_blank" href="__APP__/Content/index/id/<{$qd.id}>/classify_id/<{$qd.classify_id}>"><img src="__PUBLIC__/uploads/Goods_images/<{$qd.image_first}>/big/b_<{$qd.image_last}>" title="<{$qd.name}>" alt="<{$qd.name}>"></a>
+									</div>
+									<div class="info">
+										<span class="name"><a target="_blank" href="__APP__/Content/index/id/<{$qd.id}>/classify_id/<{$qd.classify_id}>"><{$qd.name}></a></span><br>
+										<span class="price"><ins>¥<{$qd.qd_price}></ins></span>
+									</div>
+									<br><div class="text">
+										<p><{$qd.truncate_des}></p>
+										</div>
+								</div>
+								
+								</volist>
+								
+								<volist name="qdauthor" id="qd" offset="1" length="2">
+								
+                                <div class="item_box" style="display:none;">
+									<div class="pic">
+										<a target="_blank" href="__APP__/Content/index/id/<{$qd.id}>/classify_id/<{$qd.classify_id}>"><img src="__PUBLIC__/uploads/Goods_images/<{$qd.image_first}>/big/b_<{$qd.image_last}>" title="<{$qd.name}>" alt="<{$qd.name}>"></a>
+									</div>
+									<div class="info">
+										<span class="name"><a target="_blank" href="__APP__/Content/index/id/<{$qd.id}>/classify_id/<{$qd.classify_id}>"><{$qd.name}></a></span><br>
+										<span class="price"><ins>¥<{$qd.qd_price}></ins></span>
+									</div>
+									<br><div class="text">
+										<p><{$qd.truncate_des}></p>
+										</div>
+								</div>
+								
+								</volist>
+                                <div class="sub-hd qd_num">
+                                    <span class="on">1 </span><span>2 </span><span>3 </span>
+                                </div>
+                            </div>
+							</volist>
+							
+                        </div>
+                    </div>
+                </div>
+                <!-- 起点新书上架&起点畅销榜 结束 -->
+                <!-- 广告 开始 -->
+                <div class="bm_linebox">
+                    <a target="_blank" href=""><img width="980" height="100" src="__PUBLIC__/images/768e5fe5df144a1598b39c09c7ceae51.gif"></a>
+                </div>
+                <!-- 广告 结束 -->
+                <!-- 起点新书上架&起点畅销榜 开始 -->
+                <div class="bm_linebox clearfix">
+                    <!-- 起点新书上架 -->
+                    <div class="new-bookshelf booksblue">
+                        <div class="hd">
+						<script>
+							$(function(){
+								$("#qidianNewBook>li").click(function(){
+									var tr_index=$("#qidianNewBook>li").index(this);
+									$("#qidianNewBook>li").eq(tr_index).addClass('on').siblings().removeClass();
+									$(".tr_na>span").hide().eq(tr_index).show();
+								})
+							})
+						</script>
+                            <h3>
+                                传统馆</h3>
+                            <div class="bookshelf-link xinpindh">
+                                <ul class="clearfix" id="qidianNewBook">
+                                    <li class="on"><a href="javascript:void(0);">
+                                        新书速递</a></li>
+                                    <li class=""><a href="javascript:void(0);">
+                                        名家新作</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="bd" style="height: 439px;">
+                            <div class="c-bd">
+                                <ul class="clearfix tr_na">
+								<!--新书速递-->
+								<span >
+                                  <volist name="tr_new_book" id="trNew">
+									<li style="position: relative;">
+										<div class="pic">
+											<a target="_blank" href="__APP__/Content/index/id/<{$trNew.id}>/classify_id/<{$trNew.classify_id}>"><img alt="<{$trNew.name}>" title="<{$trNew.name}>" src="__PUBLIC__/uploads/Goods_images/<{$trNew.image_first}>/big/b_<{$trNew.image_last}>"></a>
+										</div>
+										<h3><a title="<{$trNew.name}>" target="_blank" href="__APP__/Content/index/id/<{$trNew.id}>/classify_id/<{$trNew.classify_id}>"><{$trNew.truncate}></a></h3>
+										<div class="price"><ins>¥<{$trNew.qd_price}></ins><del>¥<{$trNew.price}></del></div>
+									</li>
+								  </volist>
+								</span>	
+								<!--end-->
+								<!--名家新作-->
+								<span style="display:none">
+									<volist name="tr_famous_author" id="famous">
+									<li style="position: relative;">
+										<div class="pic">
+											<a target="_blank" href="__APP__/Content/index/id/<{$famous.id}>/classify_id/<{$famous.classify_id}>"><img alt="<{$famous.name}>" src="__PUBLIC__/uploads/Goods_images/<{$famous.image_first}>/big/b_<{$famous.image_last}>"></a>
+										</div>
+										<h3><a title="<{$famous.name}>" target="_blank" href="__APP__/Content/index/id/<{$famous.id}>/classify_id/<{$famous.classify_id}>"><{$famous.truncate}></a></h3>
+										<div class="price"><ins>¥<{$famous.qd_price}></ins><del>¥<{$famous.price}></del></div>
+									</li>
+									</volist>
+								</span>
+								<!--end-->
+                                    
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 传统畅销榜 -->
+                    <div id="" class="lc-box qdcxb qdblue">
+                        <div class="lc-hd">
+	
+                            <h4 class="b1">
+                                <a target="_blank">图书畅销榜</a></h4>
+                        </div>
+						<div class="title">
+                            <ul class="qdgreen six clearfix" style="display: " id="tagsWeek">
+                                <li class="on"><a style="color: rgb(37, 172, 223);" href="javascript:void(0)">
+                                    总榜</a></li>
+                                <li class=""><a href="javascript:void(0)">少儿</a></li>
+                                <li class=""><a href="javascript:void(0)">小说</a></li>
+                                <li class=""><a href="javascript:void(0)">历史</a></li>
+                                <li class=""><a href="javascript:void(0)">传记</a></li>
+                                <li class=""><a href="javascript:void(0)">生活</a></li>
+                            </ul>
+                           
+                        </div>
+                        <div id="weekList" class="lc-bd " style="display: block;">
+                            <ul style="display: block;" class="bestsale-pannel weekranklist" id="tr_hot">
+                                
+									<!--重复-->
+									<volist name="tr_hot_book" id="trHot" offset="0" length="1">
+									<li>
+										<dl style="display: none;" class="show-text">
+											<dt class="n<{$trHot.num}>">1</dt>
+											<dd class="book-name">
+												<a target="_blank" class="book-pic" title="<{$trHot.name}>" href="__APP__/Content/index/id/<{$trHot.id}>/classify_id/<{$trHot.classify_id}>"><{$trHot.name}></a>
+											</dd>
+										</dl>
+										<dl style="" class="show-pic">
+											<dt class="n<{$trHot.num}>">1</dt>
+											<dd class="item">
+												<h3><a target="_blank" title="<{$trHot.name}>" href="__APP__/Content/index/id/<{$trHot.id}>/classify_id/<{$trHot.classify_id}>"><{$trHot.name}></a></h3>
+												<div class="price"><ins>¥<{$trHot.qd_price}></ins></div>
+												<a target="_blank" class="book-pic" title="<{$trHot.name}>" href="__APP__/Content/index/id/<{$trHot.id}>/classify_id/<{$trHot.classify_id}>">
+													<img width="42" height="55" src="__PUBLIC__/uploads/Goods_images/<{$trHot.image_first}>/big/b_<{$trHot.image_last}>" alt="<{$trHot.name}>">
+												</a> 
+											</dd>
+										</dl>
+									</li>
+									</volist>
+									<volist name="tr_hot_book" id="trHot" offset="1" length="9">
+<li>
+										<dl style="display: block;" class="show-text">
+											<dt class="n<{$trHot.num}>">1</dt>
+											<dd class="book-name">
+												<a target="_blank" class="book-pic" title="<{$trHot.name}>" href="__APP__/Content/index/id/<{$trHot.id}>/classify_id/<{$trHot.classify_id}>"><{$trHot.name}></a>
+											</dd>
+										</dl>
+										<dl style="display:none" class="show-pic">
+											<dt class="n<{$trHot.num}>">1</dt>
+											<dd class="item">
+												<h3><a target="_blank" title="<{$trHot.name}>" href="__APP__/Content/index/id/<{$trHot.id}>/classify_id/<{$trHot.classify_id}>"><{$trHot.name}></a></h3>
+												<div class="price"><ins>¥<{$trHot.qd_price}></ins></div>
+												<a target="_blank" class="book-pic" title="<{$trHot.name}>" href="__APP__/Content/index/id/<{$trHot.id}>/classify_id/<{$trHot.classify_id}>">
+													<img width="42" height="55" src="__PUBLIC__/uploads/Goods_images/<{$trHot.image_first}>/big/b_<{$trHot.image_last}>" alt="<{$trHot.name}>">
+												</a> 
+											</dd>
+										</dl>
+									</li>
+									</volist>
+									<!--end-->
+								
+                            </ul>
+							<script>
+								$(function(){
+									$("#tr_hot>li").mouseover(function(){
+										$(this).children(".show-pic").css("display","block").siblings().css("display","none");
+										$(this).siblings().children('.show-pic').css("display","none").siblings().css("display","block");
+										//$(this).siblings().children('.show-pic').hide();
+									})
+								})
+
+							</script>
+                            
+                        </div>
+                        
+                    </div>
+                </div>
+                <!-- 起点新书上架&起点畅销榜 结束 -->
+                <!-- 起点完本&作家系列图书 开始 -->
+                <div class="bm_linebox clearfix">
+                    <!-- 起点完本 -->
+                    <div class="new-bookshelf booksblue">
+                        <div class="hd">
+                            <script>
+								$(function(){
+									$("#FinishBoo>li").click(function(){
+										var sh_index=$("#FinishBoo>li").index(this);
+										
+										$("#FinishBoo>li").eq(sh_index).addClass("on").siblings().removeClass();
+										$(".tr_sh>span").hide().eq(sh_index).show();
+									})
+								})
+							</script>
+							<h3>
+                                传统馆</h3>
+                            <div class="bookshelf-link xinpindh">
+                                <ul class="clearfix" id="FinishBoo">
+								<!--
+                                    <li class="on"><a href="javascript:void(0);">
+                                        连载全套</a></li>
+								-->
+                                    <li class="on"><a href="javascript:void(0);">
+                                        热搜图书</a></li>
+                                   
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="bd">
+                            <div class="c-bd">
+                                <ul class="clearfix tr_sh">
+								
+									
+									<!--热搜-->
+                                    <span id="ctl00_cphContent_Finish0">
+										<!--重复-->
+										<volist name="tr_hot_search_book" id="hotSearch">
+										<li style="position: relative;">
+											<div class="pic">
+												<a target="_blank" href="__APP__/Content/index/id/<{$hotSearch.id}>/classify_id/<{$hotSearch.classify_id}>">
+													<img alt="<{$hotSearch.name}>" title="<{$hotSearch.name}>" src="__PUBLIC__/uploads/Goods_images/<{$hotSearch.image_first}>/big/b_<{$hotSearch.image_last}>">
+												</a>
+											</div>
+											<h3><a title="<{$hotSearch.name}>" target="_blank" href="__APP__/Content/index/id/<{$hotSearch.id}>/classify_id/<{$hotSearch.classify_id}>"><{$hotSearch.truncate}></a></h3>
+											<div class="price"><ins>¥<{$hotSearch.qd_price}></ins><del>¥<{$hotSearch.price}></del></div>
+										</li>
+										</volist>
+										<!--end-->
+									</span>
+									<!--end-->
+									
+									
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+					<script>
+							$(function(){
+								$(".tr_author>li").mouseover(function(){
+									var index=$(".tr_author>li").index(this);
+									$(this).addClass('on').css('color','#c30d23').css('cursor','pointer').siblings().removeClass().css('color','#000').css('cursor','pointer');
+									$(".tr_author_book>.tr_book_list").hide().eq(index).show();
+								
+								});
+							
+							
+								$(".tr_num>span").mouseover(function(){
+									var book_index=$(".tr_num>span").index(this);
+									$(this).addClass("on").siblings().removeClass();
+									$(".tr_book_list>.item_box").eq(book_index).show().siblings('.item_box').hide();
+									
+								})
+								
+							
+							})
+						</script>
+                    <!-- 作家系列图书 -->
+                    <div id="" class="special-selling qdcxb qdblue">
+                        <div class="lc-hd">
+                            <h4 class="b2" style="width:160px">
+                                <a target="_blank" href="">人气作家系列图书</a></h4>
+                        </div>
+                        <div class="title">
+                            <ul class="three clearfix tr_author">
+                                <li class="on">
+                                    韩寒</li>
+                                <li class="">
+                                    莫言</li>
+                                <li class="">
+                                    张小娴</li>
+                            </ul>
+                        </div>
+                        <div class="bd tr_author_book">
+							<volist name="tr_author_book" id="tr" offset="0" length="1">
+							<!--每个作家重复-->
+                            <div class="tr_book_list" style="display: block;">
+							
+						
+							   <volist name="tr" id="tr_item" offset="0" length="1">
+								<div class="item_box" style="display:block;">
+									<div class="pic">
+										<a target="_blank" href="__APP__/Content/index/id/<{$tr_item.id}>/classify_id/<{$tr_item.classify_id}>"><img src="__PUBLIC__/uploads/Goods_images/<{$tr_item.image_first}>/big/b_<{$tr_item.image_last}>" title="<{$tr_item.name}>" alt="<{$tr_item.name}>"></a>
+									</div>
+									<div class="info">
+										<span class="name">
+											<a target="_blank" href="__APP__/Content/index/id/<{$tr_item.id}>/classify_id/<{$tr_item.classify_id}>"><{$tr_item.name}></a><br>
+										</span>
+										<span class="price"><ins>¥<{$tr_item.qd_price}></ins></span>
+									</div>
+									<br><div class="text">
+										<p><{$tr_item.truncate_des}></p>
+										</div>
+								</div>
+								</volist>
+								<volist name="tr" id="tr_item" offset="1" length="2">
+								<div class="item_box" style="display:none;">
+									<div class="pic">
+										<a target="_blank" href="__APP__/Content/index/id/<{$tr_item.id}>/classify_id/<{$tr_item.classify_id}>"><img src="__PUBLIC__/uploads/Goods_images/<{$tr_item.image_first}>/big/b_<{$tr_item.image_last}>" title="<{$tr_item.name}>"  alt="<{$tr_item.name}>"></a>
+									</div>
+									<div class="info">
+										<span class="name">
+											<a target="_blank" href="__APP__/Content/index/id/<{$tr_item.id}>/classify_id/<{$tr_item.classify_id}>"><{$tr_item.name}></a><br>
+										</span>
+										<span class="price"><ins>¥<{$tr_item.qd_price}></ins></span>
+									</div>
+									<br><div class="text">
+										<p><{$tr_item.truncate_des}></p>
+										</div>
+								</div>
+								</volist>
+								
+                                <div class="sub-hd tr_num">
+                                    <span class="on">1 </span><span>2 </span><span>3 </span>
+                          
+                                </div>
+                            </div>
+							<!--结束-->
+							</volist>
+							<volist name="tr_author_book" id="tr" offset="1" length="2">
+								<div class="tr_book_list" style="display: none;">
+							
+							 
+								<volist name="tr" id="tr_item" offset="0" length="1">
+								<div class="item_box" style="display:block;">
+									<div class="pic">
+										<a target="_blank" href="__APP__/Content/index/id/<{$tr_item.id}>/classify_id/<{$tr_item.classify_id}>"><img src="__PUBLIC__/uploads/Goods_images/<{$tr_item.image_first}>/big/b_<{$tr_item.image_last}>" title="<{$tr_item.name}>" alt="<{$tr_item.name}>"></a>
+									</div>
+									<div class="info">
+										<span class="name">
+											<a target="_blank" href="__APP__/Content/index/id/<{$tr_item.id}>/classify_id/<{$tr_item.classify_id}>"><{$tr_item.name}></a><br>
+										</span>
+										<span class="price"><ins>¥<{$tr_item.qd_price}></ins></span>
+									</div>
+									<br><div class="text">
+										<p><{$tr_item.truncate_des}></p>
+										</div>
+								</div>
+								</volist>
+								<volist name="tr" id="tr_item" offset="1" length="2">
+								<div class="item_box" style="display:none;">
+									<div class="pic">
+										<a target="_blank" href="__APP__/Content/index/id/<{$tr_item.id}>/classify_id/<{$tr_item.classify_id}>"><img src="__PUBLIC__/uploads/Goods_images/<{$tr_item.image_first}>/big/b_<{$tr_item.image_last}>" title="<{$tr_item.name}>"  alt="<{$tr_item.name}>"></a>
+									</div>
+									<div class="info">
+										<span class="name">
+											<a target="_blank" href="__APP__/Content/index/id/<{$tr_item.id}>/classify_id/<{$tr_item.classify_id}>"><{$tr_item.name}></a><br>
+										</span>
+										<span class="price"><ins>¥<{$tr_item.qd_price}></ins></span>
+									</div>
+									<br><div class="text">
+										<p><{$tr_item.truncate_des}></p>
+										</div>
+								</div>
+								</volist>
+							
+                                <div class="sub-hd tr_num">
+                                    <span class="on">1 </span><span>2 </span><span>3 </span>
+                          
+                                </div>
+                            </div>
+							</volist>
+                        </div>
+                    </div>
+                </div>
+                <!-- 起点新书上架&起点畅销榜 结束 -->
+                <!-- 传统馆人气推荐&广告 开始 -->
+                <div class="popular-recommended" style="display: ;">
+                    <!-- 传统馆人气推荐 -->
+                    <div class="new-bookshelf booksblue">
+                        <div class="hd">
+                            <h3>
+                                传统馆</h3>
+                            <div class="bookshelf-link xinpindh">
+                                <ul class="clearfix">
+                                    <li class="on">人气推荐</li>
+                                </ul>
+                            </div>
+                        </div>
+						<script>
+							$(function(){
+								var sWidth=$(".carousel_li").width();
+								var len=$(".carousel_list>li").length;
+								var index=0;
+								var picTimer;
+							//上一页按钮
+								$("#popular_btnPrev").click(function() {
+									index -= 1;
+									if(index == -1) {index = len - 1;}
+									showPics(index);
+								});	
+							//下一页按钮
+								$("#popular_btnNext").click(function() {
+									index += 1;
+									if(index == len) {index = 0;}
+									showPics(index);
+								});
+							//显示图片函数，根据接收的index值显示相应的内容
+								function showPics(index) { //普通切换
+									var nowLeft = -index*sWidth; //根据index值计算ul元素的left值
+									$(".carousel_list").stop(true,false).animate({"left":nowLeft},300); //通过animate()调整ul元素滚动到计算出的position
+									//$("#focus .btn span").removeClass("on").eq(index).addClass("on"); //为当前的按钮切换到选中的效果
+									//$("#focus .btn span").stop(true,false).animate({"opacity":"0.4"},300).eq(index).stop(true,false).animate({"opacity":"1"},300); //为当前的按钮切换到选中的效果
+								}
+							})
+						</script>
+                        <div class="bd">
+                            <ul class="carousel_list" style="width: 2796px;">
+							<!--重复-->
+							<!--一个-->
+								<li class="carousel_li renqilist0" style="margin-left: 0px;">
+									<ul>
+									<volist name="tr_rq_book" id="rq" offset="0" length="8">
+										<li>
+											<div class="pic">
+												<a target="_blank" href="__APP__/Content/index/id/<{$rq.id}>/classify_id/<{$rq.classify_id}>">
+													<img src="__PUBLIC__/uploads/Goods_images/<{$rq.image_first}>/big/b_<{$rq.image_last}>" title="<{$rq.name}>" alt="<{$rq.name}>">
+												</a>
+											</div>
+											<h3><a target="_blank" title="<{$rq.name}>" href=""><{$rq.truncate}></a></h3>
+											<div class="price"><ins>¥<{$rq.qd_price}></ins> <del>¥<{$rq.price}></del> </div>
+										</li>
+									</volist>
+									</ul>
+								</li>
+							<!--二个-->
+								<li class="carousel_li renqilist1" style="margin-left: 0px;">
+									<ul>
+									<volist name="tr_rq_book" id="rq" offset="8" length="8">
+										<li>
+											<div class="pic">
+												<a target="_blank" href="__APP__/Content/index/id/<{$rq.id}>/classify_id/<{$rq.classify_id}>">
+													<img src="__PUBLIC__/uploads/Goods_images/<{$rq.image_first}>/big/b_<{$rq.image_last}>" title="<{$rq.name}>" alt="<{$rq.name}>">
+												</a>
+											</div>
+											<h3><a target="_blank" title="<{$rq.name}>" href=""><{$rq.truncate}></a></h3>
+											<div class="price"><ins>¥<{$rq.qd_price}></ins> <del>¥<{$rq.price}></del> </div>
+										</li>
+									</volist>
+
+									</ul>
+								</li>
+							<!--三个-->
+								<li class="carousel_li renqilist2" style="margin-left: 0px;">
+									<ul>
+									<volist name="tr_rq_book" id="rq" offset="16" length="8">
+										<li>
+											<div class="pic">
+												<a target="_blank" href="__APP__/Content/index/id/<{$rq.id}>/classify_id/<{$rq.classify_id}>">
+													<img src="__PUBLIC__/uploads/Goods_images/<{$rq.image_first}>/big/b_<{$rq.image_last}>" title="<{$rq.name}>" alt="<{$rq.name}>">
+												</a>
+											</div>
+											<h3><a target="_blank" title="<{$rq.name}>" href=""><{$rq.truncate}></a></h3>
+											<div class="price"><ins>¥<{$rq.qd_price}></ins> <del>¥<{$rq.price}></del> </div>
+										</li>
+									</volist>
+
+									</ul>
+								</li>
+							<!--四个-->
+								<li class="carousel_li renqilist3" style="margin-left: 0px;">
+									<ul>
+										<volist name="tr_rq_book" id="rq" offset="24" length="8">
+										<li>
+											<div class="pic">
+												<a target="_blank" href="__APP__/Content/index/id/<{$rq.id}>/classify_id/<{$rq.classify_id}>">
+													<img src="__PUBLIC__/uploads/Goods_images/<{$rq.image_first}>/big/b_<{$rq.image_last}>" title="<{$rq.name}>" alt="<{$rq.name}>">
+												</a>
+											</div>
+											<h3><a target="_blank" title="<{$rq.name}>" href=""><{$rq.truncate}></a></h3>
+											<div class="price"><ins>¥<{$rq.qd_price}></ins> <del>¥<{$rq.price}></del> </div>
+										</li>
+									</volist>
+
+									</ul>
+								</li>
+							
+							
+							
+							
+							<!--end-->
+							</ul>
+                            <a class="preNext pre" id="popular_btnPrev" style="left: 0px;">
+							</a><a class="preNext next" id="popular_btnNext" style="right: 0px;"></a>
+                        </div>
+                    </div>
+                    <!-- 广告 -->
+                    <div id="" class="qdbooksgg">
+                        <div class="bm_linebox">
+                            <a target="_blank" href=""><img src="__PUBLIC__/images/99af3421ea474f1bad22843893fbb5af.jpg"> </a>
+                        </div>
+                        <div class="bm_linebox">
+                            <a target="_blank" href=""> <img src="__PUBLIC__/images/13e4a90c4457480292ab5f84684996a3.jpg" width="241"> </a>
+                        </div>
+                    </div>
+                </div>
+                <!-- 传统馆人气推荐&广告 结束 -->
+                <!-- 广告 开始 -->
+                <div class="bm_linebox">
+                    <a target="_blank" href=""><img width="980" height="100" src="__PUBLIC__/images/6f83182c72534a769bd5c82b1d752ae1.jpg"></a>
+                </div>
+                <!-- 广告 结束 -->
+            </div>
+        </div>
+    </div>
+    <div class="clear">
+    </div>
+
+	</div>
+	<!--footer-->
+		<include file="Index:footer" />
+	<!--footer end-->
+
+
+
+
+</body></html>

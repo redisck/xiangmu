@@ -1,0 +1,169 @@
+<!doctype html>
+<html>
+	<head>
+		<meta http-equiv="content-type" content="text/html;charset=utf-8">
+		<link rel="stylesheet" type="text/css" href='__PUBLIC__/css/css.css'>
+		
+		<link href="__PUBLIC__/css/back.css" type="text/css" rel="stylesheet">
+		<script src="__PUBLIC__/js/jquery-1.7.2.js"></script>
+		<script>
+			$(function(){
+				//显示添加分类框
+				/* $(".add_class_button").click(function(){
+					
+					$(".zhezhao").css('background','#000').css('width','100%').css('height','100%').css('opacity','0.5').show().next('.add_class').show();
+				}); */
+				/*弹出层*/
+		$(".btn").click(function(){
+		
+			var box =300;
+			
+			var th= $(window).scrollTop()+$(window).height()/1.6-box;
+			
+			var h =document.body.clientHeight;
+			
+			var rw =$(window).width()/2-box;
+			
+			$(".showbox").animate({top:th+100,opacity:'show',width:300,height:250,right:rw+200},500);
+			
+			$("body").prepend("<div class='mask'></div>");
+			
+			$(".mask").css({opacity:"0.5"}).css("height",h);
+			
+			//return false;
+			
+		});
+		
+		$(".showbox .close").click(function(){
+		
+			$(this).parents(".showbox").animate({top:0,opacity: 'hide',width:0,height:0,right:0},1000);
+			
+			$(".mask").fadeOut("fast");
+			
+		});
+	/*结束*/
+
+				
+			})
+			function del(obj){
+				var result=confirm("你确定要删除吗，删除会有很大后果！");
+				if(result==true){
+					window.location.href="__APP__/Classify/delete/id/"+obj.id
+				}
+			}
+		</script>
+		<style>
+				td{user-select:none;}
+				*{margin:0;padding:0;list-style-type:none;}
+				.showbox{width:0px;height:0px;display:none;position:absolute;right:0;top:0;z-index:100;border:1px #8FA4F5 solid;padding:1px;background:#fff;}
+				.showbox h2{height:25px;font-size:14px;background-color:#3366cc;position:relative;padding-left:10px;line-height:25px;color:#fff;}
+				.showbox h2 a{position:absolute;right:5px;top:0;font-size:12px;color:#fff;}
+				.showbox .mainlist{padding:10px;}
+				.showbox .mainlist li{height:24px;line-height:24px;}
+				.showbox .mainlist li span{margin:0 5px 0 0;font-family:"宋体";font-size:12px;font-weight:400;color:#ddd;}
+				.showbox .mainlist li a{font-size:12px;}
+				.mask{background:#666;position:absolute;z-index:99;left:0;top:0;display:none;width:100%;height:100%;opacity:0.5;filter:alpha(opacity=50);-moz-opacity:0.5;}
+
+		</style>
+	</head>
+	<body>
+		<div style="margin-left:500px;margin-top:20px">
+		<!--<button class="add_class_button">添加分类</button></div>-->
+		<a href="javascript:void(0)"  rel="添加分类" title="添加分类"><input class="btn btn-small" type="button" value="添加分类" ></a></div>
+		<table class="table" cellspacing="1" cellpadding="0" width="80%" align="center" border="1">
+		  <tbody>
+			<tr>
+			  <th class="bg_tr" align="center" height="25">分类名称</th>
+			  <th class="bg_tr" align="center" width='30%'>是否显示</th>
+			  <th class="bg_tr" align="center">操作</th>
+			</tr>
+			<volist name='class_list' id='list'>
+			<tr>
+				<td>
+					<volist name='list.length' id='length'>
+						&nbsp;&nbsp;&nbsp;
+					</volist>
+					<{$list.name}>
+				</td>
+				<td style="text-align:center">
+				<if condition="$list.status eq 0">
+				是<else/>否
+				</if>
+				</td>
+				<td style="text-align:center"><a href='__URL__/edit?id=<{$list.id}>'>修改</a> <span style="color:blue"> | </span> <a href="javascript:void(0)" id="<{$list.id}>" onclick="del(this)">删除</a></td>
+			</tr>
+			</volist>
+		  </tbody>
+	</table>
+	<div class="zhezhao">
+	</div>
+	<!--
+	<div class="add_class"> 
+		<div class="close">X</div>
+		<form action="__URL__/add" method="post">
+			<table class="add_class_table" cellspacing="0" cellpadding="0" width="70%" align="center" border=1>
+				<tr>
+					<td width=50%>分类名称</td><td><input type="text" name="class_name" id="class_name" style="width:100px"></td>
+				</tr>
+				<tr>
+					<td>父级分类</td>
+					<td>
+						<select name="pid">
+							<option value="0">顶级分类</option>
+							<volist name='class_list' id='list'>
+								<option value="<{$list.id}>">
+									<volist name='list.length' id='length'>
+										&nbsp;
+									</volist>
+								<{$list.name}>
+								</option>
+							</volist>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td>是否显示</td>
+					<td><input type="radio" value="0" name="status" checked="checked">显示 &nbsp;&nbsp;<input type="radio" name="status" value="1">不显示 </td>
+				</tr>
+			</table>
+			<div style="width:80px;margin:0 auto;margin-top:20px"><input type="submit" value="提交" id="submit" style="width:80px;"></div>
+		</form>
+	</div>
+	-->
+	<div class="showbox">
+		<h2>添加分类<a class="close" href="#">关闭</a></h2>
+		<div class="mainlist">
+			<table width="360px" border="0" cellpadding="0" cellspacing="1"    class="all_cont" style="">
+				  <form action="__APP__/Classify/add"  method="post" >
+					
+				  <tr>
+					<td width=50%>分类名称</td><td><input type="text" name="class_name" id="class_name" style="width:100px"></td>
+				</tr>
+				<tr>
+					<td>父级分类</td>
+					<td>
+						<select name="pid">
+							<option value="0">顶级分类</option>
+							<volist name='class_list' id='list'>
+								<option value="<{$list.id}>">
+									<volist name='list.length' id='length'>
+										&nbsp;
+									</volist>
+								<{$list.name}>
+								</option>
+							</volist>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td>是否显示</td>
+					<td><input type="radio" value="0" name="status" checked="checked">显示 &nbsp;&nbsp;<input type="radio" name="status" value="1">不显示 </td>
+				</tr>
+				          
+			</table>
+				<div style="width:80px;margin:0 auto;margin-top:20px"><input type="submit" value="提交" id="submit" style="width:80px;" class="btn btn-primary btn-small"></div>
+			 </form>
+		</div>
+	</div>
+	</body>
+</html>

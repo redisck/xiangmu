@@ -1,0 +1,126 @@
+<script src="__PUBLIC__/js/jquery-1.7.2.js"></script>
+	<script>
+		$(function(){
+			$("#Logout").click(function(){
+				window.location.href="__APP__/Login/logout";
+			});
+			$("#order").click(function(){
+				alert('请先登录');
+				window.location.href='__APP__/Index/index';
+			});
+			$("#cart").click(function(){
+				alert('请先登录');
+				window.location.href='__APP__/Index/index';
+			});
+		})
+	</script>
+
+	<div id="head">
+	    <!--登录ToolBar begin -->
+	    
+<!-- 嵌入SDO登录条方案20100609-->
+<div id="site_nav">
+    <!--[if !IE]> 未登录状态 <![endif]-->
+    <if condition="$_SESSION['user']">
+    
+
+    <!--[if !IE]> 登录状态 <![endif]-->
+    <p id="yesLogin" class="login" style="display:block;">
+        <label id="lblUserName">
+			<{$_SESSION['user']['username']}>
+        </label>
+		
+        (<a href="javascript:void(0)" target="_blank">新消息：<label id="lblMsgCount"></label></a>)
+        ┊
+        <label>
+            <a href="javascript:void(0)" target="_blank">个人中心</a></label>
+        ┊
+        <label id="lblMyBookShelf">
+            我的书架</label>
+        ┊
+        <label id="lblVIPBookShelf" style="display: none;">
+            <a href="javascript:void(0)" style="color: #DA1A27;" target="_blank">
+                VIP书架</a>&nbsp;┊</label>
+        <label>
+            <a href="javascript:void(0)" target="_blank">web游戏</a></label>
+        ┊
+        <label id="lblMoreService">
+            更多服务</label>
+        ┊
+        <label>
+            <input type="button" name="button" id="Logout" value="退出" class="btn"></label>
+    </p>
+		<else/>
+		<div id="SdoOALoginIframeBar">
+			<div style="text-align: left; line-height: 24px;" id="nologin">
+				&nbsp;欢迎访问起点商城，请&nbsp;<a href="javascript:;" id="login_button" style="color: #cc0000;">登录</a>&nbsp;或&nbsp;<a href="__APP__/Registor/index" style="color: #236608;">注册</a>
+			</div>
+		</div>
+	</if>
+    <ul class="quick_menu">
+        <li class="qdmm"><a href="javascript:void(0)" target="_blank">【起点中文网】</a></li>
+        <li><a href="javascript:void(0)" target="_blank">简体版</a></li>
+        <li><a href="javascript:void(0)" target="_blank">繁体版</a></li>
+        <li class="home"><a href="javascript:void(0);" >
+            设为主页</a></li>
+    </ul>
+ 
+</div>
+
+
+
+
+	    <!--登录ToolBar end -->
+	    <!--Top AD begin -->
+		<div id="layout">
+			<div id="layout_inner">
+				<h1 id="mall_logo" style="padding-left:15px;"><a href="javascript:void(0)" target="_blank"><img src="__PUBLIC__/images/logo_mall_qd.gif"></a></h1>
+				<div class="banner">
+					<div class="ad">
+					    <div width="600" height="65">  <a href="" target="_blank"><img src="__PUBLIC__/images/20131204_093730537.gif" alt="起点广告" border="0"> </a></div></div>
+					<div class="qd_logo">
+					    <a href="javascript:void(0)" target="_blank"><img src="__PUBLIC__/images/logo_qd.gif"></a></div>
+				</div>
+			</div>
+		</div>
+		<!--Top AD  end -->
+		<div id="mall_nav" style="width:980px;">
+			<div class="con">
+				<ul class="main">
+					<li class="current"><a href="__APP__/Index/index">首页</a></li>
+					<li><a href="__APP__/Book/index">图书</a></li>
+					<li><a href="__APP__/Plaything/index">周边</a></li>
+					<li><a href="javascript:void(0)">道具</a></li>
+					<li><a href="javascript:void(0)">彩票</a></li>					
+					<li><a href="javascript:void(0)">百货</a></li>
+					
+					
+				</ul>
+				<ul class="others">
+					<if condition="$_SESSION['user']">
+					<li class="cart"><a href="__APP__/Showcart/index" ><s> </s>购物车</a></li>
+					<else/>
+					<li class="order"><a href="javascirpt:void(0)" id="cart">购物车</a></li>
+					</if>
+					<if condition="$_SESSION['user']">
+					<li class="order"><a href="__APP__/Order/index">我的订单</a></li>
+					<else/>
+					<li class="order"><a href="javascirpt:void(0)" id="order">我的订单</a></li>
+					</if>
+					<li class="my_mall">
+						<div class="menu">
+						    <a href="javascript:void(0)" target="_blank" >我的商城<b> </b></a>						    
+							<div id="divMenuMore" class="menu_bd" style="display: none;">
+								<div>
+								    <a href="javascript:void(0)"target="_blank">我的订单</a>
+								    <a href="javascript:void(0)" target="_blank">我的仓库</a>
+								    <a href="javascript:void(0)" target="_blank">我的收藏夹</a>
+								</div>
+							</div>
+						</div>
+					</li>
+					<li class="bd_none"><a href="javascript:void(0)">帮助</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>

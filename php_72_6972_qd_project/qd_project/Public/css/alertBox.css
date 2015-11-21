@@ -1,0 +1,60 @@
+.ajax_box,#pop_box_bg {position:absolute;top:0;left:0;z-index:55555;width:100%;}
+#pop_box_bg {z-index:55550;background:url(../images/pop_box_bg.png);_background:#000;_filter:alpha(opacity=15);/*opacity:0.15;*/}
+
+
+/* table */
+.ajax_box { width:440px;}
+.ajax_box .bd{ height:6px; background:#000; filter:alpha(opacity=50);opacity:0.50;}
+.ajax_box .con { border:1px solid #6d6d6d; background:#fff;}
+
+/* title */
+.ajax_box .title_box{ height:39px; background: url(../images/bg_ajax_title.png) no-repeat 0 0; overflow:hidden; position:relative;}
+.ajax_box .title_box h3{ font-size:14px; font-weight:bold; line-height:39px; text-indent:8px; color:#fff;}
+.ajax_box .title_box a{ position:absolute; right:11px; top:11px; width:16px; height:16px; background:url(../images/bg_ajax_title.png) no-repeat 0 -39px; text-indent:-9999px;}
+
+/* main content */
+.ajax_box .content_box{_height:50px;min-height:50px; padding:20px;}
+
+/* operation */
+.ajax_box .opt_box{ height:30px; background:#f8f8f8; border-top:1px solid #d1d1d1; padding:10px 0; text-align:center;}
+.ajax_box .opt_box a{ margin:0 10px;}
+.ajax_box .opt_box input{ margin:0 5px;}
+
+.ajax_box .opt_box .btn{ background:url(../images/btn_mall.png) no-repeat; display:inline-block; text-align:center; height:22px; line-height:22px;}
+.ajax_box .opt_box .btn_gray { width:74px; font-weight:bold; color:#333; background-position:0 -97px;}
+.ajax_box .opt_box .btn_read { width:79px; font-weight:bold; color:#fff; background-position:0 -176px;}
+.ajax_box .opt_box .btn_long_read { width:104px; font-weight:bold; color:#fff; background-position:0 -242px;}
+
+
+/* buy confirm */
+.success_alert.content_box{ padding:30px 30px 20px 30px;}
+.success_alert p{ text-align:center; line-height:30px;}
+.success_alert .confirm { font-size:14px; font-weight:bold; margin-bottom:10px;}
+.success_alert .info em { color:#ff7011;}
+.success_alert strong { font-weight:bold;}
+.success_alert b { color:#ff7011; font-size:20px; font-family:Arial, Helvetica, sans-serif;}
+.success_alert i{ background:url(../images/icon_ajax.png) no-repeat; width:24px; height:24px; display:inline-block; margin-right:20px;}
+.success_alert i.seccess{ background-position:0 0; }
+.success_alert i.error{  background-position:0 -24px;}
+
+.info_list { line-height:26px; width:280px; margin:auto;}
+.info_list input { width:20px; padding:2px;}
+
+/* modify address */
+.tig { margin-bottom:10px;}
+.adress_modify .h{ color:#FF0000;}
+.adress_modify td{ padding:2px 2px; color:#666; line-height:24px;}
+
+/* contact service */
+.contact_service {}
+.contact_service td{ padding:5px;}
+.contact_service textarea{ width:100%;}
+
+/* fav */
+.fav_alert.content_box{ padding:30px 30px 20px 30px;}
+
+/*movie*/
+.tapbox {height:27px;border-bottom:3px solid #909090;margin-bottom:40px;padding-left:16px;}
+.tapbox .active{padding:7px;background:#909090;float:left;margin-left:3px;color:#fff;font-size: 14px;font-weight: bold;}
+.tapbox .notactive{padding:6px;border:1px solid #909090;background:#fff;float:left;margin-left:3px;color:#3a3d4a;font-size:14px;line-height:14px;}
+.inputx {padding:5px;border:1px solid #999999;}

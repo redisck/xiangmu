@@ -1,0 +1,57 @@
+
+#PayMethod,#PayMethod h4{ display:block ; clear:both;}
+
+.alipaybanklist { height: 240px; margin: 5px 0 30px 10px; display:block;  clear:both ;}
+.alipaybanklist li div { float: left; position: absolute; }
+#alipaybanklist .alipaybanklist div label { background-color: #EEEEEE; border: 1px solid #DDDDDD; clear: none; cursor: pointer; display: inline-block; margin: 0; vertical-align: middle; width: 100px; }
+.alipaybanklist div input { clear: none; display: inline-block; margin: 0; padding: 0; vertical-align: middle; }
+.alipaybanklist li.current, .alipaybanklist li:hover { border-color: #FF6600 !important; }
+.alipaybanklist span.ico { background-repeat: no-repeat; color: #0077FF; display: block; font-weight: bold; height: 22px; line-height: 22px; overflow: hidden; padding: 0 10px; white-space: nowrap; }
+.alipaybanklist li { border: 1px solid white; float: left; height: 24px; margin: 10px 1px 15px 2px; width: 128px; float:left; }
+.alipaybanklist li span { background-image: url("/images/alipaybank/alipaybanicon_new.png"); text-indent: -9999px; }
+.alipaybanklist li div span.ICBCBTB { background-image: url("/images/alipaybank/B2BENV_ICBC_OUT.gif"); }
+.alipaybanklist li div span.ABC { background-image: url("/images/alipaybank/ABC_OUT.gif"); }
+.alipaybanklist li div span.abc1003 { }
+.alipaybanklist li div span.abc1004 { }
+.alipaybanklist li div span.ABCBTB { background-image: url("/images/alipaybank/B2B ENV_ABC_OUT.gif"); }
+.alipaybanklist li div span.BJBANK { background-image: url("/images/alipaybank/BJBANK.png"); }
+.alipaybanklist li div span.BJRCB { background-image: url("/images/alipaybank/BJRCB_OUT.gif"); }
+.alipaybanklist li div span.BOCB2C { background-image: url("/images/alipaybank/BOC_OUT.gif"); }
+.alipaybanklist li div span.BOC-DEBIT { background-image: url("/images/alipaybank/BOC_OUT.gif"); }
+.alipaybanklist li div span.CCB { background-image: url("/images/alipaybank/CCB_OUT.gif"); }
+.alipaybanklist li div span.CCBBTB { background-image: url("/images/alipaybank/B2B ENV_CCB_OUT.gif"); }
+.alipaybanklist li div span.CCB-DEBIT { background-image: url("/images/alipaybank/CCB_OUT.gif"); }
+.alipaybanklist li div span.CEBBANK { background-image: url("/images/alipaybank/CEB_OUT.gif"); }
+.alipaybanklist li div span.CEB-DEBIT { background-image: url("/images/alipaybank/CEB_OUT.gif"); }
+.alipaybanklist li div span.CIB { background-image: url("/images/alipaybank/CIB_OUT.gif"); }
+.alipaybanklist li div span.CITIC { background-image: url("/images/alipaybank/CITIC_OUT.gif"); }
+.alipaybanklist li div span.CMB { background-image: url("/images/alipaybank/CMB_OUT.gif"); }
+.alipaybanklist li div span.CMBC { background-image: url("/images/alipaybank/CMBC_OUT.gif"); }
+.alipaybanklist li div span.CMB-DEBIT { background-image: url("/images/alipaybank/CMB_OUT.gif"); }
+.alipaybanklist li div span.COMM { background-image: url("/images/alipaybank/COMM_OUT.gif"); }
+.alipaybanklist li div span.COMM-DEBIT { background-image: url("/images/alipaybank/COMM_OUT.gif"); }
+.alipaybanklist li div span.FDB { background-image: url("/images/alipaybank/FDB_OUT.gif"); }
+.alipaybanklist li div span.GDB { background-image: url("/images/alipaybank/GDB_OUT.gif"); }
+.alipaybanklist li div span.GDB-DEBIT { background-image: url("/images/alipaybank/GDB_OUT.gif"); }
+.alipaybanklist li div span.HZCBB2C { background-image: url("/images/alipaybank/HZCB_OUT.gif"); }
+.alipaybanklist li div span.ICBCB2C { background-image: url("/images/alipaybank/ICBC_OUT.gif"); }
+.alipaybanklist li div span.ICBC-DEBIT { background-image: url("/images/alipaybank/ICBC_OUT.gif"); }
+.alipaybanklist li div span.NBBANK { background-image: url("/images/alipaybank/NBBANK_OUT.gif"); }
+.alipaybanklist li div span.POSTGC { background-image: url("/images/alipaybank/PSBC_OUT.gif"); }
+.alipaybanklist li div span.PSBC-DEBIT { background-image: url("/images/alipaybank/PSBC_OUT.gif"); }
+.alipaybanklist li div span.SDB { background-image: url("/images/alipaybank/SDB_OUT.gif"); }
+.alipaybanklist li div span.SHBANK { background-image: url("/images/alipaybank/SHBANK_OUT.gif"); }
+.alipaybanklist li div span.SHRCB { background-image: url("/images/alipaybank/SHRCB.png"); }
+.alipaybanklist li div span.SPABANK { background-image: url("/images/alipaybank/SPABANK_OUT.gif"); }
+.alipaybanklist li div span.SPDB { background-image: url("/images/alipaybank/SPDB_OUT.gif"); }
+.alipaybanklist li div span.SPDBB2B { background-image: url("/images/alipaybank/B2B ENV_SPDB_OUT.gif"); }
+.alipaybanklist li div span.SPDB-DEBIT { background-image: url("/images/alipaybank/SPDB_OUT.gif"); }
+.alipaybanklist li div span.WZCBB2C-DEBIT { background-image: url("/images/alipaybank/WZCBB2C-DEBIT.png"); }
+#payswitches li { float: left;  margin:0 10px; }
+#payswitches li label, #payswitches li label img, #payswitches li label div{  margin: 0 auto; height: 50px; vertical-align: middle; 
+ width:172px; text-align:left;
+}
+#payswitches li label span{  display: inline-block;
+    font-size: 16px;
+    font-weight: bold;
+    margin-top: 11px;}

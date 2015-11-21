@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="__PUBLIC__/css/back.css" type=text/css rel=stylesheet>
+<script language="javascript">
+  $(function ($) { 
+	//行颜色效果
+	$('.all_cont tr').hover(
+	function () {
+        $(this).children().css('background-color', '#f9f9f9');
+	},
+	function () {
+        $(this).children().css('background-color', '#fff');
+	});
+  });
+</script>
+<title>配置</title>
+</head>
+<body>
+<div class="contener">
+   <div class="list_head_m">
+		  <div class="list_head_ml">当前位置：【环境信息】</div>
+		  <div class="list_head_mr"></div>
+   </div>
+
+
+		<table width="100%" border="0" cellpadding="0" cellspacing="1" class="all_cont">
+			<tr>
+				<th width="100%" colspan="2">服务器概况</th>
+			</tr>
+			<tr>
+				<td>服务器域名/IP地址：<{$config_arr.server_name}>(<{$config_arr.server_ip}>)</td>
+				<td>服务器时间：<{$config_arr.server_time}></td>
+			</tr>
+
+			<tr>
+				<td>服务器操作系统：<{$config_arr.os}>&nbsp;(内核版本：<{$config_arr.os_core}>)</td>
+				<td>站点物理路径：<{$config_arr.server_root}></td>
+			</tr>
+			<tr>
+				<td>服务器解译引擎：<{$config_arr.server_engine}></td>
+				<td>Web服务端口：<{$config_arr.server_port}></td>
+			</tr>
+			<tr>
+				<td>PHP版本：<{$config_arr.php_version}></td>
+				<td>PHP运行方式：<{$config_arr.php_run_type}></td>
+			</tr>
+			<tr>
+				<td>POST最大字节数(post_max_size)：<{$config_arr.post_max_size}></td>
+				<td>允许最大上传文件(upload_max_filesize)：<{$config_arr.upload_max_filesize}></td>
+			</tr>
+			<tr>
+				<td>程序最多允许使用内存量(memory_limit)：<{$config_arr.memory_limit}></td>
+				<td>程序最长运行时间(max_execution_time)：<{$config_arr.max_execution_time}>秒</td>
+			</tr>
+			
+			<tr>
+				<td>MySQL数据库：<{$config_arr.mysql_support}></td>
+				<td>Session支持：<{$config_arr.session_support}></td>
+			<tr>
+				<td>允许使用URL打开文件(allow_url_fopen)：<{$config_arr.allow_url_fopen}></td>
+				<td>允许动态加载链接库(enable_dl)：<{$config_arr.enable_dl}></td>
+			</tr>
+			<tr>
+				<td>显示错误信息(display_errors)：<{$config_arr.display_errors}></td>
+				<td>自动定义全局变量(register_globals)：<{$config_arr.register_globals}></td>
+			</tr>
+		</table>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<title>
+			起点商城——图书列表
+		</title>
+		<link href="__PUBLIC__/css/reset.css" rel="Stylesheet" type="text/css">
+		<link href="__PUBLIC__/css/style_main.css" rel="Stylesheet" type="text/css">
+		<link href="__PUBLIC__/css/impromptu.css" rel="Stylesheet" type="text/css">
+		<link href="__PUBLIC__/css/alertBox.css" rel="Stylesheet" type="text/css">
+		<link href="__PUBLIC__/css/daoju.css" rel="stylesheet" type="text/css">
+		<link href="__PUBLIC__/css/al_book_130508.css" rel="stylesheet" type="text/css">
+		<link href="__PUBLIC__/css/book_channel.css" rel="stylesheet" type="text/css">
+		<link href="__PUBLIC__/css/login.css" rel="stylesheet" type="text/css" >
+		<style>
+			.l_classes{
+				line-height:25px;
+			}
+		</style>
+		<script src="__PUBLIC__/js/jquery-1.7.2.js"></script>
+		<script src="__PUBLIC__/js/login.js"></script>
+		<script>
+			
+			$(function(){
+				
+				$("#button_user_login").click(function(){
+					if($('#username').val()=="" || $("#password").val()==""){
+						alert("用户名密码不能为空");
+					}else{
+						$("form:first").submit();
+					}
+				
+				});
+			$(".no_session").click(function(){
+				alert('请先登录');
+			})
+				/*继续购物*/
+			$("#btnContinue").click(function(){
+				$(".showcart").css('display','none');
+				$("#zhezhao").css("display","none");
+			});
+			/*关闭购物车*/
+			$("#btnClose").click(function(){
+				$(".showcart").css('display','none');
+				$("#zhezhao").css("display","none");
+			})
+			/*前往购物车*/
+			$("#btnShoppingCart").click(function(){
+				window.location.href='__APP__/Showcart/index';
+			})
+		})
+			/*购物车*/
+		function showcart(obj){
+			$.ajax({
+				url:"__APP__/Showcart/sendcart",
+				type:"post",
+				data:"id="+obj.id+"&num=1",
+				dataType:"json",
+				success:function(data){
+					
+					if(data==0){
+						alert('暂时没货');
+					}else{
+						$("#zhezhao").css("width","100%").css("height","2200px").css("background","#aaaaaa").css("opacity","0.5").css("display","block").css("z-index","2014");
+						$(".showcart").css('display','block');
+						$("#lblNumCount").html(data.count);
+						$("#lblPriceCount").html(data.total);
+					}
+					
+				}
+			})
+		}
+		</script>
+    
+	</head>
+<body>
+<div id="zhezhao" style="position:absolute;top:0px;left:0px;display:none">
+</div>
+<div id="login" class="login_content" style="display:none">
+	<div class="pop_main">
+		<div class="pop_header">
+			<div id="pop_head_1">
+				<h3 class="pop_content_II">登陆起点</h3>
+			</div>
+			<div class="pop_content_opt">
+				<a href='javascript:void(0)' class="pop_content_close" id="pop_close_1">关闭</a>
+			</div>
+		</div>
+		<div style="height:340px;overflow:hidden" class="pop_main">
+			<div class="sd_banner">
+				<div id="pop_head_1" style="height:45px">
+					<h3 id="pop_title_1"></h3>
+				</div>
+				<div class="pop_content_opt" id="pop_content_1">
+				</div>
+			</div> 
+			<div class="login_main">
+			<form name='myform' action="__APP__/Login/dologin" method="post">
+				<div class="login_name">
+					<input type="text" name="username" id="username" >
+				</div>
+				<div class="name_hidden">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;手机号/邮箱/个性账号</div>
+				<div class="login_name" style="margin-top:10px">
+					
+					<input type="password" name="password" id="password" >
+				</div>
+				<div class="p_hidden">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;请输入密码</div>
+			
+				<div class="login_button">
+					<a class="button_user_login" id="button_user_login" style="cursor:pointer" href="javascript:void(0)" >
+						<span class="button_user_login_index" >登陆</span>
+					</a>
+			
+				</div>
+			</form>
+			</div>
+		</div>
+	</div>
+</div>
+<!--购物车-->
+<div class="showcart" style="position:fixed;left:300px;top:250px; z-index:99999;display:none">
+	<table border="0" cellspacing="0" cellpadding="0" class="ajax_box">
+<colgroup valign="middle">
+<col width="5">
+<col width="430">
+<col width="5">
+</colgroup>
+	<tbody><tr>
+		<td class="bd"></td>
+		<td class="bd"></td>
+		<td class="bd"></td>
+	</tr>
+	<tr>
+		<td class="bd"></td>
+		<td class="con">
+                <!-- 标题层 start-->
+                <div class="title_box">
+                    <h3>欢迎使用起点购物系统</h3>
+                    <a id="btnClose" href="javascript:void(0);" title="关闭">关闭</a>
+				</div>
+                <!-- 标题层 end-->
+
+                <!-- 内容层 start-->
+                <div class="content_box success_alert">
+					<p class="confirm"><i class="seccess"> </i>商品已成功添加到购物车！</p>
+					<p class="info">购物车共&nbsp;<em><label id="lblNumCount">1</label></em>&nbsp;件商品，共计&nbsp;<b><label id="lblPriceCount">48.00</label></b>&nbsp;(元)</p>
+                </div>
+                <!-- 内容层 end-->
+
+                <!-- 操作层 start-->
+                <div class="opt_box"><a href="javascript:void(0);" id="btnContinue" class="btn btn_gray">继续购物</a><a id="btnShoppingCart" href="javascript:void(0);" class="btn btn_long_read">去购物车结算</a></div>
+                <!-- 操作层 end-->
+				 
+		</td>
+		<td class="bd"></td>
+	</tr>
+	<tr>
+		<td class="bd"></td>
+		<td class="bd"></td>
+		<td class="bd"></td>
+	</tr>
+</tbody></table>	
+</div>
+<!--购物车结束-->
+<div id="page">
+	<!--header开始-->
+	<include file="List:header" />
+	<!--end-->
+	<div id="content">
+        
+    
+
+<div class="search_box book_search">
+
+
+	<div class="search_card">
+		  <form action="__APP__/Search/index" method="get">
+			<label><input name="condition" type="radio" value="1" checked=""> 书名</label>&nbsp;
+			<label><input name="condition" type="radio" value="2"> 作者</label>&nbsp;
+			<label><input name="condition" type="radio" value="3"> 出版社</label>&nbsp;&nbsp;
+			<input id="txtSearchKey" class="ipt_txt" value="" name="search_name">
+			<input type="submit" class="btn_search" id="btnSearch" value="搜 索">
+		 </form>
+	
+	</div>
+	<p class="hotsearch"><span>热搜：</span><a target="_blank" href="">新书上架</a>&nbsp;<a target="_blank" href="">吞噬星空系列</a>&nbsp;<a target="_blank" href="">莽荒纪</a></p>
+</div>
+
+
+    <div class="col_main ">
+        <div class="location">
+            <b>您现在的位置：</b><a href="javascript:void(0)"><{$classify_father.name}></a>
+
+            <span id="t_nvaigation"></span>
+        </div>
+        <div class="col_left">
+            <a target="_blank" href="">
+                <img src="__PUBLIC__/images/button.png" width="207" height="30"></a>
+            <div class="books_nav mb11 bookswhite" style="padding-top: 10px">
+ 
+                <div class="title">
+                    <a style="color: white; line-height: 2;" href="">图书分类</a>
+				</div>
+                <div class="con" style="height:360px">
+                    <div id="divQd" style="">
+					<ul class="sub1-itembox" id="nav">
+					<volist name="book_classes" id="classes">
+						<li><a href="__APP__/List/index/classify_id/<{$classes.id}>" class="l_classes" <if condition="$classes['on']"> style="color:red"  </if> ><{$classes.name}></a></li>
+					</volist>
+					</ul></div>
+
+
+                </div>
+            </div>
+            <!--起点畅销榜-->
+          
+            <!-- 传统畅销榜 -->
+            
+        </div>
+        <div class="col_right">
+            <div class="grid_right_762_2 show_list mb11">
+                <div class="title filter_tools clearfix">
+                    
+                
+                    <ul class="clearfix">
+                        <li>排序：</li>
+						<if condition="$Think.get.order eq 'reserve'">
+						<li><a href="__APP__/List/index/classify_id/<{$Think.get.classify_id}>/order/reserve"  class="by_math current" title="销售量由高到低">销 量</a></li>
+						<else/>
+						<li><a href="__APP__/List/index/classify_id/<{$Think.get.classify_id}>/order/reserve"  class="by_math" title="销售量由高到低">销 量</a></li>
+						</if>
+						<if condition="$Think.get.price eq 'asc'">
+                        <li><a href="__APP__/List/index/classify_id/<{$Think.get.classify_id}>/price/asc"  class="by_price current" style="width: 51px;" title="价格由低到高">价 格</a></li>
+						<else/>
+						<li><a href="__APP__/List/index/classify_id/<{$Think.get.classify_id}>/price/asc"  class="by_price" style="width: 51px;" title="价格由低到高">价 格</a></li>
+						</if>
+                    </ul>
+                </div>
+                <div class="con">
+                    <div class="total">
+                        显示： <em><{$firstRow}>-<if condition="$count_list lt 20"><{$count_list}> <else/><{$listRows}></if>            条</em>， 共<em><{$count_list}></em>条</div>
+                    <div class="show_list_cont bookslist_new">
+                        <volist name="book_list" id="list">
+						<div class="show_list_item">
+								<h4><a target="_blank" href="__APP__/Content/index/id/<{$list.id}>/classify_id/<{$list.classify_id}>"><{$list.name}></a></h4>
+								<dl class="book_info clearfix">
+									<dt><info>作者 ：</info><a title="<{$list.author}>" target="_blank" href="javascript:void(0)"><span><{$list.author}></span></a></dt>
+									<dd><info>类别：</info> <span><{$classify_father.name}></span></dd>
+									<dt><info>出版社：</info><a a="" title="<{$list.press}>" target="_blank" href="javascript:void(0)"><span><{$list.press}></span></a></dt>
+									<dd><info>出版时间：</info><span>2014-1-1</span></dd>
+								</dl>
+							<p>简介：<br><{$list.description}></p>
+							<p class="prize_info"><span class="book_prize"><em>¥<{$list.qd_price}></em></span><span>原价：<del>¥<{$list.price}></del></span><span>折扣：<ins><{$list.rebate}>折</ins></span></p>
+							<div class="book_cover  item_box">
+								<a title="<{$list.name}>" target="_blank" href="__APP__/Content/index/id/<{$list.id}>/classify_id/<{$list.classify_id}>">
+									<img alt="<{$list.name}>" src="__PUBLIC__/uploads/Goods_images/<{$list.image_first}>/big/b_<{$list.image_last}>">
+								</a>
+							</div>
+							<div class="ope">
+								<if condition="$list['reserve'] eq 0">
+								<a class="btn_none"  href="javascript:void(0);">暂无库存</a>
+								<else/>
+									<if condition="$_SESSION['user']">
+										<a class="btn_lk_sail" id="<{$list.id}>" onclick="showcart(this)" href="javascript:void(0);">立刻购买</a>
+									<else/>
+										<a class="btn_lk_sail no_session"  href="javascript:void(0);">立刻购买</a>
+									</if>
+								</if>
+								<a class="btn_fav" onclick="" href="javascript:void(0);">收藏</a>
+							</div>
+						</div>
+						</volist>
+                        <div align="right" class="pagetor">
+                            <div class="pagetor" align="right">
+								<{$show}>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="clear">
+    </div>
+
+	</div>
+	<!--footer开始-->
+	<include file="List:footer" />
+	<!--end-->
+</div>
+
+
+</div>
+</body></html>

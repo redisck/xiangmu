@@ -1,0 +1,1 @@
+IsADRefererSystemRight=true;try{adrsload();}catch(e){}

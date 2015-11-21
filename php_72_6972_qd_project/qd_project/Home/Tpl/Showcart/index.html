@@ -1,0 +1,405 @@
+<!DOCTYPE html">
+<!-- saved from url=(0049)http://shop.qidian.com/Purchase/ShoppingCart.aspx -->
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<title>起点商城——购物车</title>
+		<link href="__PUBLIC__/css/reset.css" rel="Stylesheet" type="text/css">
+		<link href="__PUBLIC__/css/style_main.css" rel="Stylesheet" type="text/css">
+		<link href="__PUBLIC__/css/impromptu.css" rel="Stylesheet" type="text/css">
+		<link href="__PUBLIC__/css/daoju.css" rel="stylesheet" type="text/css">
+		<link href="__PUBLIC__/css/paymodestyle.css" rel="stylesheet" type="text/css">
+		<link href="__PUBLIC__/css/login.css" rel="stylesheet" type="text/css" >
+    <style type="text/css">
+        .div_line
+        {
+            border-bottom: 1px solid #CFCFCF;
+            margin: 20px 0px;
+            height: 2px;
+             display:block;
+              clear:both;            
+        }
+    </style>
+	<script src="__PUBLIC__/js/jquery-1.7.2.js"></script>
+	<script src="__PUBLIC__/js/login.js"></script>
+	<script>
+		$(function(){
+			$("#login_button").click(function(){
+				$("#zhezhao").css("width","100%").css("height","2200px").css("background","#000").css("opacity","0.5").css("display","block").css("z-index","2014").next(".login_content").css("display","block").css("z-index","2015");
+			});
+			$("#button_user_login").click(function(){
+				if($('#username').val()=="" || $("#password").val()==""){
+					alert("用户名密码不能为空");
+				}else{
+					$("form:first").submit();
+				}
+			
+			})
+			
+		})
+		function del(obj){
+	
+			var result=confirm("您确认要从购物车删除此商品");
+			if(result==true){
+				$.ajax({
+					url:'__APP__/Showcart/delete',
+					type:'post',
+					data:'id='+obj.id,
+					success:function (data){
+						if(data==1){
+							$numtotal=$(obj).parent().siblings("#deltotal").children().children().html();
+							$alltotal=$("#changetotalprice").html();
+							$newalltotal=$alltotal-$numtotal;
+							$("#changetotalprice").html($newalltotal.toFixed(2));
+							$(obj).parent().parent().remove();
+						}else{
+							alert("删除失败");
+						}
+					}
+				})
+			}
+		
+		}
+		function newnum(obj){
+			var $flag;
+			var reg=/\D/;
+				if($(obj).val()=='0' || $(obj).val()=='' || reg.test($(obj).val())){
+					$(obj).val("1");
+				}
+			var $newnum=obj.value;
+			//alert(obj.id);
+			//起点单价
+			var $qd_price=$(obj).parent().prev().children().html();
+			//原来的小计
+			var $oldprice=$(obj).parent().next().children().children().html();
+			//修改数量后的新小计
+			var $newprice=parseInt($newnum)*parseFloat($qd_price);
+			
+			//修改数量前后的价钱差
+			var $changeprice=$newprice-$oldprice;
+			//修改后小计操作
+			$(obj).parent().next().children().children().html($newprice.toFixed(2));
+			//修改前的总价
+			 var $oldtotalprice=$("#goodstotalprice").children().children().html();
+			 $newtotalprice=parseFloat($oldtotalprice) + parseFloat($changeprice);
+			 $("#goodstotalprice").children().children().html($newtotalprice.toFixed(2));
+			 $("#goodspricetotal").val($newtotalprice.toFixed(2));
+			 $.ajax({
+				url:'__APP__/Showcart/newnum',
+				type:'post',
+				data:'num='+$newnum+"&id="+obj.id,	
+				dataType:'json',
+				success:function(msg){
+						if(msg.flag==1){
+							$(obj).val(msg.reserve);
+							$(obj).next().show();
+						}else{
+							$(obj).next().css('display','none');
+						}
+						
+						
+					}
+				
+			 })
+		} 
+		
+		//选择商品改变总价格
+		
+		$alltotal=0;
+		function selectgood(obj){
+			var $selectprice=$(obj).parent().siblings("#deltotal").children().children().html();
+			var $allgoodstotal=$("#changetotalprice").html();	
+					 if($(obj).attr('checked')!=='checked'){
+						$allgoodstotal=$allgoodstotal-$selectprice;
+						$("#changetotalprice").html($allgoodstotal.toFixed(2));
+				}else{
+					$allgoodstotal=parseFloat($allgoodstotal)+parseFloat($selectprice);
+					$("#changetotalprice").html($allgoodstotal.toFixed(2));
+				} 
+				//将最后的总价放入隐藏域表单中提交
+			$("#goodspricetotal").val($("#changetotalprice").html());
+			
+		}
+		
+	</script>
+</head>
+<body>
+
+<div id="page">
+	<!--头部加载-->
+	<include file="Showcart:header" />
+	<!--end-->
+	<div id="content">
+        
+<div class="search_box main_search">
+
+
+	<div class="search_card">
+	
+	    	
+	    <div class="search-select">
+			<input id="txtSearchType" value="图书" name="" onclick="toggleSearchType();return false;">
+			<div id="divSearchType" style="display: none;" class="search_selectcontent" onmousemove="showSearchType();" onmouseout="hideSearchType();">
+				<!--p onclick="setSearchType(this, -1);">所有类别</p-->
+				<p onclick="setSearchType(this, 0);">图书</p>
+				<p onclick="setSearchType(this, 1);">周边</p>
+				<p onclick="setSearchType(this, 2);">百货</p>
+			</div>
+		</div>
+		
+		<input type="hidden" id="hdnSearchType" value="0">
+		
+		<input id="txtSearchKey" class="ipt_txt" value="请输入您要搜索的关键字" style="height:26px"><input type="button" class="btn_search" id="btnSearch" value="搜 索">
+	</div>
+	<p class="hotsearch"><span>热搜：</span> 
+<a target="_blank" href="">新书上架</a> 	
+<a target="_blank" href="">吞噬星空系列</a> 
+<a target="_blank" href="">莽荒纪</a></p>
+</div>
+
+    <div class="col_main">
+        <div class="grid_980 my_cart mb11">
+            <h3>我的购物车</h3>
+			<form action="__APP__/Order/insert" method="post">
+            <div class="con">
+                <div class="tag">
+                    * 购物车数据保存在您电脑上，如浏览器未设置cookies保存或自动清空，下次进入将无法显示购物车数据<br>
+                    * 中国大陆地区运费在选择收货地址后会自动计算显示，港澳台及海外地区暂不支持订购<br>
+                    * 已付款的订单会在两个工作日内发货，遇节假日顺延<br>
+                    * 粉丝值和钻石会在确认收货后3日内自动到账<br>                   
+                    </div>
+				
+                <table id="tblShoppingCartList" cellspacing="0" cellpadding="0" class="cart_table">
+                   
+                    <thead>
+                        <tr>
+                           <th>
+						   &nbsp;
+						   </th>
+                            <th>
+                                商品
+                            </th>
+                            <th>
+                                原价(元)
+                            </th>
+                            <th>
+                                起点价(元)
+                            </th>
+                            <th>
+                                数量
+                            </th>
+                            <th>
+                                小计
+                            </th>
+                            <th>
+                                奖励
+                            </th>
+                            <th>
+                                运费
+                            </th>
+                            <th>
+                                备注
+                            </th>
+                            <th>
+                                &nbsp;
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody id="CartBody">
+						<tr class="shop">
+							<td colspan="10">商家：<label name="companyName">起点商城</label><label style="font-weight:normal;color:red;"> &nbsp; <a target="_blank" style="font-weight:normal;color:red;" href="">运费优惠：22个城市购书满68元包邮,其余城市购书满68元减5元邮费，查看详情&gt;&gt;</a></label><label name="hidOrderType" class="hidOrderType17" style="display:none;">0</label><label name="companyId" style="display:none">17</label></td>
+							<td><input type="hidden" id="hidApp" value="17"></td>
+						</tr >
+						<!--重复-->
+						<foreach name="goods" item='vo'>
+						<tr class="selected">
+							<td class="s_chk" name="tdchk17"><input name="cartgoods[]" type="checkbox" checked value="<{$vo.id}>" onclick="selectgood(this)"></td>
+							<td class="s_title" valign="middle"><a href="" title="<{$vo.name}>"><img src="__PUBLIC__/uploads/Goods_images/<{$vo.image_first}>/common/<{$vo.image_last}>" alt="<{$vo.name}>"><{$vo.name}></a></td>
+							<td class="s_prize"><del><{$vo.price}></del></td>
+							<td id="qd_price"><em><{$vo.qd_price}></em></td>
+							<td class="s_amount" width="6%" name="tdamount17"><input name="" style="width:30px" type="text" id="<{$vo.id}>-d" class="<{$vo.reserve}>" value="<{$vo.num}>" onblur="newnum(this)"><p style='color:red;font-size:12px;display:none'>最多只能买<{$vo.reserve}>件</p></td>
+							<td class="s_total" id="deltotal"><em><label name="subTotal" id="lblSubTotalPrice2126019" shoppingcartid="100987"><{$vo.total}></label></em></td>
+							<td class="s_pride">&nbsp;小美女</td>
+							<td class="s_pride">&nbsp;包邮哦亲</td>
+							<td class="s_remark">&nbsp;<input type="hidden" id="hidType2126019" value="0"></td>
+							<td><a href="javascript:void(0)" class="deletecart" id="<{$vo.id}>" name="<{$vo.num}>" onclick="del(this)">删除</a></td>
+						</tr>
+						</foreach>
+						<!--end-->
+					</tbody>
+                    <tfoot>
+                        <tr>									
+                            <td colspan="2" class="point_info">
+                                
+                            </td>
+                            <td>
+                            </td>
+                            <td id="goodstotalprice" colspan="7" class="charge_info">
+                                商品总价：<input id="goodspricetotal" type="hidden" name="ordertotalprice" value="<{$alltotal}>"> &nbsp;&nbsp;<em class="total"><label id="changetotalprice">  <{$alltotal}></label></em>&nbsp;&nbsp;元
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+                <div class="div_line">
+                </div>
+                <div class="tag">
+                 <h4 style="  font-size: 14px;    font-weight: bold;    margin-bottom: 10px;">
+                        缺货处理</h4>
+                        
+                    如果发生缺货，希望
+                    <select id="selOOSAction">
+                        <option value="0">发送有的货物，其余退款</option>
+                        <option value="1">等待货物补齐后发货</option>
+                    </select>
+                </div>
+                 <div class="div_line">
+                </div>
+                <div class="address">
+                    <h4>  选择收货地址</h4>
+					
+					<div style="width:800px;height:30px;"></div>
+					<table border="1" align="center">
+					<foreach name="address" item="vo">
+						
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<p><input type="radio" name="address" value="<{$vo.id}>" /> &nbsp;收货人：  <{$vo.receiver}> &nbsp;收货地址： <{$vo.area}><{$vo.address}> &nbsp;手机号码： <{$vo.phone}> &nbsp;邮政编码： <{$vo.zipcode}>  </p>
+					</foreach>
+					
+					</table>
+					<div style="width:800px;height:30px;"></div>
+                    <div id="divCustomAddressList"><ul class="address_list"><li><input type="radio" rel="0" id="radOtherAddress" name="address" value="0"><label for="radOtherAddress">添加新地址</label></li></ul></div>
+                    <div id="divCustomAddress" class="con_c" style="padding-left: 30px;">
+                        <table width="100%" border="0" cellpadding="5" cellspacing="0">
+                            <tbody>
+                                <tr>
+                                    <td valign="top" width="9%" align="right">
+                                        收货人姓名：
+                                    </td>
+                                    <td>
+                                        <input id="txtCustomName" maxlength="30" size="20" type="text" name="receiver">
+                                        <span class="H">*</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td valign="top" width="9%" align="right">
+                                        所在地区：
+                                    </td>
+                                    <td>
+                                        <select id="s_province" name="s_province"></select>
+                                        省
+                                        <select id="s_city" name="s_city" ></select>
+                                        市
+                                        <select id="s_county" name="s_county"></select>
+                                        区 <span class="H">*</span>
+										 <script class="resources library" src="__PUBLIC__/js/area.js" type="text/javascript"></script>
+										 <script type="text/javascript">_init_area();</script>
+										 <script type="text/javascript">
+											var Gid  = document.getElementById ;
+											var showArea = function(){
+												Gid('show').innerHTML = "<h3>省" + Gid('s_province').value + " - 市" + 	
+												Gid('s_city').value + " - 县/区" + 
+												Gid('s_county').value + "</h3>"
+																		}
+											Gid('s_county').setAttribute('onchange','showArea()');
+										</script>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td valign="top" align="right">
+                                        街道地址：
+                                    </td>
+                                    <td>
+                                        <input id="txtStreet" name="new_address" value="" maxlength="30" size="60" type="text">
+                                        <span class="H">*</span><span class="G"> (不需要重复填写省/市/区)</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td valign="top" width="9%" align="right">
+                                        邮政编码：
+                                    </td>
+                                    <td>
+                                        <input id="txtPostCode" name="zipcode" value="" maxlength="30" size="20" type="text">
+                                        <span class="H">*</span>(大陆用户必填)
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td valign="top" width="9%" align="right">
+                                      
+                                    </td>
+                                   
+                                </tr>
+                                <tr>
+                                    <td valign="top" width="9%" align="right">
+                                        手机号码：
+                                    </td>
+                                    <td>
+                                        <input id="txtMobile" value=""  name="phone" maxlength="30" size="20" type="text">
+                                        <span id="mobileTips" class="pc:mobileTips"></span>
+                                        <br>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td valign="top" align="right">
+                                        &nbsp;
+                                    </td>
+                                    
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                     <div class="div_line">
+                </div>
+                    
+
+
+
+<div id="PayMethod">
+    <h4 style="margin: 10px auto; font-size: 14px; font-weight: bold;">
+        选择支付方式</h4>
+    <div style="display: table; float: none; clear: both;">
+        <ul id="payswitches" style="clear: both;">
+            <li>
+                <input type="radio" name="radiopaytype" checked="checked" id="paytype_alipay" value="alipay">
+                <label for="paytype_alipay">
+                    <img src="__PUBLIC__/images/alipaylogo.jpg" alt="支付宝">
+                </label>
+            </li>
+             
+            
+            <li>
+                <input type="radio" name="radiopaytype" id="paytype_alipaybank" value="alipaybank">
+                <label for="paytype_alipaybank">
+                    <span>银行卡/信用卡</span>
+                </label>
+            </li>
+        </ul>
+    </div>
+    
+               
+             
+            
+     
+    
+</div>
+
+                    
+                    <div class="ope clearfix">
+                        <input type="button" id="btnContinue" class="btn_con_buy" value="继续购物">
+                        <input type="submit" id="btnPay" class="btn_pay" value="立即结账">
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+						</form>
+	</div>
+	
+<!--底部开始-->
+	<include file="Index:footer" />
+<!--底部结束-->
+</div>
+
+
+
+
+</body></html>

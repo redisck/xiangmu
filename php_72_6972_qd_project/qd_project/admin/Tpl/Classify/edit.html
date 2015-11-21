@@ -1,0 +1,39 @@
+<!doctype html>
+<html>
+	<head>
+		<meta http-equiv="content-type" content="text/html;charset=utf-8">
+		<link rel="stylesheet" type="text/css" href='__PUBLIC__/css/css.css'>
+	</head>
+	<body>
+	
+		<div class="add_class" style="display:block" id="edit_class"> 
+		<form action="__URL__/doedit/id/<{$Think.get.id}>" method="post">
+			<table class="add_class_table" cellspacing="0" cellpadding="0" width="70%" align="center" border=1>
+				<tr>
+					<td width=50%>分类名称</td><td><input type="text" name="edit_name" id="edit_name" style="width:100px" value='<{$class_now.name}>'></td>
+				</tr>
+				<if condition="$class_now.pid neq 0">
+				<tr>
+					<td>父级分类</td>
+					<td>
+						<select name="pid">
+							<volist name='class_pid' id='pid'>
+								<option value="<{$pid.id}>" <if condition="$pid['access']"> selected='selected' </if> >
+									<{$pid.name}>
+								</option>
+							</volist>
+						</select>
+					</td>
+				</tr>
+				</if>
+				<tr>
+					<td>是否显示</td>
+					<td><input type="radio" value="0" name="status" <if condition="$class_now.status eq 0">checked='checked'</if>>显示 &nbsp;&nbsp;
+					<input type="radio" name="status" value="1" <if condition="$class_now.status eq 1">checked='checked'</if>>不显示 </td>
+				</tr>
+			</table>
+			<div style="width:80px;margin:0 auto;margin-top:20px"><input type="submit" value="修改" id="submit" style="width:80px;"></div>
+		</form>
+	</div>
+	</body>
+</html>

@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>
+	起点商城——我的订单
+</title>
+	<link href="__PUBLIC__/css/reset.css" rel="Stylesheet" type="text/css">
+	<link href="__PUBLIC__/css/style_main.css" rel="Stylesheet" type="text/css">
+	<link href="__PUBLIC__/css/impromptu.css" rel="Stylesheet" type="text/css">
+    <link href="__PUBLIC__/css/daoju.css" rel="stylesheet" type="text/css">
+	<link href="__PUBLIC__/css/alertBox.css" rel="Stylesheet" type="text/css">
+    <link href="__PUBLIC__/css/my_mall.css" rel="stylesheet" type="text/css">
+	<link href="__PUBLIC__/css/alertcontent.css" rel="Stylesheet" type="text/css">
+	<link href="__PUBLIC__/css/back.css" rel="Stylesheet" type="text/css">
+	<script src="__PUBLIC__/js/jquery-1.7.2.js"></script>
+	<script src="__PUBLIC__/js/login.js"></script>
+	<script>
+		$(function(){
+			$("#login_button").click(function(){
+				$("#zhezhao").css("width","100%").css("height","2200px").css("background","#000").css("opacity","0.5").css("display","block").css("z-index","2014").next(".login_content").css("display","block").css("z-index","2015");
+			});
+			$("#button_user_login").click(function(){
+				if($('#username').val()=="" || $("#password").val()==""){
+					alert("用户名密码不能为空");
+				}else{
+					$("form:first").submit();
+				}
+			
+			})
+		
+			
+	</script>
+    </head><body>
+
+<div id="login" class="login_content" style="display:none">
+	<div class="pop_main">
+		<div class="pop_header">
+			<div id="pop_head_1">
+				<h3 class="pop_content_II">登陆起点</h3>
+			</div>
+			<div class="pop_content_opt">
+				<a href='javascript:void(0)' class="pop_content_close" id="pop_close_1">关闭</a>
+			</div>
+		</div>
+		<div style="height:340px;overflow:hidden" class="pop_main">
+			<div class="sd_banner">
+				<div id="pop_head_1" style="height:45px">
+					<h3 id="pop_title_1"></h3>
+				</div>
+				<div class="pop_content_opt" id="pop_content_1">
+				</div>
+			</div> 
+			<div class="login_main">
+			<form name='myform' action="__APP__/Login/dologin" method="post">
+				<div class="login_name">
+					<input type="text" name="username" id="username" >
+				</div>
+				<div class="name_hidden">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;手机号/邮箱/个性账号</div>
+				<div class="login_name" style="margin-top:10px">
+					
+					<input type="password" name="password" id="password" >
+				</div>
+				<div class="p_hidden">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;请输入密码</div>
+			
+				<div class="login_button">
+					<a class="button_user_login" id="button_user_login" style="cursor:pointer" href="javascript:void(0)" >
+						<span class="button_user_login_index" >登陆</span>
+					</a>
+			
+				</div>
+			</form>
+			</div>
+		</div>
+	</div>
+</div>
+<!--订单-->
+<div id="zhezhao" style="position:absolute;top:0px;left:0px;display:none">
+</div>
+<div class="ordershow" style="position:fixed;left:150px;top:220px; z-index:99999;display:none; width:800px">
+	<table border="1" cellspacing="0" cellpadding="0" class="ajax_box" style="width:800px">
+<colgroup valign="middle">
+<col width="5">
+<col width="430">
+<col width="5">
+</colgroup>
+	<tbody><tr>
+		<td class="bd"></td>
+		<td class="bd"></td>
+		<td class="bd"></td>
+	</tr>
+	<tr>
+		<td class="bd"></td>
+		<td class="con">
+                <!-- 标题层 start-->
+                <div class="title_box" style="height:31px; background: url(__PUBLIC__/images/title_mall.png) no-repeat 0 0; overflow:hidden; position:relative;">
+                    <h3>订单查询</h3>
+                    <a id="btnClose" href="javascript:void(0);" title="关闭">关闭</a>
+				</div>
+                <!-- 标题层 end-->
+
+                <!-- 内容层 start-->
+                <div class="content_box success_alert">
+					<table width="100%" class="list all_cont" border="1" >
+						<tr>
+							<td>订单号：<span id="o_name"></span></td>
+							<td>收货人：<span id="o_receiver"></span></td>
+							<td>地址：	<span id="o_address"></span></td>
+							<td>电话：	<span id="o_phone"></span></td>
+							<td>总价：	<span id="o_price"></span></td>
+						</tr>
+						
+					</table>
+					<table class="goods_list" width="100%" class="list all_cont" border="1">
+						<!--
+						<tr >
+							<th style="text-align:center">商品名</th>
+							<th style="text-align:center">商品价格</th>
+							<th style="text-align:center">商品数量</th>
+						</tr>
+						-->
+					</table>
+                </div>
+                <!-- 内容层 end-->
+
+		</td>
+		<td class="bd"></td>
+	</tr>
+	<tr>
+		<td class="bd"></td>
+		<td class="bd"></td>
+		<td class="bd"></td>
+	</tr>
+</tbody></table>	
+</div>
+<!--购物车结束-->
+<div id="page">
+	<!--header start-->
+	<include file="Order:header" />
+	<!--header end-->
+	<div id="content">
+        
+    
+    
+
+<div class="search_box main_search">
+
+
+	<div class="search_card">
+	
+	    	
+	    <div class="search-select">
+			<input id="txtSearchType" value="图书" name="">
+			<div id="divSearchType" style="display: none;" class="search_selectcontent">
+				<!--p onclick="setSearchType(this, -1);">所有类别</p-->
+				<p>图书</p>
+				<p>周边</p>
+				<p>百货</p>
+			</div>
+		</div>
+		
+		<input type="hidden" id="hdnSearchType" value="0">
+		<input id="txtSearchKey" class="ipt_txt" value="请输入您要搜索的关键字"><input type="button" class="btn_search" id="btnSearch" value="搜 索">
+	
+	</div>
+	<p class="hotsearch"><span>热搜：</span> 
+<a target="_blank" href="">新书上架</a> 	
+<a target="_blank" href="">吞噬星空系列</a> 
+<a target="_blank" href="">莽荒纪</a></p>
+</div>
+
+
+    
+    <div id="divColMain" class="col_main clearfix">
+			<div class="col_left">
+                
+
+<div id="divMyLeftMenu" class="my_trade grid_left_207_2 mb11">
+	<div class="title">我的商品</div>
+	<div class="con">
+		<ul class="nav_list">
+			<li>已经买到的商品
+			    <ol>
+				<!--
+					<li class="current"><a href="" style="color: rgb(188, 43, 0); font-weight: bold;">我的订单</a></li>
+				-->
+					<li><a href="" style="color: rgb(104, 104, 104); font-weight: 400;">我的仓库</a></li>
+					
+				</ol>
+				</li>
+			<li><a href="" style="color: rgb(104, 104, 104); font-weight: 400;">我的购物车</a></li>
+			<li><a href="" style="color: rgb(104, 104, 104); font-weight: 400;">我的收藏夹</a></li>
+		</ul>
+	</div>
+</div>
+<div class="grid_left_207_2 my_bonus mb11" style="display:none;">
+	<div class="title">我的优惠</div>
+	<div class="con">
+		<ul class="nav_list">
+			<li><a href="javascript:void(0);">我的团购</a></li>
+		</ul>
+	</div>
+</div>
+<div class="grid_left_207_2 my_service mb11">
+	<div class="title">客户服务</div>
+	<div class="con">
+		<ul class="nav_list">
+			<li><a href="">联系客服</a></li>
+			<li><a href="">投诉邮箱</a></li>
+			<li><a href="">客服论坛</a></li>
+		</ul>
+	</div>
+</div>
+    
+			</div>
+			<div class="col_right">
+				<div class="col_right_wrap">
+					
+
+					<div class="grid_980 mb11 my_order">
+						<div class="title">我的订单
+						</div>
+						<div class="con" style="height:250px">
+							<div class="remide_box clearfix">
+								<h3>我的交易提醒：</h3>
+								<ul> 
+									<li><a href="__APP__/Order/index" >所有订单<em>(<label id="lblNeedPayCount"><{$ordercount}></label>)</em></a></li>
+									<li><a href="__APP__/Order/index?status=0">未发货<em>(<label id="lblNeedPayCount"><{$noordercount}></label>)</em></a></li>
+									<li><a href="__APP__/Order/index?status=1" >已发货<em>(<label id="lblNeedPayCount"><{$yesordercount}></label>)</em></a></li>
+								</ul>
+							</div>
+							<div style="height:20px"></div>
+						
+							<table id="allorder" style="border:1px solid #ccc" cellspacing="0" cellpadding="0" class="order_table" >
+			
+							<thead>
+								<tr>
+									<th>订单号:</th>
+									<th>收货人</th>
+									<th>订单详情</th>
+									<th>商品金额</th>
+									<th>状态</th>
+								</tr>
+								<foreach name='showorder' item="vo">
+								
+									<tr style="text-align:center">
+										<td class="tit_sort"><{$vo.name}></td>
+										<td><{$vo.receiver}></td>
+										<td><a href="javascript:void(0)" id="<{$vo.name}>" onclick="show(this)">订单详情</a></td>
+										<td><{$vo.price}></td>
+										<td><if condition="$vo.status eq 0">未发货
+											<else/>
+											<span style="color:blue">已发货</span>
+											</if>
+										</td>
+										
+									</tr>
+								</foreach>
+								<script>
+									
+									function show(obj){
+										$(".goods_list").html("");
+										var $th=$("<tr></tr>");
+										$th.html("<th style='text-align:center'>商品名</th><th style='text-align:center'>商品价格</th><th style='text-align:center'>商品数量</th>");
+										$(".goods_list").append($th);
+										$.ajax({
+											url:"__APP__/Order/orderShow",
+											data:"name="+obj.id,
+											type:"post",
+											dataType:"json",
+											success:function(data){
+												//alert(data.goods.length);
+												$("#o_name").html(data.name);
+												$("#o_receiver").html(data.receiver);
+												$("#o_address").html(data.address);
+												$("#o_phone").html(data.phone);
+												$("#o_price").html(data.price);
+												
+												for(var i=0;i<data.goods.length;i++){
+													var $tr=$("<tr style='line-height:25px'></tr>");
+													
+													$tr.html("<td style='text-align:center'><a href='__APP__/Content/index/id/"+data.goods[i].id+"/classify_id/"+data.goods[i].classify_id+"'>"+data.goods[i].name+"</a></td><td style='text-align:center'>"+data.goods[i].qd_price+"</td><td style='text-align:center'>"+data.goods[i].num+"</td>");
+													$(".goods_list").append($tr);
+												}
+												
+											}
+										})
+										
+										$(".ordershow").show();
+										$("#zhezhao").css("width","100%").css("height","1000px").css("background","#aaaaaa").css("opacity","0.5").css("display","block").css("z-index","2014");
+									}
+									$("#btnClose").click(function(){
+										$(".ordershow").hide();
+										$("#zhezhao").css('display','none');
+									})
+								</script>
+							</thead>
+							
+							<tfoot>
+								<tr>
+									
+									</tr>
+							</tfoot>
+							</table>
+							
+							
+							
+							<input type="hidden" id="hdnOrderTimeType" value="0">
+						</div>
+					</div>
+					
+				</div>
+			</div>
+	</div>
+	<div class="clear"></div>
+
+	</div>
+	
+<!--footer start-->
+<include file="Index:footer" />
+<!--footer end-->
+</div>
+
+
+
+
+</body></html>

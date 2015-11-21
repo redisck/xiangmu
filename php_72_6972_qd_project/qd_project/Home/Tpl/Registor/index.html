@@ -1,0 +1,215 @@
+<!DOCTYPE html ">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<title>注册</title>
+		<link type="text/css" href="__PUBLIC__/css/base_v3.css" rel="stylesheet">	
+		<script src="__PUBLIC__/js/jquery-1.7.2.js"></script>
+		<script>
+			$(function(){
+				//账号表单
+				$flag_user=false;
+				$flag_pass=false;
+				$flag_email=false;
+				
+				$("#username").focus(function(){
+					$("#inputLabeluser").css('display','none');
+					$("#tipsInfouser").css('display','block');
+				})
+				$("#username").blur(function(){
+					var $unum=$("#username").val().length;
+					if($unum>=4&&$unum<=16){
+						$.ajax({
+							url:"__APP__/Registor/usernameajax",
+							type:"post",
+							data:"username="+$("#username").val(),
+							success:function(data){
+								if(data==1){
+									$("#tipsInfouser").html("<span style='color:red'>账号已存在</span>");
+									$flag_user=false;
+								}else if(data==0){
+									$("#tipsInfouser").html("<span style='color:green'>该账号可以注册</span>");
+									$flag_user=true;
+								}
+							}
+						})
+					}else{
+						$("#tipsInfouser").html("<span style='color:red'>账号长度不符合规则</span>");
+						$flag_user=false;
+					}
+				})
+				//密码验证
+				$("#password").focus(function(){
+					$("#inputLabelpass").css('display','none');
+					$("#tipsInfopass").css('display','block');
+				})
+				$("#password").blur(function(){
+					$pnum=$("#password").val().length;
+					if($pnum>=6 && $pnum<=16){
+						$("#tipsInfopass").html("<span style='color:green'>密码可用</span>");
+						$flag_pass=true;
+					}else{
+						$("#tipsInfopass").html("<span style='color:red'>密码长度不正确</span>");
+						$flag_pass=false;
+					}
+				})
+				//电子邮箱
+				$("#email").focus(function(){
+					$("#tipsInfoemail").css("display",'block');
+					$("#inputLabelemail").css('display','none');
+				})
+				//验证码
+				$("#valiteCode").focus(function(){
+					$("#inputLabelcode").css('display','none');
+				})
+				$("form").submit(function(){
+				
+					if($flag_user==false||$flag_pass==false){
+						return false;
+					}
+				})
+			})
+		</script>
+	</head>
+	<body>
+
+<!--/弹出层-->
+<div class="layout">
+	<!-- logo -->
+	<div class="logo" id="logoDiv">
+		<a href="" target="_blank"><img src="__PUBLIC__/images/logo.jpg"></a>
+	</div>
+	<!--/ logo -->
+	<div class="wrap">
+		
+<div class="boxt">
+	<div class="cell_title">
+		<h2>盛大通行证注册</h2>
+	</div>
+</div>
+<div class="box" style="height: 432px;">
+	<div class="mode_aimate_wrap">
+		<link type="text/css" href="__PUBLIC__/css/custom_v3.css" rel="stylesheet">
+	
+
+<a class="slide_top fix" href="javascript:;" hidefocus="true" style="top: 20px; height: 22px;"> 
+	<span class="down_txt" style="display: inline;">安装G家<span class="autoreg_txt">自动为您注册</span></span>
+	
+</a>
+
+<div id="div_Register" class="mod_regist  with_code" style="top: 0px; height: 369px;">
+    <div class="mod_regist_nav">
+		<ul>
+<li name="registPhone" class="">
+	<a href="javascript:void(0);" hidefocus="true" class="btn_phone">
+		<span class="icon miniHide"></span> 手机注册
+	</a>
+	<span class="arrow miniHide"></span>
+</li><li name="registMail">
+	<a href="javascript:void(0);" hidefocus="true" class="btn_mail">
+		<span class="icon miniHide"></span> 邮箱注册
+	</a>
+	<span class="arrow miniHide"></span>
+</li><li name="registCustom" class="cur">
+	<a href="javascript:void(0);" class="tipsExtendedBtn btn_custom" >
+		<span class="icon miniHide"></span> 个性注册
+	</a>
+	
+
+</li>		</ul>
+	</div>
+	<div id="mod_regist_form" class="mod_regist_form registCustom">
+		<div class="call_back_tips"></div>
+			<form action="__APP__/Registor/doregistor" method="post" id="registForm">
+				<fieldset class="regist_info">	
+				
+				<div class="input_wrap" id="input_wrap_custom">
+					<div class="inputBox inputError">
+						<span class="inputLabel" id="inputLabeluser" style="display:block">个性账号（必须填写）</span> 
+						<input class="text username" name="username" id="username" type="text" tabindex="10" style="margin-top:8px">
+					</div>
+					<div class="tips show_tips" id="usernameTip">
+						<p class="tipsInfo" id="tipsInfouser"style="display: none;">4-16位字母或数字，首位为字母</p>
+						<!--<p class="tipsBg" style="display: block;"></p>-->
+                    </div>
+				</div>
+
+				<div class="input_wrap" id="input_wrap_password">
+                    <div class="inputBox ">
+			        	<span class="inputLabel" id="inputLabelpass" >静态密码（必须填写）</span> 
+			        	<input class="text password" name="password" id="password" type="password" tabindex="13" style="margin-top:8px">
+                    </div>
+					<div class="tips show_tips" id="passwordTip" style="display:block">
+						<p class="tipsInfo" id="tipsInfopass"style="display: none;">6-12位字母或数字</p>
+                    </div>
+				</div>
+				
+				<!--邮箱-->
+				<div class="input_wrap" id="input_wrap_password">
+                    <div class="inputBox ">
+			        	<span class="inputLabel" id="inputLabelemail" >正确电子邮箱（必须填写）</span> 
+			        	<input class="text password" name="email" id="email" type="email" tabindex="13" style="margin-top:8px">
+                    </div>
+					<div class="tips show_tips" id="emailTip" style="display:block">
+						<p class="tipsInfo" id="tipsInfoemail"style="display: none;">填写正确的邮箱格式如diaoyizi@126.com</p>
+                    </div>
+				</div>
+				<!--end-->
+			</fieldset>
+			
+            <fieldset class="verifyCode" id="code" style="display: block;">
+					<div class="inputBox">
+						<span class="inputLabel" id="inputLabelcode">验证码（必须填写）</span> <img src="__APP__/Public/verify/" onclick="this.src=this.src+'?'+Math.random">
+						<input class="text validateCode" name="Code" id="valiteCode" type="text" tabindex="30" style="margin-top:8px"> 
+						
+					</div>
+					
+			</fieldset>
+		
+		    <div class="mod_regist_form_submit" id="mod_regist_form_submit">
+				<a href="" target="_blank">用户<span class="miniHide">服务</span>协议</a>
+				 
+				<input type="submit" class="submit_btn" id="submit" tabindex="40" value="接受协议并注册" >
+							</div>
+			
+	    </form>
+	</div>
+</div>
+
+
+	
+
+	</div>
+	<div class="cell_side_bar">
+	
+		<div class="cell_bner">
+			<div class="cell_slider" id="SideBnerSlider">
+				<ul style="width: 300px;">
+					<li>
+						<a href="javascript:void(0);" hidefocus="true" id="register_app_1">
+							<img src="__PUBLIC__/images/app_ad_401.jpg" width="300" height="200" alt="">
+						</a>
+					</li>
+				</ul>
+				
+			</div>
+		</div>
+		<!--/ cell_bner -->
+		<div class="cell_feed_back" style="background-image: url('__PUBLIC__/images/bf_ad.jpg'&quot;);">
+			<a target="_blank" href="">边锋、浩方旗下游戏通行证服务独立通告</a>
+		</div>
+		
+	</div>
+	<div class="clear"></div>
+	
+
+	</div>
+</div>
+
+<div class="footer">
+	<a href="http://www.snda.com/" target="_blank" hidefocus="true">盛大网络</a> 旗下网站 上海盛大网络发展有限公司 版权所有<br>24小时客服热线：95105222；未开通95地区或海外用户请拨 +86-21-50504728
+</div>
+	
+	<div style="position: absolute; display: block; left: -500px; width: 1px; height: 1px;">
+	
+</body></html>

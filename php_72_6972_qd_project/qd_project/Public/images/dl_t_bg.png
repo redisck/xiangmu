@@ -1,0 +1,956 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8" />
+	<meta content="G家，g家，盛大游戏移动平台，盛大手游平台，盛大移动平台，手游平台，手游APP" name="Keywords" />
+<meta content="G家是由盛大游戏开发的一款移动端APP，旨在帮助玩家更安全、更超值、更快乐的体验游戏。在秉持最基本的安全管家理念的同时，将围绕游戏融入更多辅助功能与贴心服务。此外，G家还将汇聚和分享全球最优质、最G品的移动游戏，为游戏用户在移动端全方位打造一款强大的游戏助手。" name="Description" />
+    <title> G家：游戏助手，快乐G家</title>
+    <link type="text/css" rel="stylesheet" href="/static_0724/css/base.css?2013091701"/>
+    <link rel="shortcut icon" href="/favicon.ico?20121024001"/>
+	<script src="http://g.sdo.com/static/js/jquery-1.8.1.min.js?2013091701" type="text/javascript"></script>
+	<!--script src="http://g.sdo.com/static/js/jquery-1.4.2.min.js?2013091701" type="text/javascript"></script-->	
+	
+	<script src="http://g.sdo.com/static/js/jquery.plugins.js?2013091701" type="text/javascript"></script>	
+	
+	
+	<script src="http://g.sdo.com/static/js/util.js?2013091701" type="text/javascript"></script>
+	<script src="http://we.sdoprofile.com/common/js/release/loader.min.js" type="text/javascript"></script>  
+
+	
+
+</head>
+<body>
+<script type="text/javascript">
+
+    document.domain = "sdo.com";
+    var fkudplog = {
+        writeLog:function (fromUrl,logTime,buttonId,thisUrl,logId,retmsg,extend)
+        {
+            var t = fkudplog;
+            document.domain = "sdo.com";
+            t.api.sendLog(fromUrl,logTime,buttonId,thisUrl,logId,retmsg,extend,function (response)
+            {
+                if(response["return_code"]!=0){
+                }
+            });
+        },
+        api:{
+            sendLog:function(fromUrl,logTime,buttonId,thisUrl,logId,retmsg,extend,handler)
+            {
+                var nowDate = new Date();
+                var t=nowDate.getTime();
+                $.get('/home/WriteFKUdpLog',{fromUrl:fromUrl,logTime:logTime,buttonId:buttonId,retmsg:retmsg,thisUrl:thisUrl,logId:logId,extend:extend,t:t}, function (response)
+                {
+                    handler(response);
+                }, 'json');
+            }
+        }
+    };
+    var downApp = {
+        sendDownAppLink:function (mobile,mobile_code,mobile_key,mobile_flow,apptype)
+        {
+            var t = downApp;
+            document.domain = "sdo.com";
+            var reg = /^1(3|4|5|8)\d{9}$/;
+            $("#ret_msg_"+apptype).removeClass("suc_text");
+            $("#ret_msg_"+apptype).addClass("error_text");
+            if(!reg.test(mobile)){
+                $("#ret_msg_"+apptype).text("请正确输入手机号码");
+                //$("#ret_msg_"+apptype).show();
+                $("#ret_msg_"+apptype).css('display','inline');
+                $('#mobile_'+apptype).val("输入手机号码");
+            }else{
+                var isMobileCodeShow= $("#mobile_code").is(":visible");//是否隐藏 
+                //alert(temp);
+                if(isMobileCodeShow && $('#mobile_code').val() == ""){
+                    //如果用户没有输入验证码
+                } else {
+                    var sendBtn=$("#mobile_"+apptype).parent().find('.btn_gray');
+                    //sendBtn.addClass('sending').html('发送中');
+                    $('#mobile_send').addClass('sending').html('发送中');
+                    t.api.sendSms(mobile,mobile_code,mobile_key,mobile_flow,apptype, function (response)
+                    {
+                        $("#ret_msg_"+apptype).parent().find('.btn_gray').removeClass('sending').html('发&nbsp;送');
+                        $("#ret_msg_"+apptype).text(response["error"]);
+                        $('#mobile_cancel').html("取&nbsp;消");
+                        if(response["errno"] == -20091){
+                            $('#mobile_cancel').show();
+                            $("#ret_msg_"+apptype).text("");
+                            $("#ret_msg_"+apptype).show();
+                            var sessionkey_code = response["error"].split("||") ; 
+                            $('#mobile_key').val(sessionkey_code[0]);
+                            $('#mobile_flow').val(sessionkey_code[1]);
+                            $('#mobile_'+apptype).hide();
+                            $('#mobile_code').val('请输入验证码');
+                            $('#mobile_code').show();
+                            initCacheKey();
+                            $('#t_code').show();
+                        }else if(response["errno"]==0){
+                            $("#ret_msg_"+apptype).removeClass("error_text");
+                            $("#ret_msg_"+apptype).addClass("suc_text");
+                            $('#mobile_'+apptype).val('输入手机号码');
+                            $('#mobile_'+apptype).show();
+                            $('#mobile_cancel').hide();
+                            $('#mobile_code').hide();
+                            $('#mobile_code').val('');
+                            $('#t_code').hide();
+                            $('#t_code').val('');
+                            $('#t_code').html('');
+                        }
+                        $("#ret_msg_"+apptype).show();
+                    });
+                }
+                
+            }
+
+        },
+        api:{
+            sendSms:function(mobile,mobile_code,mobile_key,mobile_flow,apptype,handler)
+            {
+                var nowDate = new Date();
+                var t=nowDate.getTime();
+                $.get('/home/SendSms',{mobile:mobile,mobile_code:mobile_code,mobile_key:mobile_key,mobile_flow:mobile_flow,apptype:apptype,t:t}, function (response)
+                {
+                    handler(response);
+                }, 'json');
+            }
+        }
+    };
+    var login = {
+        checkLogin:function (ticket)
+        {
+
+            var t = login;
+            document.domain = "sdo.com";
+            t.api.validatTicket(ticket,function(response)
+            {
+                if(response["return_code"]==0&&response["loginMoblie"].length>3){
+                    $("#maskMobile").text(response["loginMoblie"]);
+                    $("#nologin").hide();
+                    $("#logined").show();
+                    $("#logout").show();
+                    $("#pushMsg").show();
+                    return ;
+                }
+                $("#nologin").show();
+                $("#logined").hide();
+                $("#logout").hide();
+                $("#pushMsg").hide();
+            });
+        },
+        api:{
+            validatTicket:function(ticket,handler)
+            {
+                var nowDate = new Date();
+                var t=nowDate.getTime();
+                $.get('/home/ValidatTicket',{mticket:ticket,t:t}, function (response)
+                {
+                    handler(response);
+                }, 'json');
+            }
+        }
+    };
+    var pushMsg = {
+        sendMsg:function ()
+        {
+
+            var t = pushMsg;
+            document.domain = "sdo.com";
+            t.api.sendTestMsg(function(response)
+            {
+                $("#pushMsg").hide();
+                $("#pushResMsg").text(response["msg"]);
+                if(response["return_code"]==0){
+                    $("#pushResMsg").removeClass("error_text ml15");
+                    $("#pushResMsg").addClass("suc_text ml15");
+                }else{
+                    $("#pushResMsg").removeClass("suc_text ml15");
+                    $("#pushResMsg").addClass("error_text ml15");
+                }
+                $("#pushResMsg").show();
+            });
+        },
+        api:{
+            sendTestMsg:function(handler)
+            {
+                var nowDate = new Date();
+                var t=nowDate.getTime();
+                $.get('/home/PushMsg',{t:t}, function (response)
+                {
+                    handler(response);
+                }, 'json');
+            }
+        }
+    };
+    function writeFkLog(buttonId,logId,extend){
+        var fromUrl="http%3A%2F%2Fregister.sdo.com%2Fregister%2Findex%3FappId%3D10%26areaId%3D0%26cssId%3Dqidian%26directTarget%3D1%26serviceUrl%3Dhttps%253A%252F%252Fcas.sdo.com%252Fcas%252Flogin%253Fappid%253D10%2526service%253Dhttp%25253A%25252F%25252Favd.qidian.com%25252FOALoginJump.aspx%25253Fappid%25253D10%252526regtype%25253D3%252526ReturnUrl%25253Dhttp%2525253a%2525252f%2525252fwww.qidian.com%2525252fReg%2525252fRegNewStep2.aspx%25252523reg%252526mrregfrom%25253D0";
+        var myDate = new Date();
+        var logTime=myDate.getTime();
+        var thisUrl=window.location.href;
+        var retmsg="";
+        fkudplog.writeLog(fromUrl,logTime,buttonId,thisUrl,logId,retmsg,extend);
+    }
+    function sendDownLink(type){
+		var sendBtn=mobile=$("#mobile_"+type).parent().find('.btn_gray');
+        var mobile=$("#mobile_"+type).val();
+        var mobile_code=$('#mobile_code').val();
+        var mobile_key=$('#mobile_key').val();
+        var mobile_flow=$('#mobile_flow').val();
+    
+		if(sendBtn.hasClass('sending')){
+					return;
+				}
+        downApp.sendDownAppLink(mobile,mobile_code,mobile_key,mobile_flow,type);
+        var comment=mobile+type+"sendDownLink";
+        var buttonId="sendDownLink_"+type;
+        var logId=getLogId(type);
+        writeFkLog(3,logId,'');
+
+    }
+    function doLogout(){
+        var logoutUrl="http://ycas.sdo.com/authen/logout?serviceUrl=http%3A%2F%2Fg.sdo.com&appId=475&areaId=1";
+        window.top.location=logoutUrl;
+    }
+    function getLogId(type){
+        var logId="11001";
+        if(type=="iphone"){
+            logId="11002";
+        }else if(type=="symbian"){
+            logId="11003";
+        }else if(type=="java"){
+            logId="11004";
+        }
+        return logId;
+    }
+    function download(type,extend){
+        var logId=getLogId(type);
+        writeFkLog(0,logId,extend);
+        return true;
+    }
+
+    $we.require("core", function() {
+        var fromId='';//$we.string.getQueryByName("fromid");
+        if(fromId!=null && fromId!=""){
+    		$.cookie("txz_from",fromId ,{path: "/"});
+        }
+	}); 
+	
+	
+	$(function() {
+		
+		
+		$(".nav").lavaLamp({
+			fx: "backout", 
+			speed: 700,
+			click: function(event, menuItem) {
+				return true;
+			}
+		});	});
+</script>
+<!-- wraper -->
+<div class="wraper">
+    <!-- header -->
+	<div class="header">
+        <div class="wrap_box">
+			<div class="f_box">
+                <a href="/home/gshow" class="f_link" target="_blank"></a>
+                <object width="60" height="60" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=7,0,19,0" classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000">
+                            <param value="/static_0724/img/gshowbt.swf" name="movie">
+                            <param value="high" name="quality">
+                            <param value="always" name="allowScriptAccess">
+                            <param value="transparent" name="wmode">
+                            <embed width="60" height="60" allowscriptaccess="always" wmode="transparent" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" quality="high" src="/static_0724/img/gshowbt.swf">
+                    </object>
+            </div>
+            <!--<div class="tips" style="width:508px;display:none" id='tips_sms'>
+                <span style="color:#DD2025">移动业务调整通知：</span>
+                由于移动短信业务调整需要，目前移动用户无法正常注册、APP下载、接收短信验证码、解屏蔽等所有移动短信服务，请稍后再试。联通、电信用户不受影响。
+                <a href="javascript:$('#tips_sms').hide();" class="close" title="关闭" style="position:absolute;right:5px;top:5px;"></a>
+            </div-->            
+		
+			<!--div class="tips" style="display:none;">
+                <i class="icon_alert"></i>即日起，g.sdo.com将作为盛大G家的网站域名，若要登录盛大玩，请访问<a href="">wan.sdo.com</a><a href="javascript:void(0);" onclick="javascript:$('.tips').hide();" class="close" title="关闭"></a>
+            </div-->
+            <a href="/" class="logo" title="G家"></a>
+			
+			
+			
+			
+<style type="text/css">
+
+
+.nav li.back{ border-bottom: 5px solid #CE171E;
+    color: #CE171E;
+    padding-bottom: 13px;
+    text-decoration: none;height:26px;overflow:hidden;z-index:8;position:absolute;}
+
+</style>
+
+	
+			
+			
+			
+			
+			
+			
+            <ul class="nav">
+                <li id="index">
+                    <a id="index_a" href="/" class="cur item">首&nbsp;页</a>
+                </li>
+                <li id="down">
+                    <a id="down_a" href="/home/DownAndroid" class="item mo" style="padding-bottom:13px;">客户端下载</a>
+                    <div class="nav_list mo" id="nav_list1" style="display:none;width:174px;">
+                        <dl>
+                            <dd><a id="d_android" href="/home/DownAndroid" class="">Android</a></dd>
+                            <dd class="last"><a id="d_iphone" href="/home/DownIphone">iPhone</a></dd>
+                            <!--dd><a id="d_symbian" href="/home/DownSymbian">Symbian</a></dd>
+                            <dd class="last"><a id="d_java" href="/home/DownJava">Java</a></dd-->
+                        </dl>
+                    </div>
+                </li>
+                <li id="activityInfo">
+                    <a id="activityInfo_a" href="/home/ActivityIndex" class="item">特权活动</a>
+                </li>
+                <li id="faq_help">
+                    <a id="faq_a" href="/home/faq" class="item">用户帮助</a>
+                </li>
+                <!--li>
+                    <a id="update_a" href="/home/Achievement" class="update"><i class="icon_update"></i><span>更新动态</span></a>
+                </li>
+                <li>
+                    <a id="pc_a" href="/home/DownPc" class="mode"><i class="icon_mode"></i><span>PC版</span></a>
+                </li-->
+				
+				<li class="link">
+                    <a id="pc_a" href="/home/DownPc" class="mode"><span>PC版</span></a><i>|</i>
+                </li>
+                <li class="link">
+                    <a id="gbox_a" href="/home/gbox" class="mode"><span>G品</span></a><i>|</i>
+                </li>
+                <li class="link">
+                    <a id="update_a" href="/home/Achievement" class="update"><span>更新动态</span></a>
+                </li>
+            </ul>
+        </div>
+        
+    </div>
+    <!-- /header -->
+	<div class="main">
+        <div class="banner_wrap">
+            <div class="banner">
+                <div class="wrap_box">
+                <div class="download_box clearfix index_download_box">
+					<div class="cell_flash">
+							<object width="248" height="200" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=7,0,19,0" classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000">
+								<param value="/static_0724/img/iflash.swf" name="movie">
+								<param value="high" name="quality">
+								<param value="always" name="allowScriptAccess">
+								<param value="transparent" name="wmode">
+								<embed width="248" height="200" allowscriptaccess="always" wmode="transparent" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" quality="high" src="/static_0724/img/iflash.swf">
+						</object>
+						</div>
+                    <div class="left">
+						
+                        <div class="intro_pic">
+                            <img alt="G家，g家" src="/static_0724/img/photo_1.png" class="png">
+                            <div class="itab">
+                                
+                                <ul class="itab_list_b">
+                                    <li><img alt="G家，g家"  src="/static_0724/img/01.jpg"></li>
+                                    <li style="display:none"><img alt="G家，g家"  src="/static_0724/img/02.jpg"></li>
+                                    <li style="display:none"><img alt="G家，g家" src="/static_0724/img/03.jpg?2013091701"></li>
+									<li style="display:none"><img alt="G家，g家" src="/static_0724/img/04.jpg?2013091701"></li>
+                                </ul>
+                                <span class="switch">
+                                    <a href="javascript:void(0);" index='0' class="cur"></a>
+                                    <a href="javascript:void(0);" index='1'></a>
+                                    <a href="javascript:void(0);" index='2'></a>
+									<a href="javascript:void(0);" index='3'></a>
+                                </span>
+                            </div>
+							<script type="text/javascript">
+                            $(function(){
+								$(".itab .switch").find("a").unbind('click').click(function(){
+                                    var t = $(this);
+                                    var index = parseInt(t.attr("index"));
+                                    t.siblings().removeClass('cur');
+                                    t.addClass('cur');
+
+                                    var target = $('.itab .itab_list_b').find('li').eq(index);
+                                    target.siblings().fadeOut(1000);
+                                    target.fadeIn(1000);
+
+                                    var prevIndex = index + 1;
+                                    prevIndex = prevIndex>3 ? 0:prevIndex;
+                                    var prev = $('.itab .itab_list_s').find('li').eq(prevIndex);
+                                    prev.siblings().fadeOut(2000);
+                                    prev.fadeIn(2000);
+                                });
+								
+								clearInterval(tindex);
+                                setInterval(function(){
+									
+                                    var cur = $(".itab .switch").find(".cur");
+                                    var index = parseInt(cur.attr("index"))+1;
+                                    index = index>3 ?0 :index;
+
+                                    var nav = $(".itab .switch").find('a').eq(index);
+                                    nav.siblings().removeClass('cur');
+                                    nav.addClass('cur');
+
+                                    var target = $('.itab .itab_list_b').find('li').eq(index);
+                                    target.siblings().fadeOut(1000);
+                                    target.fadeIn(1000);
+
+                                    var prevIndex = index + 1;
+                                    prevIndex = prevIndex>3 ? 0:prevIndex;
+                                    var prev = $('.itab .itab_list_s').find('li').eq(prevIndex);
+                                    prev.siblings().fadeOut(1000);
+                                    prev.fadeIn(1000);
+                                },4500);
+							});
+							</script>
+                        </div>
+                    </div>
+                    <div class="download_main">
+                        
+                        <div class="download_link_box">
+                            <div class="download_link">
+                                <a target="_blank" href="http://pp.t.sdo.com/dl?d=0&o=0" class="btn btn_red" title="Android版下载"><i class="icon_android"></i>Android版下载</a>
+                                <a target="_blank" href="http://pp.t.sdo.com/dl?o=2&d=0" class="btn btn_blue" title="iPhone版下载"><i class="icon_iphone"></i>iPhone版下载</a>
+								<!--a href="javascript:void(0);" class="btn" title="iPhone版下载" style="background-color:#c1c1c1;cursor:default;"><i class="icon_iphone"></i>iOS版即将推出</a-->
+                            </div>
+                            <div class="code">
+                                <p>扫描下方二维码下载</p>
+                                <img alt="G家，g家" width="126" src="/static_0724/img/code.png">
+                            </div>
+                        </div>   
+                        <!--div class="download_other">
+                            <a href="/home/DownSymbian" class="symb" title="symbian"></a>
+                            <a href="/home/DownJava" class="kjava" title="kjava"></a>
+                        </div-->
+                    </div>
+                </div>
+            </div>
+            </div>    
+        </div>
+        <!-- feature_box -->
+        <div class="feature_box">
+		 <a href="javascript:void(0);" class="jt"></a>
+            <ul>
+                <li class="item1">
+                    <h1>尖端</h1>
+                    <p>
+                        动态密码、一键确认、二维码扫描。<br>
+                        贴身安全的账号保镖，达人玩游戏必备。<br>
+                    </p>
+                    <div class="pic1"></div>
+                </li>
+                <li class="item2 text_right">
+                    <h1>掌控</h1>
+                    <p>
+                        即时的登录消费提醒，<br>
+                        账号锁定，踢人下线，<br>
+                        账号尽在掌握。<br>
+                    </p>
+                    <div class="pic2"></div>
+                </li>
+                <li class="item3">
+                    <h1>随身</h1>
+                    <p>
+                        遇到游戏难题，<br>
+                        找随身客服或与数万玩家互动交流，<br>
+                        无忧畅享盛大游戏。<br>
+                    </p>
+                    <div class="pic3"></div>
+                </li>
+                <li class="item4 text_right">
+                    <h1>超值</h1>
+                    <p>
+                        移动时代的点券，更优惠、更放心。<br>
+                        参与丰富任务，还有消费返利。<br>
+                    </p>
+                    <div class="pic4"></div>
+                </li>
+                <li class="item5">
+                    <h1>尊贵</h1>
+                    <p>
+                        升级为G家会员，<br>
+                        尊享游戏、购物、礼包、客服特权，<br>
+                        这是您的快乐G家。
+                    </p>
+                    <div class="pic5"></div>
+                </li>
+                <li class="item6 text_right">
+                    <h1>G品</h1>
+                    <p>
+                       汇聚和分享全球最优质移动游戏，<br>
+                       随你精彩！<br> 
+                    </p>
+                    <div class="pic6"></div>
+                </li>
+                
+            </ul>
+             <div class="client_download">
+                <a href="/home/DownAndroid" class="btn btn_red">客户端下载<i class="icon_down"></i></a>
+            </div>
+        </div>
+        <!-- /feature_box -->
+
+    </div>    
+</div> 
+<!-- footer -->
+<div class="footer">
+    <div class="wrap_box1">
+        <ul class="footer_main clearfix">
+            <li>
+                <h4><i class="icon_logo_s"></i>关于盛大G家 </h4>
+                <p>
+                    G家是盛大开发的一款免费手机端应用，并与游戏打通，为用户提供安全管家、游戏助手、随身客服、玩家互动等功能。
+                </p>
+
+                <!-- JiaThis Button BEGIN -->
+                <div class="jiathis_style"><span class="jiathis_txt">分享到：</span>
+                    <a class="jiathis_button_qzone" title="分享到QQ空间"></a>
+                    <a class="jiathis_button_tsina" title="分享到新浪微博"></a>
+                    <a class="jiathis_button_tqq" title="分享到腾讯微博"></a>
+                    <a class="jiathis_button_renren" title="分享到人人网"></a>
+                    <a class="jiathis_button_kaixin001" title="分享到开心网"></a>
+                    <a target="_blank" class="jiathis jiathis_txt jiathis_separator jtico jtico_jiathis" href="http://www.jiathis.com/share"></a>
+                    <a class="jiathis_counter_style"><span class="jiathis_button_expanded jiathis_counter jiathis_bubble_style" id="jiathis_counter_29" title="累计分享1447次">1.4K</span></a>
+                </div>
+                <script type="text/javascript">
+                    var jiathis_config={
+                        url:"http://g.sdo.com",
+                        summary:"盛大通行证手机版全面升级为G家，并与游戏打通，为用户提供安全管家、游戏助手、随身客服、玩家互动等功能。",
+                        title:"G家 #盛大通行证手机版升级为G家# ",
+						pic:'http://g.sdo.com/static_0724/img/01.jpg',
+                        hideMore:false
+                    }
+                </script>
+                <script charset="utf-8" src="http://v3.jiathis.com/code/jia.js" type="text/javascript"></script><script charset="utf-8" src="http://v3.jiathis.com/code/plugin.client.js" type="text/javascript"></script><div style="position:absolute;width:0px;height:0px;"><object width="0" height="0" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab" id="JIATHISSWF" classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"><param value="always" name="allowScriptAccess"><param value="true" name="swLiveConnect"><param value="http://www.jiathis.com/code/swf/m.swf" name="movie"><param value="z=a" name="FlashVars"><embed width="0" height="0" pluginspage="http://www.macromedia.com/go/getflashplayer" type="application/x-shockwave-flash" swliveconnect="true" allowscriptaccess="always" flashvars="z=a" src="http://www.jiathis.com/code/swf/m.swf" name="JIATHISSWF"></object></div>
+                <!-- JiaThis Button END -->
+            </li>
+            <li class="last">
+                <dl>
+                    <dd class="first_dd">
+                        <h4><i class="icon_trend"></i>联系我们</h4>
+                        <div>
+                            <a href="http://e.weibo.com/sdghome" target="_blank">新浪微博</a>
+                            <a href="http://t.qq.com/SDGHOME" target="_blank">腾讯微博</a>
+                            微信号: sdg-home
+                        </div>
+                    </dd>
+                    <dd>
+                        <h4><i class="icon_help"></i>用户帮助</h4>
+                        <div>
+                            <a href="/home/faq" >常见问题</a>
+                            <a href="/home/feedback?channel=2" >反馈问题</a>
+                            <a href="/home/ActivityIndex">活动特权</a>
+                        </div>
+                    </dd>
+                    <dd class="last_dd">
+                        <h4><i class="icon_cooperate"></i>合作伙伴</h4>
+                        <div>
+                            <a href="http://www.shandagames.com" target="_blank">盛大游戏</a>
+                            <a href="http://qidian.com" target="_blank">起点中文</a>
+                        </div>
+                    </dd>
+                </dl>
+            </li>
+        </ul>
+        <div class="footer_bottom" style="background:none;">
+            <ul>
+                <li>
+                    <a class="logo_snda" href="http://www.snda.com" target="_blank">关于盛大集团</a><span>|</span>
+                    <a class="logo1"  href="http://www.sdo.com/business" target="_blank">商务合作</a><span>|</span>
+                    <a class="logo1"  href="http://www.sdo.com" target="_blank">盛大在线</a><span>|</span>
+                    <a class="logo1"  href="http://hr.snda.com" target="_blank">盛大招聘</a><span>|</span>
+                    <a class="logo1"  href="http://kf.sdo.com" target="_blank">客服中心</a>
+                </li>
+            </ul>
+            <p>
+                <span>上海盛展网络科技有限公司&nbsp;版权所有&nbsp;&nbsp;&nbsp;&nbsp;沪ICP备11006268号-5</span>
+            </p>
+        </div>
+    </div>
+</div>
+<!-- /footer -->
+<!-- /wraper -->
+<!--page_aside-->
+<div class="page_aside" id="divPageASide" >
+            <a id="aPageSide_1" class="feed_back" title="反馈" href="/feedback?channel=2"><span></span></a>
+            <a id="aPageSide_2" class="help" title="帮助" href="/home/faq"><span></span></a>
+</div>
+<!--page_aside-->
+<!--  -->
+<div class="back_top" style="display:none;">
+    <a href="javascript:window.scrollTo(0,0);" class="link_top" title="返回顶部"><span></span></a>
+</div>
+<!--  -->
+<script type="text/javascript">
+	var hasD=false;
+	if($(window).height()>700){
+		if($(window).scrollTop()==0){
+			$('.jt').show();
+		}
+	}
+	if($(window).scrollTop()>$(window).height()){
+		$('.back_top').show();
+	}
+	$(window).bind('scroll resize',function(){
+		if($(window).scrollTop()>$(window).height()){
+			$('.back_top').show();
+			$('.jt').hide();
+		}else{
+			$('.back_top').hide();
+			if($(window).scrollTop()==0&&$(window).height()>700){
+				$('.jt').show();
+			}else{
+				$('.jt').hide();
+			}
+		}
+	});
+	
+	$('.jt').click(function(){
+		$(this).hide();
+		//window.scrollTo(0,$(window).height());
+		$('html,body').animate({scrollTop:$(window).height()},800);
+	});
+	
+	$(".itab .switch").find("a").click(function(){
+                                    var t = $(this);
+                                    var index = parseInt(t.attr("index"));
+                                    t.siblings().removeClass('cur');
+                                    t.addClass('cur');
+
+                                    var target = $('.itab .itab_list_b').find('li').eq(index);
+                                    target.siblings().fadeOut(1000);
+                                    target.fadeIn(1000);
+
+                                    var prevIndex = index + 1;
+                                    prevIndex = prevIndex>2 ? 0:prevIndex;
+                                    var prev = $('.itab .itab_list_s').find('li').eq(prevIndex);
+                                    prev.siblings().fadeOut(2000);
+                                    prev.fadeIn(2000);
+                                });
+                                var tindex=setInterval(function(){
+                                    var cur = $(".itab .switch").find(".cur");
+                                    var index = parseInt(cur.attr("index"))+1;
+                                    index = index>2 ?0 :index;
+
+                                    var nav = $(".itab .switch").find('a').eq(index);
+                                    nav.siblings().removeClass('cur');
+                                    nav.addClass('cur');
+
+                                    var target = $('.itab .itab_list_b').find('li').eq(index);
+                                    target.siblings().fadeOut(1000);
+                                    target.fadeIn(1000);
+
+                                    var prevIndex = index + 1;
+                                    prevIndex = prevIndex>2 ? 0:prevIndex;
+                                    var prev = $('.itab .itab_list_s').find('li').eq(prevIndex);
+                                    prev.siblings().fadeOut(2000);
+                                    prev.fadeIn(2000);
+                                },4500);
+								
+								
+    $(".test_mes").hover(
+            function(){
+                $("#text_tips").show();
+            },
+            function(){
+                $("#text_tips").hide();
+            }
+    );
+	
+	
+	function getCookie(name) {
+		var arr = document.cookie.match(new RegExp("(^| )" + name + "=([^;]*)(;|$)"));
+		if(arr != null) return (arr[2]);
+			
+		return null;
+	}
+
+	function setCookie(name, value, exp) {
+		var expiresStr = '';
+		var domainStr = 'domain=.' + window.location.host;
+		
+		if(typeof(exp) == "number") {
+			var d  = new Date();
+			d.setTime(d.getTime() + exp * 1000);
+			expiresStr =  ';expires=' + d.toGMTString();
+		}
+		
+		document.cookie = name + '=' + value +  '; path=/;' + domainStr + expiresStr;
+	}
+	
+    function pageInit(){
+        var url = window.location.href;
+        url=url.toLowerCase();
+        var loginId="";
+        if(loginId.length<3){   //未登录
+            $("#nologin").show();
+            $("#logined").hide();
+            $("#logout").hide();
+            $("#pushMsg").hide();
+        }else{
+            $("#maskMobile").text(loginId);  //已登录
+            $("#nologin").hide();
+            $("#logined").show();
+            $("#logout").show();
+            $("#pushMsg").show();
+        }
+        if(url.indexOf("down")>-1){
+			$("#d_android").removeClass("list_cur");
+            //$(".menu_list_down").show();
+            var logId="11001";
+            if(url.indexOf("iphone")>1){
+                 $("#d_iphone").addClass("list_cur");
+                logId="11002";
+            }else if(url.indexOf("symbian")>1){
+                $("#d_symbian").addClass("list_cur");
+                logId="11003";
+            }else if(url.indexOf("java")>1){
+                $("#d_java").addClass("list_cur");
+                logId="11004";
+            }else{
+                $("#d_android").addClass("list_cur");
+                logId="11001";
+            }
+			if(url.indexOf("pc")>-1){
+				$("#index_a").removeClass("cur");
+				$("#activityinfo_a").removeClass("cur");
+				$("#down_a").removeClass("cur");
+				$('#pc_a').parent().addClass('cur');
+				$('#pc_a').parent().addClass('current');
+			}else{
+				$("#index_a").removeClass("cur");
+				$("#activityinfo_a").removeClass("cur");
+				$("#down_a").addClass("cur");
+				$('#nav_list1').show();
+				$("#down_a").parent().addClass('current');
+			}
+            document.title="G家：游戏助手，快乐G家-下载";
+            
+			
+            writeFkLog("",logId,"");
+        }else if(url.indexOf("activity")>-1){
+            $(".menu_list_down").hide();
+            document.title="G家：游戏助手，快乐G家-特权活动";
+            $("#index_a").removeClass("cur");
+            $("#activityInfo_a").addClass("cur");
+            $("#down_a").removeClass("cur");
+			$("#activityInfo_a").parent().addClass("current");
+        }else if(url.indexOf("faq")>-1){
+			$(".menu_list_down").hide();
+            document.title="G家：游戏助手，快乐G家-用户帮助";
+			$("#faq_a").addClass("cur");
+            $("#index_a").removeClass("cur");
+            $("#activityInfo_a").removeClass("cur");
+            $("#down_a").removeClass("cur");
+			$("#faq_a").parent().addClass("current");
+			setTimeout(function(){
+				document.title="G家：游戏助手，快乐G家-用户帮助";
+			},1000);
+		}else if(url.indexOf("achievement")>-1){
+			$(".menu_list_down").hide();
+            document.title="G家：游戏助手，快乐G家-更新动态";
+			$("#update_a").parent().addClass("cur");
+			$("#update_a").parent().addClass("current");
+			$("#faq_a").removeClass("cur");
+            $("#index_a").removeClass("cur");
+            $("#activityInfo_a").removeClass("cur");
+            $("#down_a").removeClass("cur");
+		}else if(url.indexOf("ox")>-1){
+			$(".menu_list_down").hide();
+            document.title="G家：游戏助手，快乐G家-G品";
+			$("#gbox_a").parent().addClass("cur");
+			$("#gbox_a").parent().addClass("current");
+			$("#faq_a").removeClass("cur");
+            $("#index_a").removeClass("cur");
+            $("#activityInfo_a").removeClass("cur");
+            $("#down_a").removeClass("cur");
+		}else{
+			if(!getCookie('show_tips')){
+				$('.tips').show();
+				setCookie('show_tips','1');
+			}
+			
+            $(".menu_list_down").hide();
+            document.title="G家：游戏助手，快乐G家-首页";
+            $("#index_a").addClass("cur");
+			$("#index_a").parent().addClass("current");
+            $("#activityinfo_a").removeClass("cur");
+            $("#down_a").removeClass("cur");
+            writeFkLog("","10001","");
+        }
+		
+		
+		$('#down_a').mouseover(function(){
+			$('#nav_list1').show();
+		});
+		
+		$('#nav_list1').mouseover(function(){
+			
+			$('#nav_list1').show();
+		});
+		
+		
+		if(url.indexOf("down")==-1||url.indexOf('pc')>-1){	
+			$('#index').mouseover(function(){
+				$('#nav_list1').hide();
+			});
+			$('#activityInfo').mouseover(function(){
+				$('#nav_list1').hide();
+			});
+			
+			$('#faq_help').mouseover(function(){
+				$('#nav_list1').hide();
+			});
+			
+			$('#nav_list1').mouseout(function(){
+				$(this).hide();
+			});	
+			
+			$('#nav_list1').hover(function(){
+				$('#down_a').addClass('cur');
+			},function(){
+				$('#down_a').removeClass('cur');
+			});
+		}
+
+    }
+    pageInit();
+    //判断是否登录
+    function ssoLogin_JSONPMethod(data)
+    {
+        if(data.return_code==0&&data.data.ticket.length>1){
+
+            login.checkLogin(data.data.ticket);
+        }else{
+            $("#nologin").show();
+            $("#logined").hide();
+            $("#logout").hide();
+            $("#pushMsg").hide();
+        }
+    }
+    $('#mobile_android').click(function ()
+    {       $("#ret_msg_android").hide();
+            if($('#mobile_android').val()=="输入手机号码"){
+                $('#mobile_android').val("");
+            }
+    });
+    $('#mobile_android').blur(function(){
+        if($('#mobile_android').val()==""){
+            $('#mobile_android').val("输入手机号码");
+        }
+    });
+    $('#mobile_iphone').click(function ()
+    {   $("#ret_msg_iphone").hide();
+        if($('#mobile_iphone').val()=="输入手机号码"){
+            $('#mobile_iphone').val("");
+        }
+    });
+    $('#mobile_iphone').blur(function(){
+        if($('#mobile_iphone').val()==""){
+            $('#mobile_iphone').val("输入手机号码");
+        }
+    });
+    $('#mobile_symbian').click(function ()
+    {
+        $("#ret_msg_symbian").hide();
+        if($('#mobile_symbian').val()=="输入手机号码"){
+            $('#mobile_symbian').val("");
+        }
+    });
+    $('#mobile_symbian').blur(function(){
+        if($('#mobile_symbian').val()==""){
+            $('#mobile_symbian').val("输入手机号码");
+        }
+    });
+    $('#mobile_code').click(function ()
+    {
+        if($('#mobile_code').val()=="请输入验证码"){
+            $('#mobile_code').val("");
+        }
+    });
+    $('#mobile_code').blur(function(){
+        if($('#mobile_code').val()==""){
+            $('#mobile_code').val("请输入验证码");
+        }
+    });    
+
+
+
+    function cancelSend(apptype){
+            //取消按钮恢复原样 
+            $('#mobile_'+apptype).show();
+            $('#mobile_'+apptype).val("");
+            $("#ret_msg_"+apptype).text("");
+            $('#mobile_cancel').hide();
+            $('#mobile_code').hide();
+            $('#mobile_code').val('');
+            $('#t_code').hide();
+            $('#t_code').val('');
+            $('#t_code').html('');
+    }
+
+    function PageASideSizeHandler()
+    {
+        try {
+            var lvTop=200+Util_getScrollTop();
+            $("#divPageASide").css({"top":(lvTop+"px"),"position":"absolute"});
+        }catch(ex){}
+    }
+    function PageASideBindEvent(elRefer,eventType,handler)
+    {
+        if(typeof elRefer!="object"||typeof eventType!="string"||(typeof handler!="function"&&typeof handler!="object"))
+            return;
+        if(elRefer.attachEvent)
+            elRefer.attachEvent("on"+eventType,handler);
+        else if(elRefer.addEventListener)
+            elRefer.addEventListener(eventType,handler,false);
+    }
+
+    function InitLeftASide()
+    {
+        var browerType=getBrowserVersion();
+        if("ie6"==browerType){
+            PageASideBindEvent(window, "resize", function(e) {
+                PageASideSizeHandler();
+            });
+            PageASideBindEvent(window, "scroll", function(e) {
+                PageASideSizeHandler();
+            });
+            $("#aPageSide_1").bind("mouseover",function(){
+                $("#spanSide_1").show();
+            });
+            $("#aPageSide_1").bind("mouseout",function(){
+                $("#spanSide_1").hide();
+            });
+            $("#aPageSide_2").bind("mouseover",function(){
+                $("#spanSide_2").show();
+            });
+            $("#aPageSide_2").bind("mouseout",function(){
+                $("#spanSide_2").hide();
+            });
+        }
+    }
+    InitLeftASide();
+</script>
+<script src="http://ycas.sdo.com/authen/ssoLogin.jsonp?callback=ssoLogin_JSONPMethod&appId=475&areaId=1&version=21&authenSource=2&productId=1&customSecurityLevel=1&serviceUrl=http://g.sdo.com/home/index&t=1387088385" type="text/javascript" id="jsonpSrc"></script>
+    <!--tongji.baidu.com-->
+    <script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?29ded8a40103525e4f0b5e9d11fb25be";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+    <!--end of tongji.baidu.com-->
+<script type="text/javascript" src="http://ipic.staticsdo.com/external/install_beacon.js"></script>
+</body>
+</html>

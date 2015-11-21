@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>
+		起点商城——首页
+	</title>
+	<link href="__PUBLIC__/css/reset.css" rel="Stylesheet" type="text/css">
+	<link href="__PUBLIC__/css/style_main.css" rel="Stylesheet" type="text/css">
+	<link href="__PUBLIC__/css/alertBox.css" rel="Stylesheet" type="text/css">
+	<link href="__PUBLIC__/css/login.css" rel="stylesheet" type="text/css" >
+	<link href="__PUBLIC__/css/ad.css" rel="stylesheet" type="text/css" >
+	<script src="__PUBLIC__/js/jquery-1.7.2.js"></script>
+	<script src="__PUBLIC__/js/login.js"></script>
+	<script src="__PUBLIC__/js/showcart.js"></script>
+	<script>
+		var sail_time;
+		$(function(){
+			$("#button_user_login").click(function(){
+				if($('#username').val()=="" || $("#password").val()==""){
+					alert("用户名密码不能为空");
+				}else{
+					$("form:first").submit();
+				}
+			
+			})		
+/*限时促销*/
+		sail_time=setInterval(function(){
+			
+				$.ajax({
+				url:"__APP__/Index/ajax_sail_time",
+				dataType:"json",
+				success:function(data){
+					
+					if(data[0]>0){	
+						$("#sail_time").html((Math.floor(data[0]/3600))+"小时"+Math.floor((data[0]%3600)/60)+"分钟"+Math.floor((data[0]%3600)%60)+"秒");
+					}else if(data[0]<0){
+						$("#sail_time").html('<span style="color:red;font-weight:bold;font-size:15px">正在热销</span>');
+						clearInterval(sail_time);
+						setTimeout(function(){
+						$("#sail_time").html("<span style='color:red;font-weight:bold'>已经结束了哦</span>");
+					},data[1]*1000);
+					}
+					
+				}
+			})	
+			},1000);
+			
+			
+			$(".look").click(function(){
+				if($("#sail_time").children().html()=="正在热销"){
+					window.location.href="__APP__/Content/index/id/<{$sail_info[0]['goods_id']}>/classify_id/<{$sail_info[0]['classify_id']}>/sail_price/<{$sail_info[0]['rebate_price']}>/time_sail/<{$sail_info[0]['md5']}>";
+				}else if($("#sail_time").children().html()=="已经结束了哦"){
+					$(".time_sail_end").css('display','block');
+					$("#zhezhao").css("width","100%").css("height","2200px").css("background","#aaaaaa").css("opacity","0.5").css("display","block").css("z-index","2014");
+				}else{
+					//alert('还没有开始哦');
+					$(".time_sail_nostart").css('display','block');
+					$("#zhezhao").css("width","100%").css("height","2200px").css("background","#aaaaaa").css("opacity","0.5").css("display","block").css("z-index","2014");
+				}
+			});
+			//提示未开始弹出框关闭
+			$("#time_btnClose").click(function(){
+				$(".time_sail_nostart").css('display','none');
+				$("#zhezhao").css("display",'none');
+			})
+			$("#time_btnContinue").click(function(){
+				$(".time_sail_nostart").css('display','none');
+				$("#zhezhao").css("display",'none');
+			})
+			//提示结束
+			//提示已结束弹出框关闭
+			$("#end_btnClose").click(function(){
+				$(".time_sail_end").css('display','none');
+				$("#zhezhao").css("display",'none');
+			})
+			$("#end_btnContinue").click(function(){
+				$(".time_sail_end").css('display','none');
+				$("#zhezhao").css("display",'none');
+			})
+			
+			
+			$(".time_sail_image").click(function(){
+				if($("#sail_time").children().html()=="正在热销"){
+					window.location.href="__APP__/Content/index/id/<{$sail_info[0]['goods_id']}>/classify_id/<{$sail_info[0]['classify_id']}>/sail_price/<{$sail_info[0]['rebate_price']}>/time_sail/<{$sail_info[0]['md5']}>";
+				}else if($("#sail_time").children().html()=="已经结束了哦"){
+					$(".time_sail_end").css('display','block');
+					$("#zhezhao").css("width","100%").css("height","2200px").css("background","#aaaaaa").css("opacity","0.5").css("display","block").css("z-index","2014");
+				}else{
+					$(".time_sail_nostart").css('display','block');
+					$("#zhezhao").css("width","100%").css("height","2200px").css("background","#aaaaaa").css("opacity","0.5").css("display","block").css("z-index","2014");
+				}
+			});
+			/*限时促销结束*/
+			/*热卖榜*/
+			var len=$(".book_list").length;
+			var index=1;
+			var zd;
+			function moveDiv(num){
+				$("#tab_holder>li").eq(num).addClass('current').siblings().removeClass();
+				$(".book_list").hide().eq(num).show();
+			}
+			
+			function zidong(){
+				if(index==len){
+					index=0;
+				}
+				moveDiv(index);
+				index=index+1;
+				
+			}
+			zd=window.setInterval(zidong,5000);
+			$("#tab_holder>li").mouseover(function(){
+					var index_num=$(".tab_holder>li").index(this);
+					moveDiv(index_num);
+					index=index_num+1;
+					clearInterval(zd);
+				})
+				$("#tab_holder>li").mouseout(function(){
+					zd=window.setInterval(zidong,5000);
+				})
+			
+			/*热卖榜结束*/
+			
+			
+			
+			function moveBook(num){
+				$("#tab_book>li").eq(num).addClass('current').siblings().removeClass();
+				$("#book .item_list").hide().eq(num).show();
+			}
+			$("#tab_book>li").mouseover(function(){
+				var book_num=$("#tab_book>li").index(this);
+				moveBook(book_num);
+			});
+			$(".no_session").click(function(){
+				alert('请先登录');
+			})
+			
+			/*继续购物*/
+			$("#btnContinue").click(function(){
+				$(".showcart").css('display','none');
+				$("#zhezhao").css("display","none");
+			});
+			/*关闭购物车*/
+			$("#btnClose").click(function(){
+				$(".showcart").css('display','none');
+				$("#zhezhao").css("display","none");
+			})
+			/*前往购物车*/
+			$("#btnShoppingCart").click(function(){
+				window.location.href='__APP__/Showcart/index';
+			})
+			/*关闭库存提示*/
+			$("#reserve_btnClose").click(function(){
+				$(".reserve").css('display','none');
+				$("#zhezhao").css("display","none");
+			});
+			$("#reserve_btnContinue").click(function(){
+				$(".reserve").css('display','none');
+				$("#zhezhao").css("display","none");
+			});
+			
+		})
+		/*购物车*/
+		function showcart(obj){
+			$.ajax({
+				url:"__APP__/Showcart/sendcart",
+				type:"post",
+				data:"id="+obj.id+"&num=1",
+				dataType:"json",
+				success:function(data){
+					if(data==0){
+						$(".reserve").css('display','block');
+						$("#zhezhao").css("width","100%").css("height","2200px").css("background","#aaaaaa").css("opacity","0.5").css("display","block").css("z-index","2014");
+					}else{
+						$("#zhezhao").css("width","100%").css("height","2200px").css("background","#aaaaaa").css("opacity","0.5").css("display","block").css("z-index","2014");
+						$(".showcart").css('display','block');
+						$("#lblNumCount").html(data.count);
+						$("#lblPriceCount").html(data.total);
+					}
+				}
+			})
+		}
+	/*end*/
+	
+	</script>
+</head>
+<body>
+
+<div id="zhezhao" style="position:absolute;top:0px;left:0px;display:none">
+</div>
+<div id="login" class="login_content" style="display:none">
+	<div class="pop_main">
+		<div class="pop_header">
+			<div id="pop_head_1">
+				<h3 class="pop_content_II">登陆起点</h3>
+			</div>
+			<div class="pop_content_opt">
+				<a href='javascript:void(0)' class="pop_content_close" id="pop_close_1">关闭</a>
+			</div>
+		</div>
+		<div style="height:340px;overflow:hidden" class="pop_main">
+			<div class="sd_banner">
+				<div id="pop_head_1" style="height:45px">
+					<h3 id="pop_title_1"></h3>
+				</div>
+				<div class="pop_content_opt" id="pop_content_1">
+				</div>
+			</div> 
+			<div class="login_main">
+			<form name='myform' action="__APP__/Login/dologin" method="post">
+				<div class="login_name">
+					<input type="text" name="username" id="username" >
+				</div>
+				<div class="name_hidden">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;手机号/邮箱/个性账号</div>
+				<div class="login_name" style="margin-top:10px">
+					
+					<input type="password" name="password" id="password" >
+				</div>
+				<div class="p_hidden">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;请输入密码</div>
+			
+				<div class="login_button">
+					<a class="button_user_login" id="button_user_login" style="cursor:pointer" href="javascript:void(0)" >
+						<span class="button_user_login_index" >登陆</span>
+					</a>
+			
+				</div>
+			</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!--购物车-->
+<div class="showcart" style="position:fixed;left:300px;top:250px; z-index:99999;display:none">
+	<table border="0" cellspacing="0" cellpadding="0" class="ajax_box">
+<colgroup valign="middle">
+<col width="5">
+<col width="430">
+<col width="5">
+</colgroup>
+	<tbody><tr>
+		<td class="bd"></td>
+		<td class="bd"></td>
+		<td class="bd"></td>
+	</tr>
+	<tr>
+		<td class="bd"></td>
+		<td class="con">
+                <!-- 标题层 start-->
+                <div class="title_box">
+                    <h3>欢迎使用起点购物系统</h3>
+                    <a id="btnClose" href="javascript:void(0);" title="关闭">关闭</a>
+				</div>
+                <!-- 标题层 end-->
+
+                <!-- 内容层 start-->
+                <div class="content_box success_alert">
+					<p class="confirm"><i class="seccess"> </i>商品已成功添加到购物车！</p>
+					<p class="info">购物车共&nbsp;<em><label id="lblNumCount">1</label></em>&nbsp;件商品，共计&nbsp;<b><label id="lblPriceCount">48.00</label></b>&nbsp;(元)</p>
+                </div>
+                <!-- 内容层 end-->
+
+                <!-- 操作层 start-->
+                <div class="opt_box"><a href="javascript:void(0);" id="btnContinue" class="btn btn_gray">继续购物</a><a id="btnShoppingCart" href="javascript:void(0);" class="btn btn_long_read">去购物车结算</a></div>
+                <!-- 操作层 end-->
+				 
+		</td>
+		<td class="bd"></td>
+	</tr>
+	<tr>
+		<td class="bd"></td>
+		<td class="bd"></td>
+		<td class="bd"></td>
+	</tr>
+</tbody></table>	
+</div>
+<!--购物车结束-->
+<!--提示库存开始-->
+<div class="reserve" style="position:fixed;left:300px;top:250px; z-index:99999;display:none">
+	<table border="0" cellspacing="0" cellpadding="0" class="ajax_box">
+<colgroup valign="middle">
+<col width="5">
+<col width="430">
+<col width="5">
+</colgroup>
+	<tbody><tr>
+		<td class="bd"></td>
+		<td class="bd"></td>
+		<td class="bd"></td>
+	</tr>
+	<tr>
+		<td class="bd"></td>
+		<td class="con">
+                <!-- 标题层 start-->
+                <div class="title_box">
+                    <h3>提示信息</h3>
+                    <a id="reserve_btnClose" href="javascript:void(0);" title="关闭">关闭</a>
+				</div>
+                <!-- 标题层 end-->
+
+                <!-- 内容层 start-->
+                <div class="content_box success_alert">
+					<p class="confirm"><i class="error"> </i>该商品的库存为0，请随时关注最新动态</p>
+                </div>
+                <!-- 内容层 end-->
+
+                <!-- 操作层 start-->
+                <div class="opt_box"><a href="javascript:void(0);" id="reserve_btnContinue" class="btn btn_gray">继续购物</a></div>
+                <!-- 操作层 end-->
+				 
+		</td>
+		<td class="bd"></td>
+	</tr>
+	<tr>
+		<td class="bd"></td>
+		<td class="bd"></td>
+		<td class="bd"></td>
+	</tr>
+</tbody></table>	
+</div>
+<!--提示库存结束-->
+
+<!--提示限时购物还没开始-->
+<div class="time_sail_nostart" style="position:fixed;left:300px;top:250px; z-index:99999;display:none">
+	<table border="0" cellspacing="0" cellpadding="0" class="ajax_box">
+<colgroup valign="middle">
+<col width="5">
+<col width="430">
+<col width="5">
+</colgroup>
+	<tbody><tr>
+		<td class="bd"></td>
+		<td class="bd"></td>
+		<td class="bd"></td>
+	</tr>
+	<tr>
+		<td class="bd"></td>
+		<td class="con">
+                <!-- 标题层 start-->
+                <div class="title_box">
+                    <h3>提示信息</h3>
+                    <a id="time_btnClose" href="javascript:void(0);" title="关闭">关闭</a>
+				</div>
+                <!-- 标题层 end-->
+
+                <!-- 内容层 start-->
+                <div class="content_box success_alert">
+					<p class="confirm"><i class="error"> </i>本次限时购物还没有开始，敬请关注</p>
+                </div>
+                <!-- 内容层 end-->
+
+                <!-- 操作层 start-->
+                <div class="opt_box"><a href="javascript:void(0);" id="time_btnContinue" class="btn btn_gray">继续购物</a></div>
+                <!-- 操作层 end-->
+				 
+		</td>
+		<td class="bd"></td>
+	</tr>
+	<tr>
+		<td class="bd"></td>
+		<td class="bd"></td>
+		<td class="bd"></td>
+	</tr>
+</tbody></table>	
+</div>
+<!--提示限时未购物开始 end-->
+<!--提示限时购物已经结束-->
+<div class="time_sail_end" style="position:fixed;left:300px;top:250px; z-index:99999;display:none">
+	<table border="0" cellspacing="0" cellpadding="0" class="ajax_box">
+<colgroup valign="middle">
+<col width="5">
+<col width="430">
+<col width="5">
+</colgroup>
+	<tbody><tr>
+		<td class="bd"></td>
+		<td class="bd"></td>
+		<td class="bd"></td>
+	</tr>
+	<tr>
+		<td class="bd"></td>
+		<td class="con">
+                <!-- 标题层 start-->
+                <div class="title_box">
+                    <h3>提示信息</h3>
+                    <a id="end_btnClose" href="javascript:void(0);" title="关闭">关闭</a>
+				</div>
+                <!-- 标题层 end-->
+
+                <!-- 内容层 start-->
+                <div class="content_box success_alert">
+					<p class="confirm"><i class="error"> </i>本次限时购物已经结束，谢谢关注</p>
+                </div>
+                <!-- 内容层 end-->
+
+                <!-- 操作层 start-->
+                <div class="opt_box"><a href="javascript:void(0);" id="end_btnContinue" class="btn btn_gray">继续购物</a></div>
+                <!-- 操作层 end-->
+				 
+		</td>
+		<td class="bd"></td>
+	</tr>
+	<tr>
+		<td class="bd"></td>
+		<td class="bd"></td>
+		<td class="bd"></td>
+	</tr>
+</tbody></table>	
+</div>
+<!--提示限时购物结束-->
+
+
+
+
+
+
+<div id="page">
+	<!--头部开始-->
+	<include file="Index:header" />
+	<!--头部结束-->
+	<div id="content">
+<div class="search_box main_search">
+
+	<div class="search_card">
+		<form action="__APP__/Search/index" method="get">
+	    <div class="search-select">
+			<input id="txtSearchType" value="图书" name="search_classify">
+			<div id="divSearchType" style="display: none;" class="search_selectcontent">
+				<p>图书</p>
+				<p>周边</p>
+			</div>
+		</div>
+		<script>
+			$(function(){
+				$(".search-select").click(function(){
+					$("#divSearchType").css('display','block');
+				});
+				$("#divSearchType>p").live('click',function(){
+					$("#txtSearchType").val($(this).html());
+					$(this).parent().hide();
+				})
+			})
+		</script>
+		<input id="txtSearchKey" name="search_name" class="ipt_txt" value="请输入您要搜索的关键字"><input type="submit" class="btn_search" id="btnSearch" value="搜 索">
+		<script>
+			$(function(){
+				$("#txtSearchKey").click(function(){
+					if($(this).val()=="请输入您要搜索的关键字"){
+						$("#txtSearchKey").val('');
+					}
+				})
+			})
+		</script>
+		</form>
+	</div>
+	<p class="hotsearch"><span>热搜：</span> 
+<a target="_blank" href="javascript:void(0)">新书上架</a> &nbsp;<a target="_blank" href="javascript:void(0)">吞噬星空系列</a>&nbsp;<a target="_blank" href="javascript:void(0)">莽荒纪</a></p>
+</div>
+
+
+    <div class="col_main clearfix">
+        <div class="col_left">
+            <div class="guide mb11">
+                <div class="title"> 商品分类</div>
+                <div class="con">
+				
+                    <ul>
+						<volist name="classify" id="qdclass">
+							<li><a href="<{$qdclass.path}>"  style="background: url(&#39__PUBLIC__/images/<{$qdclass.image}>&#39;) no-repeat scroll 20px 15px transparent;"> <{$qdclass.name}> </a></li>
+                        </volist>
+                    </ul>
+                </div>
+            </div>
+           
+<!--限时特卖-->    
+<div class="limit_sale mb11" style="width:100%; height:400px; margin-bottom:10px; ">
+    <div class="title" style=" width:auto;">
+        限时特卖</div>
+    <div class="con" style=" width:auto;">
+        <div class="box">
+			<volist name="sail_info" id="info">
+            <div class="ItemsBox ui-carousel" id="carousel" style="width: 190px; overflow: hidden; height: 335px;">
+            <div class="wrapper">
+				<div class="Item" style="width: 190px; height: 335px; margin-right: 0px;">   
+					<div class="photo" style="text-align: center; height:190px;">  
+						<a target="_blank" title="<{$info.name}>" href="javascript:void(0)" style="border:none;" class="time_sail_image">
+						<img src="__PUBLIC__/uploads/Goods_images/<{$info.image_first}>/big/b_<{$info.image_last}>" width="185" height="185" ></a>
+					</div>                
+					<div class="name" style=" overflow:hidden;line-height:18px; height:18px; text-align:center;  word-wrap:normal ; text-overflow:ellipsis; ">
+					<a title="<{$info.name}>" href="" target="_blank" style="color:white"><{$info.name}></a>
+					</div>
+					<div class="yes_sale"> 
+						<span class="price" style="font-size:22px;"><{$info.rebate_price}></span>
+						<a class="look" href="javascript:void(0s)" target="_blank"></a>
+						<div class="clearfix">                    </div>      
+					</div>               
+					<div class="info">                   
+						<table width="100%" border="0" cellspacing="0" cellpadding="0">                      
+						<tbody>
+							<tr><th>原价</th> <th>折扣 </th> <th> 节省 </th> </tr>                       
+							<tr><td> ￥<del><{$info.price}></del> </td>                            <td> <{$rebate}>折</td><td><{$diff_price}></td></tr>
+						</tbody>
+						</table>              					
+					</div>             
+					<div class="time"><span class="aaa">距离本次促销时间</span></div>         
+				</div>
+			</div>
+			</div>
+			</volist>
+			
+            <div class="control" align="center" style="text-align:center; ">
+                <div style="margin: 0 auto; text-align:center; overflow:hidden; width:130px; margin-left: 5px;" id="pages">
+                <span id="sail_time"></span><span id="hidden_time" style="display:none"></span>
+			</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- end -->
+
+
+
+            
+            
+<div class="grid_left_207 hot_sale mb11 col_left">
+    <div class="title" style="background:url(&#39;__PUBLIC__/images/stuff_mall.gif&#39;) no-repeat scroll 0 -42px transparent;color:white;">
+        热卖榜</div>
+    <div class="con">
+        <ul class="tab_holder" id="tab_holder">
+            <li class="current" >
+                <a href="javascript:void(0);" style="color: White;">图书</a></li>
+            
+            <li  class=""><a href="javascript:void(0);" style="color: White;">周边</a></li>
+        </ul>
+        <div style="clear: both">
+        </div>
+        <div id="divTopSaleBook" class="book_list">
+			<volist name="hot_sail_book" id="hotbook">
+		   <div class="book_box" style="margin-bottom:0px;">
+				<div class="cover">
+					<a href="__APP__/Content/index/id/<{$hotbook.id}>/classify_id/<{$hotbook.classify_id}>" target="_blank" title="<{$hotbook.name}>">
+					<img style="width:65px;height:85px;" src="__PUBLIC__/uploads/Goods_images/<{$hotbook.image_first}>/big/b_<{$hotbook.image_last}>" alt="<{$hotbook.name}>">
+					</a>
+				</div>
+				<div class="intro" style="padding-left:0px;margin-left:94px;">
+					<p class="tit"><b><{$hotbook.order}></b><a href="__APP__/Content/index/id/<{$hotbook.id}>/classify_id/<{$hotbook.classify_id}>" title="<{$hotbook.name}>"><{$hotbook.truncate}></a></p>
+					<p>原价：<del><{$hotbook.price}></del><br><i>起点价：<{$hotbook.qd_price}></i>
+					<if condition="$_SESSION['user']">
+					<a class="btn_buy" id="<{$hotbook.id}>" href="javascript:void(0);" onclick="showcart(this)">立即购买</a></p>
+					<else/>
+					<a class="btn_buy no_session"href="javascript:void(0);">立即购买</a></p>
+					</if>
+				</div>
+			</div>
+			</volist>
+			<!--一个结束-->
+        </div>
+		
+		<div id="divTopSalePlaything" class="book_list" style="display:none" >
+			<volist name="hot_sail_plaything" id="hotplaything">
+		    <div class="book_box" style="margin-bottom:0px;">
+				<div class="cover">
+					<a href="__APP__/Content/index/id/<{$hotplaything.id}>/classify_id/<{$hotplaything.classify_id}>" target="_blank" title="<{$hotplaything.name}>">
+					<img style="width:65px;height:85px;" src="__PUBLIC__/uploads/Goods_images/<{$hotplaything.image_first}>/big/b_<{$hotplaything.image_last}>" alt="<{$hotplaything.name}>">
+					</a>
+				</div>
+				<div class="intro" style="padding-left:0px;margin-left:94px;">
+					<p class="tit"><b><{$hotplaything.order}></b><a href="__APP__/Content/index/id/<{$hotplaything.id}>/classify_id/<{$hotplaything.classify_id}>" title="<{$hotplaything.name}>"><{$hotplaything.truncate}></a></p>
+					<p>原价：<del><{$hotplaything.price}></del><br><i>起点价：<{$hotplaything.qd_price}></i>
+					<if condition="$_SESSION['user']">
+					<a class="btn_buy" id="<{$hotplaything.id}>" href="javascript:void(0);" onclick="showcart(this)">立即购买</a></p>
+					<else/>
+					<a class="btn_buy no_session"href="javascript:void(0);">立即购买</a></p>
+					</if>
+				</div>
+			</div>
+			</volist>
+		
+		</div>
+       
+    </div>
+</div>
+
+
+           
+            <div style="margin-top: 5px;">
+			<!--底部广告-->
+                <a href="<{$ad_bottom.href}>" alt="<{$ad_bottom.title}>">
+	                <img src="__PUBLIC__/uploads/Ad_images/<{$ad_bottom.image_first}>/common/<{$ad_bottom.image_last}>" width="206px" height="240px">
+                </a>
+			<!--end-->
+            </div>
+        </div>
+        <div class="col_right">
+            <div class="col_right_wrap mb11">
+                <div class="col_center">
+                    <div class="notice">
+                        <strong><font color="#808080">【公告】</font><a href="" target="_blank"><b><font color="#ff0000">《全职高手》系列周边延迟发货通知！</font></b></a></strong></div>
+                    <div class="billboard" style="position:relative;top:-15px;">
+                        <b class="box-rc-lt"></b><b class="box-rc-rt"></b>
+						<!--幻灯片-->
+					   <div class="slide box_hd" style="position:relative;margin:20px auto;">
+                            <ul class="slidepic">
+							<volist name="ad_list" id="ad">
+								<li><a href="<{$ad.href}>"><img width="502" height="216" alt="<{$ad.title}>" src="__PUBLIC__/uploads/Ad_images/<{$ad.image_first}>/common/<{$ad.image_last}>" /></a></li>
+								
+							</volist>
+							</ul>
+							<div class="slidebtn">
+								<ul>
+									<li class="current">1</li>
+									<li>2</li>
+									<li>3</li>		
+									<li>4</li>				
+								</ul>
+							</div>
+                            
+                        </div>
+						<script>
+							$(function(){
+	
+								// 图片上下翻滚
+								var len = $('.slidebtn>ul>li').length;
+								var index = 0;
+								var autoplay;
+								$('.slidebtn li').mouseover(function(){
+									index = $('.slidebtn li').index(this);
+									showImg(index);
+								}).eq(0).mouseover();
+								
+								$('.slide').hover(function(){
+									clearInterval(autoplay);
+								},function(){
+									autoplay = setInterval(function(){
+										showImg(index)
+										index++;
+										if(index==len){
+											index=0;
+										}
+									},3000);
+								}).trigger('mouseleave');
+
+								function showImg(index){
+									var picheight = $('.slide').height();
+									$('.slidepic').stop(true,false).animate({top:-picheight*index},600)
+									$('.slidebtn li').removeClass('current').eq(index).addClass('current');
+								};
+							})
+						</script>
+						<!--幻灯片-->
+                    </div>
+                </div>
+                <div class="col_side">
+                    <div class="news_box">
+                        <ul class="tag_holder">
+                            <li class="current" >
+                                公告</li>
+                           
+                        </ul>
+                        <div id="divNotice" class="con">
+                            <ul class="news_list">
+                                <p><a href="" target="_blank"><font color="#ff0000">·[关注]商城购起点图书赠粉丝值钻石</font></a> </p>
+								<p><a href="" target="_blank"><font color="#ff0000">·[喜讯]用户擒获胜负彩313万大奖</font></a></p>
+								<p><font color="#000080"><a href="" target="_blank">·[活动]体彩排列三玩法加奖</a></font></p>
+								<p><a href="" target="_blank"><font color="#003366">·《大主宰》、《莽荒纪》等最新图书</font></a></p>
+								<p><font color="#003366"><a href="" target="_blank">·意千重新作《良婿》热卖中</a></font></p>
+								<p><a href="" target="_blank">·《明朝那些事》9册增补版全套热卖</a></p>
+								<p><span style="COLOR: rgb(0,51,102)">·</span><a href="" target="_blank">新版图书频道22个城市满68包邮</a> </p>
+								<p><font color="#003366">·<a href="" target="_blank">魔兽世界周边手办火热上线！</a></font><br></p>
+                            </ul>
+                        </div>
+                        
+                       
+                    </div>
+                </div>
+            </div>
+            <div class="col_right_wrap" style=" padding-top:10px;">
+                <div class="box_main mb11">
+                    <div class="title">
+                        <a href="">
+                            <h3>
+                                图书</h3>
+                        </a>
+                        <div class="tab_list">
+                            </div>
+                    </div>
+                    <div class="conent" id="book">
+                        <ul class="tab_holder" id="tab_book">
+                        
+                             <li class="current"><a href="javascript:void(0);">
+                                新书上架</a></li>
+                            <li class=""><a href="javascript:void(0);">重磅推荐</a></li>
+                       
+                        </ul>
+                        <div class="clear"> </div>
+						
+						<!--新书-->
+						<div id="divNewBookList" class="item_list"  style="display:block">
+							<volist name="new_book" id="new">
+							<div class="item_box">
+								<p class="cover">
+									<a href="__APP__/Content/index/id/<{$new.id}>/classify_id/<{$new.classify_id}>" target="_blank" title="<{$new.name}>">
+										<img src="__PUBLIC__/uploads/Goods_images/<{$new.image_first}>/common/<{$new.image_last}>" alt="<{$new.name}>">
+									</a>
+								</p>
+								<p><a href="__APP__/Content/index/id/<{$new.id}>/classify_id/<{$new.classify_id}>" title="<{$new.name}>"><{$new.truncate}></a></p>
+								<p>原价：<del><{$new.price}></del><br><i>起点价：<{$new.qd_price}></i></p>
+							</div>
+							</volist>
+						</div>
+                       <!--end-->
+						
+						<!--推荐-->
+                        <div id="divRecList" class="item_list"  style="display:none">
+							<volist name="weight_book" id="weight">
+                            <div class="item_box">
+								<p class="cover">
+									<a href="__APP__/Content/index/id/<{$weight.id}>/classify_id/<{$weight.classify_id}>" target="_blank" title="<{$weight.name}>">
+										<img src="__PUBLIC__/uploads/Goods_images/<{$weight.image_first}>/common/<{$weight.image_last}>" alt="<{$weight.name}>">
+									</a>
+								</p>
+								<p><a href="__APP__/Content/index/id/<{$weight.id}>/classify_id/<{$weight.classify_id}>" title="<{$weight.name}>"><{$weight.truncate}></a></p>
+								<p>原价：<del><{$weight.price}></del><br><i>起点价：<{$weight.qd_price}></i></p>
+							</div>
+							</volist>
+                        </div>
+						<!--end-->
+						
+                    </div>
+                </div>
+
+               
+<div class="box_main mb11" id="div_relatedrecommend">
+    <div class="title">
+        <a href="">
+            <h3 style="background-position:0 -160px">
+                周边</h3>
+        </a>
+        <div class="tab_list">
+        </div>
+    </div>
+    <div class="conent" id="plaything">
+        
+        <!--<div class="clear">  </div>-->       
+        
+		<div class="item_list"> 
+			<volist name="plaything" id="play">
+			<div class="item_box">
+				<p class="cover1" style="border: 1px solid #D1D1D1; height: 150px; width: 120px;">
+					<a title="<{$play.name}>" target="_blank" href="__APP__/Content/index/id/<{$play.id}>/classify_id/<{$play.classify_id}>">
+						<img alt="<{$play.name}>" src="__PUBLIC__/uploads/Goods_images/<{$play.image_first}>/big/b_<{$play.image_last}>"  style="padding-top:16px;" width="120" height="120">
+					</a>
+				</p>
+				<p>
+					<a title="<{$play.name}>" href="__APP__/Content/index/id/<{$play.id}>/classify_id/<{$play.classify_id}>"><{$play.truncate}></a>
+				</p>
+				<p> 原价：<del><{$play.price}></del><br><i>起点价：<{$play.qd_price}></i></p>
+				
+			</div>
+			</volist>
+			<!--end-->
+		</div>
+	</div>
+</div>
+
+
+  
+            </div>
+        </div>
+        <div class="clear">
+        </div>
+    </div>
+
+	</div>
+	
+<!-- 底部开始-->
+	<include file="Index:footer" />
+<!-- 底部结束-->
+</div>
+
+
+<!--</form>-->
+
+
+</body></html>

@@ -1,0 +1,160 @@
+.col_main .col_left {overflow:visible}
+
+
+
+.small_pages {line-height:normal;}
+.small_pages * {vertical-align:top;}
+.small_pages .prev,
+.small_pages .next {display:inline-block;width:14px;height:14px;overflow:hidden;line-height:60px;background:url(../images/daoju/btn_bg01.gif) -15px -245px no-repeat;}
+
+.small_pages .disable {background-position:-15px -260px;_background-position:-15px -245px}
+
+.small_pages .next {background-position:0 -245px;}
+.small_pages .next.disable {background-position:0 -260px;_background-position:0 -245px}
+
+*html .small_pages .next.disable {background-position-y:-260px;}
+
+
+
+
+
+.likebox {margiN:0 0 10px 0;}
+.likebox .box_caption {height:29px;line-height:29px;overflow:hidden;padding:0 0 0 12px;background:#c00 url(../images/daoju/bg01.gif) 0 0 repeat-x;border:1px solid #c43b12;color:#fff;}
+.likebox .box_cont {border:1px solid #d5d5d5;border-top:0;}
+
+.likebox .box_caption b {font-size:14px;}
+
+
+
+.human_info {border:4px solid #d5d5d5;padding:10px 10px 0 10px;margiN:0 0 10px 0;height:138px;overflow:hidden;}
+.human_info .title {height:20px;overflow:hidden;border-bottom:1px solid #e5e5e5;color:#333;font-size:14px;}
+.human_info .cont {padding:10px 0  0 10px;color:#333;line-height:16px;}
+.human_info .cont .line{margin:0 0 10px 0;}
+.human_info .cont .money,
+.human_info .cont .diamond {margiN:0 3px 0 0 ;display:inline-block;width:16px;height:16px;overflow:hidden;line-height:62px;vertical-align:top;
+	background:url(../images/daoju/icons01.gif) 0 0 no-repeat;
+	}
+.human_info .cont .money {background-position:0 -3px;}
+.human_info .cont .diamond {background-position:0 -40px;}
+
+.human_info .cont .red {color:#c00;}
+.human_info .cont .green {color:#004d00;}
+
+
+.itemize {}
+.itemize .list_box {padding:10px 0;}
+.itemize .list_box .title {text-indent:26px;font-size:14px;font-weight:bold;color:#333;height:31px;line-height:33px;overflow:hidden;background:url(../images/daoju/btn_bg01.gif) 0 -57px no-repeat;}
+.itemize .list_box ul {margiN:10px 0 0 0;}
+.itemize .list_box ul li {height:31px;line-height:31px;overflow:hidden;padding:0 0 0 37px;}
+.itemize .list_box ul li a {color:#333;}
+.itemize .list_box ul li a:hover {color:#c00;}
+
+.itemize .list_box ul li:hover {background:#f3f3f3;}
+.itemize .list_box ul li.active {background:#e3e3e3;}
+.itemize .list_box ul li.active a {color:#c00;}
+
+.itemize .activebox .title {position:absolute;width:227px;color:#bc2b00;background-position:0 -26px;}
+
+
+
+.sign_in {}
+.sign_in .box_cont {padding:9px 0 9px 9px;}
+
+
+.hot_tuijian {border:1px solid #d5d5d5;padding:1px;margiN:0 0 10px 0;}
+.hot_tuijian .caption {position:absolute;margin:-4px 0 0 -4px;width:69px;height:69px;overflow:hidden;text-indent:-9999px;background:url(../images/daoju/btn_bg01.gif) 0 -113px no-repeat;}
+.hot_tuijian .game_list {padding:0 0 0 40px;height:152px;overflow:hidden;background:#f1f1f1 url(../images/daoju/bg01.gif) 0 -30px repeat-x;}
+.hot_tuijian .game_list .box {float:left;width:33.3%;overflow:hidden;_display:inline;margin:30px 0 0 0;}
+.hot_tuijian .shuping_list {padding:0 0 0 40px;height:152px;overflow:hidden;background:#f1f1f1 url(../images/daoju/bg01.gif) 0 -30px repeat-x;}
+.hot_tuijian .shuping_list .box {float:left;width:33.3%;overflow:hidden;_display:inline;margin:30px 0 0 0;}
+
+.all_games {border:1px solid #d5d5d5;padding:0 0 30px 0;}
+.all_games .left {float:left;}
+.all_games .right {float:right;}
+.all_games .list_top {height:30px;overflow:hidden;line-height:30px;padding:0 12px;background:url(../images/daoju/bg01.gif) 0 -185px;}
+.all_games .list_top .small_pages {margiN:8px 0 0 0;}
+.all_games .list_top .list_top_btn01 {vertical-align:middle;display:inline-block;text-indent:15px;line-height:24px;height:22px;width:59px;overflow:hidden;border:0;background:url(../images/daoju/btn_bg01.gif) 0 -196px no-repeat;}
+.all_games .list_top .up {background-position:-60px -196px; }
+.all_games .list_top .gray {background-position:0 -219px; }
+.all_games .list_top .gray.d_up {background-position:-60px -219px; }
+
+*html .all_games .list_top .left {margin:4px 0 0 0;}
+
+.all_games .show_info {height:30px;line-height:30px;padding:0 12px;margiN:10px 0 0 0;}
+.all_games .show_info b {color:#c00;font-weight:normal;}
+
+.all_games .pages {color:#777;margin:15px 30px 0 0;text-align:right;}
+
+.all_shuping_dg {border:1px solid #d5d5d5;padding:0 0 30px 0;}
+.all_shuping_dg .left {float:left;}
+.all_shuping_dg .right {float:right;}
+
+.all_shuping_dg .list_top {height:30px;overflow:hidden;line-height:30px;padding:0 12px;background:url(../images/daoju/bg01.gif) 0 -185px;}
+.all_shuping_dg .list_top .small_pages {margiN:8px 0 0 0;}
+.all_shuping_dg .list_top .list_top_btn01 {vertical-align:middle;display:inline-block;text-indent:15px;;line-height:24px;height:22px;width:59px;overflow:hidden;border:0;background:url(../images/daoju/btn_bg01.gif) 0 -196px no-repeat;}
+.all_shuping_dg .list_top .up {background-position:-60px -196px; }
+.all_shuping_dg .list_top .gray {background-position:0 -219px; }
+.all_shuping_dg .list_top .gray.d_up {background-position:-60px -219px; }
+
+*html .all_shuping_dg .list_top .left {margin:4px 0 0 0;}
+
+.all_shuping_dg .show_info {height:30px;line-height:30px;padding:0 12px;margiN:10px 0 0 0;}
+.all_shuping_dg .show_info b {color:#c00;font-weight:normal;}
+
+.all_shuping_dg .pages {color:#777;margin:15px 30px 0 0;text-align:right;}
+
+
+
+
+.buybox {padding:20px;color:#333;}
+.buybox .left {float:left;}
+.buybox .right {float:right;}
+.buybox .formbox {margin:10px 0 25px 0;}
+.buybox .formbox .formline:after{content:".";display:block;height:0;clear:both;visibility:hidden;}
+.buybox .formbox .formline {*display:inline-block;clear:both;padding:10px 0 0 0;}
+
+.buybox .formbox .formline .item {width:43%;float:left;overflow:hidden;text-align:right;line-height:20px;}
+.buybox .formbox .formline .cont {width:56%;float:right;overflow:hidden;}
+.buybox .formbox .lightbox {background:#fffae0;border:1px solid #ddd;padding:0 0 10px 0;font-size:14px;}
+
+.buybox .formbox .formline .cont input.text {padding:1px 0;width:50px;}
+.buybox .formbox .formline .cont input.button {padding:0 3px;}
+.buybox .formbox .formline .cont input[type="text"] {padding:1px 0;width:50px;}
+.buybox .formbox .formline .cont input[type="button"] {padding:0 3px;}
+.buybox .formbox .formline .cont input.amout {width:50px}
+
+*html .buybox .formbox .formline .cont input {zoom:expression(function(el){
+	el.style.zoom = "1";
+	el.className += " "+el.type;
+}(this))}
+
+
+.buybox .amout_info {clear:both;height:20px;margin:5px 0 0 0;line-height:20px;}
+.buybox .amout_info .left {margin-top:3px;}
+.buybox .amout_info b {color:#ed5448;font-family:Tahoma;}
+.buybox .amout_info .right b {font-size:20px;}
+.buybox .amout_info a {color:#004d00;}
+
+
+.buy_ok_box {color:#333;text-align:center;}
+.buy_ok_box h3 {margiN:20px 0;font-size:14px;font-weight:bold;}
+.buy_ok_box p {margiN:20px 0;}
+
+
+.duihuan_box {}
+.duihuan_box .form_box {margiN:20px;line-height:30px;}
+.duihuan_box .form_line {margiN:0 0 10px 0;}
+
+.duihuan_box .form_line input.text{width:50px;}
+.duihuan_box .form_line input[type="text"] {width:50px;}
+
+.duihuan_box .form_line input.radio {margin-right:-3px;}
+*+html .duihuan_box .form_line input[type="radio"] {margin-right:-3px;}
+
+
+*html .duihuan_box .form_line input {zoom:expression(function(el){
+	el.style.zoom="1";
+	el.type=="text"?el.className='text':"";
+	el.type=="radio"?el.className='radio':"";
+}(this))}
+

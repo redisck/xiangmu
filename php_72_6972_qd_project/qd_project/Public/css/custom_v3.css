@@ -1,0 +1,20 @@
+/* custom */
+
+/* 背景 */
+body { background: #ffffff}
+
+/* 中间背景 */
+.layout { background: url(../images/mainbj.jpg) center top no-repeat;}
+
+/* 边框&透明背景 */
+.wrap { border-color: #C5C5C5;}
+
+/* logo */
+.logo { height: 100px !important; margin-bottom: 0; overflow: hidden;}
+
+
+/* custom end */
+
+
+/* 默认样式修复，不要修改 */
+.mod_regist_nav a { color: #222}

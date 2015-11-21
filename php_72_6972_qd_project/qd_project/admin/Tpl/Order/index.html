@@ -1,0 +1,110 @@
+<link href="__PUBLIC__/css/back.css" type="text/css" rel="stylesheet">
+<script src="__PUBLIC__/js/jquery-1.7.2.js" type="text/javascript"></script>
+<script src="__PUBLIC__/js/time_sail.js" type="text/javascript"></script>
+<style>
+td{user-select:none;}
+*{margin:0;padding:0;list-style-type:none;}
+.showbox{width:0px;height:0px;display:none;position:absolute;right:0;top:0;z-index:100;border:1px #8FA4F5 solid;padding:1px;background:#fff;}
+.showbox h2{height:25px;font-size:14px;background-color:#3366cc;position:relative;padding-left:10px;line-height:25px;color:#fff;}
+.showbox h2 a{position:absolute;right:5px;top:0;font-size:12px;color:#fff;}
+.showbox .mainlist{padding:10px;}
+.showbox .mainlist li{height:24px;line-height:24px;}
+.showbox .mainlist li span{margin:0 5px 0 0;font-family:"宋体";font-size:12px;font-weight:400;color:#ddd;}
+.showbox .mainlist li a{font-size:12px;}
+.mask{background:#666;position:absolute;z-index:99;left:0;top:0;display:none;width:100%;height:100%;opacity:0.5;filter:alpha(opacity=50);-moz-opacity:0.5;}
+</style>
+
+<script language="javascript">
+	function changestatus(obj){
+	//alert($(obj).siblings("#ordername").html())
+		if($(obj).html().length==15){
+			$.ajax({
+					url:'__APP__/Order/changestatus',
+					type:'post',
+					data:'name='+$(obj).siblings("#ordername").html(),
+					success:function(msg){
+						if(msg==1){
+							$(obj).html("<span style='color:blue'>已发货</span>");
+						}
+					}
+					
+				
+			})
+		}
+		
+	
+	}
+	function changegoodstatus(obj){
+		
+		if($(obj).html()=="未发货"){
+			$result=confirm("是否确认发货？");
+			
+			if($result){
+				$(obj).html("<span style='color:blue'>已发货</span>");
+				$.ajax({
+					url:'__APP__/Order/changestatus',
+					type:'post',
+					data:'name='+$(obj).siblings("#ordername").html(),
+				})
+			}
+			
+		}
+		
+		
+	}
+		
+	
+</script>
+<div class="contener">
+   <div class="list_head_m" style="width:100%">
+		  <div class="list_head_ml">当前位置：【订单列表】</div>
+		 
+		
+		<form id="orderform" action="__APP__/Order/index" method="post" >
+			
+			<table style="width:100%" border="0" cellpadding="0" cellspacing="1" class="all_cont">
+				<tr>
+					<td>搜索：</td>
+					<td>
+						订单号查询:<input type="text" name="ordername" id="ordernum" style="margin-top:5px">
+					</td>
+					<td>
+						买家查询:<input type="text" name="buyuser" id="userbuy" style="margin-top:5px">
+					</td>
+					<td >
+						<div style="float:left">
+						未发货查询：<input type="radio" name="nosend" size="20" id="nosend" value="0" >
+						</div>
+						<div style="float:right">
+							<input class="btn btn-success btn-small" type="submit" value="搜索">
+						</div>
+					</td>
+				</tr>
+			</table>
+		</form>
+		<table width="100%" class="list all_cont" >
+			<tr>
+				<th>订单号</th>
+				<th>下单人</th>
+				<th>商品总价</th>
+				<th>下单时间</th>
+				<th>状态</th>
+				<th>操作</th>
+			</tr>
+			<foreach name="orders" item="vo">
+				<tr style="text-align:center">
+					<td id="ordername"><{$vo.name}></td>
+					<td><{$vo.username}></td>
+					<td><{$vo.price}></td>
+					<td><{$vo.time}></td>
+					<td onclick="changegoodstatus(this)" style="cursor:pointer" id="changestatus"><if condition="$vo.status eq 0">未发货<else/><span style="color:blue">已发货</span></if></td>
+					<td><a href="__APP__/Order/detail?id=<{$vo.id}>">订单详情</a></td>
+					
+				</tr>
+			</foreach>
+			<tr><{$page}></tr>
+		</table>
+	
+	</div>
+</div>
+
